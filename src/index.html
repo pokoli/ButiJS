@@ -1,0 +1,22 @@
+<html>
+<head>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8000');
+  
+  socket.on('login', function (data) {
+  	var name = prompt(data.msg);
+  	socket.emit('name',{'name' : name});
+  });
+  
+  socket.on('hello',function (data) {
+  	alert('Hello '+ data);
+  	socket.disconect();
+  });
+  
+</script>
+</head>
+<body>
+    <div id="text">Hola</div>
+</body>
+</html>
