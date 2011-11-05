@@ -1,1 +1,3 @@
-TODO
+ButiJS an server-client application for the Catalan cards game: Butifarra
+
+The server code is based on the node.js asynchronous asynchronous event-driven model.
