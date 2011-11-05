@@ -1,15 +1,9 @@
-
-
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-
-io = require('socket.io');
-
-var socket = io.connect('http://localhost');
-
-
-  socket.on('news', function (data) {
-    alert('hot news:'+data.hello);
-    socket.emit('my other event', { my: 'data hola que tal' });
-  });
-
+var socket = io.connect('http://localhost:8000');
+  
+socket.on('login', function (data) {
+	var name = prompt(data.msg);
+  	socket.emit('name',{'name' : name}, function(data){
+  		alert('Hello '+ data.name);		
+  	});
+});  
+  

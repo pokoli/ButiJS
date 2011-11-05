@@ -1,22 +1,9 @@
 <html>
 <head>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8000');
-  
-  socket.on('login', function (data) {
-  	var name = prompt(data.msg);
-  	socket.emit('name',{'name' : name});
-  });
-  
-  socket.on('hello',function (data) {
-  	alert('Hello '+ data);
-  	socket.disconect();
-  });
-  
-</script>
+<script src="/client.js"></script>
 </head>
 <body>
-    <div id="text">Hola</div>
+    <div id="chat"><ul id="messages"></ul></div>
 </body>
 </html>
