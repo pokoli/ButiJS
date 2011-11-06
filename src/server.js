@@ -8,7 +8,8 @@ app.listen(8000);
 
 function handler (req, res) {
   var pathname = url.parse(req.url).pathname;
-  var file = (pathname == '/client.js' ?  '/client.js' : '/index.html') ;
+  console.log(pathname);
+  var file = (pathname.match('^/public') ?  pathname : '/index.html') ;
   fs.readFile(__dirname +  file,
   function (err, data) {
     if (err) {
@@ -50,6 +51,14 @@ io.sockets.on('connection', function (socket) {
   		_player.join(data);
   		_games.push(data);
   		if(fn) fn(data);
+  	});
+  	
+  	socket.on('send', function(data){
+  		var sendData = {};
+  		sendData.player=_player;
+  		sendData.msg=data;
+  		socket.emit('message',sendData);
+  		socket.broadcast.emit('message',sendData);
   	});
   	
   	socket.on('disconnect', function(){

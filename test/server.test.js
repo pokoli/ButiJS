@@ -87,6 +87,16 @@ module.exports = {
 			});
 		});	
 	},
+	"You cand send messages to all players in the server " : function(done) {
+		var msg = 'Hello, how are you';
+		socket.on('message',function(data){
+			data.player.name.should.eql('Luiggi');
+			data.msg.should.eql(msg);
+			done();
+		});
+		socket.emit('send',msg);
+	
+	},
 	"The server must be able to notify a player in a Game" : function(done){
 		//Todo:
 		done();

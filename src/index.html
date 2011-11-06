@@ -1,9 +1,16 @@
 <html>
 <head>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/client.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/public/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="/public/client.js"></script>
 </head>
 <body>
-    <div id="chat"><ul id="messages"></ul></div>
+    <div id="chat">
+    	<ul id="messages"></ul>
+    	<form id="form">
+	    	<input type="text" id="msg" />
+	    	<input type="submit" id="send" value="send" />
+	    </form>	
+	</div>
 </body>
 </html>
