@@ -1,0 +1,21 @@
+{
+  "author": "Sergi Almacellas <pokoli@gmail.com>",
+  "name": "ButiJS",
+  "description": "Butifarra's game server on the top of node.js",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pokoli/ButiJS.git"
+  },
+  "engines": {
+    "node": "~0.6.0"
+  },
+  "dependencies": {
+  	 "socket.io": ">= 0.8.6"
+  },
+  "devDependencies": {
+ 	 "expresso": ">= 0.9.2",
+  	 "socket.io-client": ">= 0.8.6",
+   	 "should": ">= 0.3.2"
+  }
+}
