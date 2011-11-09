@@ -47,15 +47,15 @@ module.exports = {
 //			done();
 //		});
 //	},
-	"We are recibing a login event after connecting" : function(done){
-		socket.on('login', function (data){
+	"We are recibing a welcome event after connecting" : function(done){
+		socket.on('welcome', function (data){
 			connected.should.be.true;
 			data.msg.should.eql('Welcome, who you are?');
 			done();
 		});
 	},
 	"When we send a name event the server stores our name and acknowledgets it" : function (done){
-		socket.emit('name',{'name' : 'Luiggi'}, function(data){
+		socket.emit('login',{'name' : 'Luiggi'}, function(data){
 			data.name.should.eql('Luiggi');
 			done();
 		});

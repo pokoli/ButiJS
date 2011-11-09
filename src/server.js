@@ -29,9 +29,9 @@ var _players = [];
 io.sockets.on('connection', function (socket) {
 	var _player;
 
-	socket.emit('login', { msg : 'Welcome, who you are?'});
+	socket.emit('welcome', { msg : 'Welcome, who you are?'});
   
-	socket.on('name', function(data, fn){
+	socket.on('login', function(data, fn){
 		player = Player.create();
 		player.name=data.name;
 		_player=player;
