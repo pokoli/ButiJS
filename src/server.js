@@ -32,8 +32,7 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('welcome', { msg : 'Welcome, who you are?'});
   
 	socket.on('login', function(data, fn){
-		var player = Player.create();
-		player.name=data.name;
+		var player = Player.create(data.name);
 		_player=player;
 		_players.push(player);
 		if(fn) fn(player);

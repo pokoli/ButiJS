@@ -1,8 +1,8 @@
 var Game = require(__dirname+'/game');
 
-var Player = function() {
-	this.name='';
-	this.email='';
+var Player = function(name,email) {
+	this.name=name;
+	this.email=email;
 };
 
 Player.prototype.join = function(game){
@@ -15,8 +15,8 @@ Player.prototype.notify = function(type,data,fn){
 };	
 
 
-module.exports.create = function() {
-	return new Player();
+module.exports.create = function(name,email) {
+	return new Player(name,email);
 };
 
 

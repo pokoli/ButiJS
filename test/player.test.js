@@ -4,16 +4,14 @@ var Player = require('../src/player'),
 
 module.exports = {
     " A player has name and email attributes" : function() {
-		var player = Player.create();
+		var player = Player.create('','');
 		player.should.have.property('name');
 		player.should.have.property('email');
 		player.name.should.eql('');
 		player.email.should.eql('');
 	},
 	" If we define a name and an email they should be stored" : function () {
-		var player = Player.create();
-		player.name = 'Pedro';
-		player.email = 'test@gmail.com';
+		var player = Player.create('Pedro','test@gmail.com');
 		player.name.should.eql('Pedro');
 		player.email.should.eql('test@gmail.com');
 	},
