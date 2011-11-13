@@ -3,6 +3,7 @@ var app = require('http').createServer(handler)
   , fs = require('fs')
   , url = require('url')
   , sanitize = require('validator').sanitize
+  , Game = require('./game')
   , Player = require('./player');
 
 app.listen(8000);
@@ -48,6 +49,8 @@ io.sockets.on('connection', function (socket) {
   	});
   	
   	socket.on('create-game', function(data, fn){
+  		if(!data)
+  			data = Game.create();
   		_player.join(data);
   		_games.push(data);
   		if(fn) fn(data);
