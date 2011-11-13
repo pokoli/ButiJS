@@ -15,10 +15,8 @@ module.exports = {
 		game.should.respondTo('addPlayer');
 	},
 	"A game should remeber each player that joins it" : function (){
-		var playerA = Player.create();
-		playerA.name='Player A';
-		var playerB = Player.create();
-		playerB.name='Player B';
+		var playerA = Player.create('Player A');
+		var playerB = Player.create('Player B');
 		playerA.join(game);
 		playerB.join(game);
 		game.numberOfPlayers().should.eql(2);
