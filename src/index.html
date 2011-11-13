@@ -7,9 +7,16 @@
 <body>
     <div id="chat">
     	<ul id="messages"></ul>
-    	<form id="form">
-	    	<input type="text" id="msg" />
+    	<form action="javascript:send();" id="chat-form">
+	    	<input type="text" id="msg" value="" />
 	    	<input type="submit" id="send" value="send" />
+	    </form>	
+	</div>
+    <div id="games">
+    	<ul id="messages"></ul>
+    	<form action="" id="game-form">
+	    	<input type="text" id="gamename" />
+	    	<input type="submit" id="create" value="Create game" />
 	    </form>	
 	</div>
 </body>

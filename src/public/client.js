@@ -11,14 +11,15 @@ socket.on('welcome', function (data) {
 socket.on('message', function(data){
 	var text;
 	if(data.player)
-		text = '<'+data.player+'> ';
-	text+=data.msg
-	$('#messages').prepend($('<li>' + text + '</li>'));
+		text = ''+data.player.name+': ';
+	text+=data.msg;
+	$('#messages').append('<li>' + text + '</li>');
 });
 
 function send() {
-  var message = $('#message').val();
-  socket.emit('send message', message);
-  $('#message').val('');
+	var msg = $('#msg').val();
+	socket.emit('send',msg);
+	$('#msg').val('');
 }
+
   
