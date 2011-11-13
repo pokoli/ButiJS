@@ -3,6 +3,7 @@ var Game = require('../src/game'),
 	shodul = require ('should');
 
 var game = Game.create();
+var newPlayer = Player.create('new Player');
 
 module.exports = {
     "Game's initials number of players should be 0" : function() {
@@ -13,6 +14,19 @@ module.exports = {
 	},
 	"We can add players to the game":function(){
 		game.should.respondTo('addPlayer');
+	},
+	"We have to now if a player has joined the game " : function(){
+		game.should.respondTo('hasPlayer');
+		game.addPlayer(newPlayer);
+		game.hasPlayer(newPlayer).should.be.true;
+		game.hasPlayer(Player.create('no player')).should.be.false;
+	},
+	"We can remove players from a game" : function(){
+		game.numberOfPlayers().should.eql(1);
+		game.should.respondTo('removePlayer');
+		game.removePlayer(newPlayer).should.be.true;
+		game.numberOfPlayers().should.eql(0);
+		game.hasPlayer(newPlayer).should.be.false;
 	},
 	"A game should remeber each player that joins it" : function (){
 		var playerA = Player.create('Player A');

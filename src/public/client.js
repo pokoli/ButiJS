@@ -10,18 +10,26 @@ socket.on('welcome', function (data) {
 
 socket.on('message', function(data){
 	var text;
-	if(data.player)
-		text = ''+data.player.name+': ';
-	text+=data.msg;
-	$('#messages').append('<li>' + text + '</li>');
+	if(typeof(data)=='string')
+	{
+		//That's a server message
+		$('#messages').append('<li>' + data + '</li>');
+	}
+	else
+	{
+		if(data.player)
+			text = ''+data.player.name+': ';
+		text+=data.msg;
+		$('#messages').append('<li>' + text + '</li>');
+	}
 });
 
 /*Called onLoad of the html. Loads all the data needed:
-	1. Refresh games-list
+	1. Refresh games-list (every 5 seconds)
 */
 function doLoad()
 {
-	refreshGames();
+	setInterval("refreshGames()",5000);
 }
 
 function send() {
@@ -35,7 +43,7 @@ function refreshGames(){
 		$('#game-list').children().remove();
 		if(!data || data==[] || data.length ==0)
 		{
-			$('#game-list').append('No games found');
+			$('#game-list').append('<li>No games found</li>');
 			return;
 		}
 		for(var game in data)

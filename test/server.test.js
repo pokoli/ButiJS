@@ -67,7 +67,7 @@ module.exports = {
 			done();
 		});
 	},
-	"When we querry for the connected players we get a list of players " : function(done){
+	"When we query for the connected players we get a list of players " : function(done){
 		socket.emit('list-players',null,function(data){
 			data.should.be.an.instanceof(Array);
 			data.shift().name.should.eql('Luiggi');

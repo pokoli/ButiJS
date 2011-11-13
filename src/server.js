@@ -24,7 +24,7 @@ function handler (req, res) {
   });
 }
 
-//Variable for hosting the current games on the server
+//Variable for hosting the current games and players on the server
 var _games = [];
 var _players = [];
 
@@ -38,6 +38,7 @@ io.sockets.on('connection', function (socket) {
 		_player=player;
 		_players.push(player);
 		if(fn) fn(player);
+  		socket.broadcast.emit('message',_player.name + ' joined the server');
   	});
   	
   	socket.on('list-games', function(data, fn){
@@ -64,8 +65,17 @@ io.sockets.on('connection', function (socket) {
   	});
   	
   	socket.on('disconnect', function(){
+  		_games.forEach(function(game,idx){
+  			if(game.hasPlayer(_player))
+  			{
+  				game.removePlayer(_player);
+  				if(game.numberOfPlayers()==0)
+  					_games.splice(idx,1);
+  			}
+  		})
   		var idx = _players.indexOf(_player);
   		if(idx != -1) _players.splice(idx,1);
+  		socket.broadcast.emit('message',_player.name + ' left the server');
   	});
 });
 
