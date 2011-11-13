@@ -1,0 +1,26 @@
+#container
+{
+	height:100%;
+	width:100%;
+	display:table;
+
+}
+
+#chat
+{
+	height:100%;
+	display:table-cell;
+}
+
+#games
+{
+	height:100%;
+	display:table-cell;
+	width:20%;
+}
+
+#messages, #game-list 
+{
+	border: 1px solid #ddd;
+	height:90%;
+}

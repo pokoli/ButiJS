@@ -3,21 +3,23 @@
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="/public/jquery-1.7.min.js"></script>
 <script type="text/javascript" src="/public/client.js"></script>
+<link rel="stylesheet" type="text/css" href="/public/style.css" />
 </head>
 <body>
-    <div id="chat">
-    	<ul id="messages"></ul>
-    	<form action="javascript:send();" id="chat-form">
-	    	<input type="text" id="msg" value="" />
-	    	<input type="submit" id="send" value="send" />
-	    </form>	
-	</div>
-    <div id="games">
-    	<ul id="messages"></ul>
-    	<form action="" id="game-form">
-	    	<input type="text" id="gamename" />
-	    	<input type="submit" id="create" value="Create game" />
-	    </form>	
+	<div id="container">
+		<div id="chat">
+			<ul id="messages"></ul>
+			<form action="javascript:send();" id="chat-form">
+				<input type="text" id="msg" value="" />
+				<input type="submit" id="send" value="send" />
+			</form>	
+		</div>
+		<div id="games">
+			<ul id="game-list"></ul>
+			<form action="javascript:createGame();" id="game-form">
+				<input type="submit" id="create" value="Create game" />
+			</form>	
+		</div>
 	</div>
 </body>
 </html>
