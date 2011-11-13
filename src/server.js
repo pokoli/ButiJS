@@ -2,6 +2,7 @@ var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
   , url = require('url')
+  , sanitize = require('validator').sanitize
   , Player = require('./player');
 
 app.listen(8000);
@@ -55,7 +56,7 @@ io.sockets.on('connection', function (socket) {
   	socket.on('send', function(data){
   		var sendData = {};
   		sendData.player=_player;
-  		sendData.msg=data;
+  		sendData.msg=sanitize(data).xss();
   		socket.emit('message',sendData);
   		socket.broadcast.emit('message',sendData);
   	});
