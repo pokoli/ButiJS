@@ -7,7 +7,7 @@ var Player = function(name,email) {
 
 Player.prototype.join = function(game){
 	if(typeof(game) !== 'object') { throw new Error('Game must be an object');}
-	game.players.push(this);
+	game.addPlayer(this);
 };
 
 Player.prototype.notify = function(type,data,fn){

@@ -20,6 +20,10 @@ Game.prototype.notifyAll = function(type,data,fn) {
 	});
 };
 
+Game.prototype.addPlayer = function(player){
+	this.players.push(player);
+}
+
 Game.prototype.numberOfPlayers = function(){
 	return this.players.length;
 }

@@ -49,10 +49,9 @@ io.sockets.on('connection', function (socket) {
   	});
   	
   	socket.on('create-game', function(data, fn){
-  		if(!data)
-  			data = Game.create();
-  		_player.join(data);
-  		_games.push(data);
+  		var game = Game.clone(data);
+  		game.addPlayer(_player);
+  		_games.push(game);
   		if(fn) fn(data);
   	});
   	
