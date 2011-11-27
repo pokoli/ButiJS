@@ -23,6 +23,14 @@ var SpanishCardStack = function(){
 		cards = temp;
 	}
 	
+	/* This method shuffles the card array implementing the Knuth Fisher Yates algorithm
+		Author: Jonas Raoni Soares Silva
+		From: http://jsfromhell.com/array/shuffle [rev. #1]
+	*/
+	 function fischer_yates_shuffle(v){
+		for(var j, x, i = v.length; i; j = parseInt(Math.random() * i), x = v[--i], v[i] = v[j], v[j] = x);
+		return v;
+	};
 	/*
 		This is the public function to shuflle the card Stack.
 		It shuffles it 12 times to get a better shuffled Stack.
@@ -31,9 +39,9 @@ var SpanishCardStack = function(){
 	*/
 	this.shuffle = function(ntimes){
 		ntimes = ntimes || 12;
-		console.log(ntimes);
 		for(i=0;i<ntimes;i++)
-			_shuffle();
+			//_shuffle();
+			fischer_yates_shuffle(cards);	
 	}
 	
 	this._toString = function(){
