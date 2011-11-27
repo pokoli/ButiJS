@@ -2,15 +2,19 @@ var Card = require('./card');
 
 var SpanishCardStack = function(){
 
-	var cards=new Array();
-	['Oros','Copes','Espases','Bastos'].forEach(function(suit){
-		for(i=1;i<=12;i++)
-			cards.push(Card.create(i,suit));
-	});
+	var cards;
 	
-	this.size = function(){
-		return cards.length;
-	}
+	this.reset = function(){
+		cards=new Array();
+		['Oros','Copes','Espases','Bastos'].forEach(function(suit){
+			for(i=1;i<=12;i++)
+				cards.push(Card.create(i,suit));
+		});
+	};
+	
+	this.reset();
+		
+	this.size = cards.length;
 	
 	/*This method shuffles the card array*/
 	function _shuffle(){
@@ -51,6 +55,19 @@ var SpanishCardStack = function(){
 		});
 		string += '>';
 		return string;
+	}
+	
+	this.next = function(num){
+		if(!num || num <=1)
+			return cards.shift();
+		temp = new Array();
+		for(i=0;i<num && cards.length >0;i++)
+			temp.push(cards.shift());
+		return temp;	
+	}
+	
+	this.left = function(){
+		return cards.length;
 	}
 
 };
