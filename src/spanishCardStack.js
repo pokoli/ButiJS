@@ -7,8 +7,9 @@ var SpanishCardStack = function(){
 	this.reset = function(){
 		cards=new Array();
 		['Oros','Copes','Espases','Bastos'].forEach(function(suit){
-			for(i=1;i<=12;i++)
-				cards.push(Card.create(i,suit));
+			[1,2,3,4,5,6,7,8,9,10,11,12].forEach(function(i){
+				cards.push(Card.create(i,suit));	
+			});
 		});
 	};
 	
