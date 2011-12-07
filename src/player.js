@@ -7,7 +7,7 @@ var Player = function(name,email,socket) {
 	var _socket=socket;
 	
 	this.notify = function (type,data,fn){
-	    if(!_socket) { throw new Error('The socket must be defined')}
+	    if(_socket)
 	        _socket.emit(type,data,fn);
 	}
 };

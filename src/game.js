@@ -17,6 +17,8 @@ module.exports.clone = function(game) {
 	return _game;
 };
 
+module.exports.Game = Game;
+
 Game.prototype.notifyAll = function(type,data,fn) {
 	this.players.forEach(function(player){
 		player.notify(type,data,fn);
@@ -47,11 +49,14 @@ Game.prototype.removePlayer = function(player){
 Game.prototype.numberOfPlayers = function(){
 	return this.players.length;
 }
-
+/*
+This function only does the common things for a game. 
+The game inits must be done in a doStart function 
+*/
 Game.prototype.start = function(){
     if(this.players.length < this.min_players) throw new Error('Not enough players');
     this.state='running';
-    this.notifyAll('start',this)
+    this.notifyAll('start',this);
 }
 
 

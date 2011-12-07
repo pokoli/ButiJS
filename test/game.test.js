@@ -54,11 +54,11 @@ module.exports = {
         game.should.respondTo('start');
         should.doesNotThrow(function(){
             game.start();
-        },Error,"Not enouhg playes");
+        },Error,"Not enough players");
         game.min_players=4;
         should.throws(function(){
             game.start();
-        },Error,"Not enouhg playes");
+        },Error,"Not enough playerss");
 	},
 	
 };
