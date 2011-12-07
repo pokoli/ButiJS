@@ -1,6 +1,6 @@
 var Game = require('../src/game'),
 	Player = require('../src/player'),
-	shodul = require ('should');
+	should = require ('should');
 
 var game = Game.create();
 var newPlayer = Player.create('new Player');
@@ -45,6 +45,20 @@ module.exports = {
 	"The game should have a state property, 'waiting'' by default" : function(){
 		game.should.have.property('state');
 		game.state.should.eql('waiting');
+	},
+	"The game should have a min_players property, 0' by default" : function(){
+		game.should.have.property('min_players');
+		game.min_players.should.eql(0);
+	},
+	"We cant start a game only if there are more than the min_players" : function(){
+        game.should.respondTo('start');
+        should.doesNotThrow(function(){
+            game.start();
+        },Error,"Not enouhg playes");
+        game.min_players=4;
+        should.throws(function(){
+            game.start();
+        },Error,"Not enouhg playes");
 	},
 	
 };

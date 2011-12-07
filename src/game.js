@@ -1,6 +1,7 @@
 var Game = function() {
 	this.players = [];
 	this.state = 'waiting';
+	this.min_players = 0;
 };
 
 module.exports.create = function() {
@@ -17,7 +18,7 @@ module.exports.clone = function(game) {
 };
 
 Game.prototype.notifyAll = function(type,data,fn) {
-	players.forEach(function(player){
+	this.players.forEach(function(player){
 		player.notify(type,data,fn);
 	});
 };
@@ -45,6 +46,12 @@ Game.prototype.removePlayer = function(player){
 
 Game.prototype.numberOfPlayers = function(){
 	return this.players.length;
+}
+
+Game.prototype.start = function(){
+    if(this.players.length < this.min_players) throw new Error('Not enough players');
+    this.state='running';
+    this.notifyAll('start',this)
 }
 
 
