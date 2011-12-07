@@ -1,8 +1,15 @@
 var Game = require(__dirname+'/game');
 
-var Player = function(name,email) {
+var Player = function(name,email,socket) {
+
 	this.name=name;
 	this.email=email;
+	var _socket=socket;
+	
+	this.notify = function (type,data,fn){
+	    if(!_socket) { throw new Error('The socket must be defined')}
+	        _socket.emit(type,data,fn);
+	}
 };
 
 Player.prototype.join = function(game){
@@ -10,12 +17,8 @@ Player.prototype.join = function(game){
 	game.addPlayer(this);
 };
 
-Player.prototype.notify = function(type,data,fn){
-	socket.emit(type,data,fn);
-};	
 
-
-module.exports.create = function(name,email) {
+module.exports.create = function(name,email,socket) {
 	return new Player(name,email);
 };
 
