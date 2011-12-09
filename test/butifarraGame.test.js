@@ -37,8 +37,26 @@ module.exports = {
     "When the game is started round should be 1" : function() {
         game.round.should.eql(1);
     },
-    "When the game is all teams must have 2 players" : function() {
+    "When the game is started all teams must have 2 players" : function() {
         game.teams[1].length.should.eql(2);
         game.teams[2].length.should.eql(2);
+    },
+    "When the game is started all the players should be in order (beetween the others team players)" : function() {
+        var lastTeam=0;
+        game.players.forEach(function(player){
+            player.team.should.not.eql(lastTeam);
+            lastTeam=player.team;
+        });
+    },
+    
+    "When the game is started all player must have 12 cards" : function() {
+        game.players.forEach(function(player){
+            player.cards.should.instanceof(Array);
+            player.cards.length.should.eql(12);
+            player.cards.forEach(function(card){
+        		card.should.have.property('number');
+		        card.should.have.property('suit');
+            });
+        });
     }
 }   

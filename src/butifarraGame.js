@@ -14,7 +14,10 @@ var ButifarraGame = function() {
     
     //Holds the last player to choose Thriumph
     var _thriumpher;
-    
+    /*
+        Asigns a player to a team.
+        Also assigns an empty tuple to each player for holding their cards
+    */
     function assignTeams(players,teams){
         var teamA = [], teamB = [];
         players.forEach(function(player){
@@ -32,6 +35,7 @@ var ButifarraGame = function() {
                 teamA.push(player);
                 player.team=1;
             }
+            player.cards=[];
         });
         teams[1] = teamA;
         teams[2] = teamB;
@@ -60,15 +64,46 @@ var ButifarraGame = function() {
     }
     
     /*
+        Put the players in the correct other to the game flow. 
+        @returns and array of players.
+    */
+    function orderPlayers(players,teams,firstPlayer)
+    {
+        var temp = new Array();
+        var teamFirst = firstPlayer.team;
+        var otherTeam= teamFirst == 1 ? 2 : 1;
+        var firstPos= teams[teamFirst].indexOf(firstPlayer);
+
+        temp.push(firstPlayer); //First the thriumber
+        temp.push(teams[otherTeam][firstPos]); //The other player in the other team. 
+        firstPos++; //Increment the position to get the other two players. 
+        firstPos=firstPos %2;
+        temp.push(teams[teamFirst][firstPos]);
+        temp.push(teams[otherTeam][firstPos]);
+        return temp;
+    }
+    
+    /*
         Starts a new round. Has the following responsabilities: 
         1. Increment round number.
         2. Shufle card stack.
-        3. Deliver cards to players
+        3. Put the players in the correct order in seats.     
+        4. Deliver cards to players
     */
     this.startNewRound = function(){
         this.round++;
         this.stack.shuffle();
-        //TODO: Deliver cards
+        this.players=orderPlayers(this.players,this.teams,_thriumpher);
+        /*
+            Deliver cards to the players.
+            We start for index 1 because is the player in the right of the thriumber
+            We deliver 4 cards per player;
+        */
+        for(var i=1;this.stack.left() > 0;i++)
+        {
+            i=i%4;
+            this.players[i].cards = this.players[i].cards.concat(this.stack.next(4));            
+        }
     }
     
     //Reference to the super start function.
