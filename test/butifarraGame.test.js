@@ -15,11 +15,10 @@ module.exports = {
         game.should.respondTo('addPlayer');
         game.should.respondTo('start');
     },
-    "Butifarra consits of teams, scores and a spanishCardStack" : function() {
+    "Butifarra consits of teams, scores and a players" : function() {
         game.should.have.property('teams');
         game.should.have.property('score');
-        game.should.have.property('stack');
-        //game.stack.should.be.instanceof(Stack);
+        game.should.have.property('players');
     },
     "A butifarraGame needs 4 players to start" : function() {
         game.min_players.should.eql(4);
@@ -47,16 +46,6 @@ module.exports = {
         game.players.forEach(function(player){
             player.team.should.not.eql(lastTeam);
             lastTeam=player.team;
-        });
-    },
-    "When the game is started all player must have 12 cards" : function() {
-        game.players.forEach(function(player){
-            player.cards.should.instanceof(Array);
-            player.cards.length.should.eql(12);
-            player.cards.forEach(function(card){
-        		card.should.have.property('number');
-		        card.should.have.property('suit');
-            });
         });
     }
 }   
