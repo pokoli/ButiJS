@@ -34,8 +34,9 @@ module.exports = {
             game.start();
         },Error,"Not enough players");        
     },
-    "When the game is started round should be 1" : function() {
+    "When the game is started round should be 1 and state running" : function() {
         game.round.should.eql(1);
+        game.state.should.eql('running');
     },
     "When the game is started all teams must have 2 players" : function() {
         game.teams[1].length.should.eql(2);
@@ -48,7 +49,6 @@ module.exports = {
             lastTeam=player.team;
         });
     },
-    
     "When the game is started all player must have 12 cards" : function() {
         game.players.forEach(function(player){
             player.cards.should.instanceof(Array);

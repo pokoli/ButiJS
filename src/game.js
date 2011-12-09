@@ -1,5 +1,6 @@
 var Game = function() {
 	this.players = [];
+	this.watchers = [];
 	this.state = 'waiting';
 	this.min_players = 0;
 };
@@ -23,10 +24,17 @@ Game.prototype.notifyAll = function(type,data,fn) {
 	this.players.forEach(function(player){
 		player.notify(type,data,fn);
 	});
+	this.watchers.forEach(function(player){
+		player.notify(type,data,fn);
+	});
 };
 
 Game.prototype.addPlayer = function(player){
 	this.players.push(player);
+}
+
+Game.prototype.addWatcher = function(watcher){
+	this.watchers.push(watcher);
 }
 
 Game.prototype.hasPlayer = function(player){
@@ -49,6 +57,11 @@ Game.prototype.removePlayer = function(player){
 Game.prototype.numberOfPlayers = function(){
 	return this.players.length;
 }
+
+Game.prototype.numberOfWatchers = function(){
+	return this.watchers.length;
+}
+
 /*
 This function only does the common things for a game. 
 The game inits must be done in a doStart function 

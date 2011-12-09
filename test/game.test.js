@@ -60,5 +60,16 @@ module.exports = {
             game.start();
         },Error,"Not enough playerss");
 	},
+	"After starting the have the stat property should be 'running'" : function(){
+		game.should.have.property('state');
+		game.state.should.eql('running');
+	},
+	"Other players can watch the game " : function(){
+	    game.should.respondTo('addWatcher');
+		var watcher = Player.create('Watcher A');
+		game.addWatcher(watcher);
+        game.numberOfWatchers().should.eql(1);
+        game.numberOfPlayers().should.eql(0);
+	}
 	
 };
