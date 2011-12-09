@@ -48,6 +48,7 @@ var SpanishCardStack = function(){
 		shuflles the card stack a random number of times.
 	*/
 	this.shuffle = function(ntimes){
+		this.reset();
 		ntimes = ntimes || 12;
 		for(i=0;i<ntimes;i++)
 			//_shuffle();
