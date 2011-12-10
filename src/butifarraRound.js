@@ -8,8 +8,10 @@ var ButifarraGame = require('./butifarraGame'),
 var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.moves = [];
     
+    this.thriumph;
     this.thriumpher=thriumpher;
-    _teams = teams;
+    this.delegated=false;
+    this.teams = teams;
 
     //Internally hold the order of the players
     var _players = teams[1].concat(teams[2]);
@@ -23,13 +25,11 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         2. Shufle card stack.
         3. Put the players in the correct order in seats.     
         4. Deliver cards to players
-        
-        @params callback: Accecpts a callback called at the end of the process
+        5. Notify the player to make thriumph
     */
-    this.start = function(callback){
-        _callback=callback;
+    this.start = function(){
         var stack = Stack.create();
-        _players=ButifarraGame.orderPlayers(_players,_teams, this.thriumpher);
+        _players=ButifarraGame.orderPlayers(_players,this.teams, this.thriumpher);
         /*
             Deliver cards to the players.
             We start for index 1 because is the player in the right of the thriumber
@@ -41,13 +41,47 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             _players[i].cards = _players[i].cards.concat(stack.next(4));            
 
         }
-        //TODO: Notify players with their cards
+        _players.forEach(function(player){
+            if(player==this.thriumpher) 
+            {
+                player.notify('make-triumph',
+                    ['Oros','Copes','Espases','Bastos','Botifarra','Delegar'],
+                    this.makeThriumph);
+            }
+            player.notify('cards',player.cards);
+        });
+    }
+    
+    this.makeThriumph = function(choise){
+        if(this.thriumph) throw new Error('Make thriumph is allowed once per round');
+        
+        if(choise=='Delega')
+        {
+            this.delegated=true;
+            var team = this.teams[this.thriumpher.team];
+            for(i in team)
+            {
+                if(team[i]!=this.thriumpher)
+                {
+                    this.thriumpher=team[i];
+                    team[i].notify('make-triumph',
+                    ['Oros','Copes','Espases','Bastos','Botifarra'],
+                    this.makeThriumph);
+                }
+            }
+        }
+        else
+        {
+            this.thriumph=choise;
+            //TODO: Start the moves
+        }
+
     }
     
 };
 
 
-module.exports.create = function(teams,triumpher,firstPlayer,callback) {
-    return new ButifarraRound(teams,triumpher,firstPlayer,callback);
+module.exports.create = function(teams,triumpher,firstPlayer) {
+    return new ButifarraRound(teams,triumpher,firstPlayer);
 };
 

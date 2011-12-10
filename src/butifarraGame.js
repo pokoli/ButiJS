@@ -35,7 +35,7 @@ var ButifarraGame = function() {
     //Holds the number of the actual round
     this.round=0;
     //Holds the rounds played in the past;
-    this.playedRound=[]
+    this.playedRounds=[]
     
 
     //Holds the last player to choose Thriumph
@@ -103,9 +103,8 @@ var ButifarraGame = function() {
         var idFristplayer = _thriumpher+1;
         idFristplayer = idFristplayer % 4;
         var currentRound = Round.create(this.teams,this.players[_thriumpher],this.players[idFristplayer]);
-        currentRound.start(function(data){
-            //TODO: Implement the round ending process
-        });
+        currentRound.start();
+        this.playedRounds.push(currentRound);
     }
     
     //Reference to the super start function.
