@@ -103,12 +103,9 @@ var ButifarraGame = function() {
         var idFristplayer = _thriumpher+1;
         idFristplayer = idFristplayer % 4;
         var currentRound = Round.create(this.teams,this.players[_thriumpher],this.players[idFristplayer]);
-        console.log('create');
         currentRound.start(function(data){
             //TODO: Implement the round ending process
         });
-                console.log('create');
-
     }
     
     //Reference to the super start function.
