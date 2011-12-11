@@ -93,6 +93,13 @@ var ButifarraGame = function() {
         });
     }
     
+    function roundEnded(roundData){
+        this.playedRounds[this.round]=roundData; //Refresh the round data.
+        //TODO: Calculate Scores, show to the players.
+        //TODO: See if we have to play another round or the game has ended.
+    }
+    
+        
     /*
         Starts a new round. Has the following responsabilities: 
         1. Increment round number.
@@ -104,8 +111,11 @@ var ButifarraGame = function() {
         idFristplayer = idFristplayer % 4;
         var currentRound = Round.create(this.teams,this.players[_thriumpher],this.players[idFristplayer]);
         currentRound.start();
+        currentRound.on('round-ended',roundEnded);
         this.playedRounds.push(currentRound);
+        
     }
+    
     
     //Reference to the super start function.
     var super_start = this.start;
