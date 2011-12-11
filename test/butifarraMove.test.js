@@ -105,5 +105,37 @@ module.exports = {
         should.doesNotThrow(function(){
             move.addRoll(player3,player3.cards[6]);
         },Error,"Invalid movement");
+    },
+    "We must be able to know the value of the move and the team that wons" : function(){
+        move.should.respondTo('getValue');
+        move.should.respondTo('getWinner');
+        var move0 = Move.create('Copes');
+        move0.addRoll(player1,Card.create(2,'Espases'));
+        move0.addRoll(player2,Card.create(3,'Espases'));
+        move0.addRoll(player3,Card.create(4,'Espases'));
+        move0.addRoll(player4,Card.create(5,'Espases'));
+        move0.getWinner().should.eql(player4.team);
+        move0.getValue().should.eql(1);
+        var move1 = Move.create('Copes');
+        move1.addRoll(player1,Card.create(11,'Espases'));
+        move1.addRoll(player2,Card.create(12,'Espases'));
+        move1.addRoll(player3,Card.create(1,'Espases'));
+        move1.addRoll(player4,Card.create(9,'Espases'));
+        move1.getWinner().should.eql(player4.team);
+        move1.getValue().should.eql(15);
+        //TODO: Review it
+//        var move2 = Move.create('Copes');
+//        console.log(2);
+//        move2.addRoll(player1,Card.create(2,'Espases'));
+//        console.log(11);
+//        move2.addRoll(player2,Card.create(11,'Espases'));
+//        console.log(8);
+//        move2.addRoll(player3,Card.create(8,'Espases'));
+//        console.log(5);
+//        move2.addRoll(player4,Card.create(5,'Espases'));
+//        move2.getWinner().should.eql(player2.team);
+//        move2.getValue().should.eql(3);
+        
     }
+    //TODO: Write more test cases. Is very important that those functions work properly.
 }   

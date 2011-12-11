@@ -115,6 +115,55 @@ var ButifarraMove = function(thriumph) {
 
     }
     
+    /*
+        Returns the value of the current hand. 
+    */
+    this.getValue = function(){
+        if(this.rolls.length!=4) return 0;
+        var points = 0;
+        for(i in this.rolls)
+        {
+            var card = this.rolls[i].card;
+            if(card.number==10) points++;
+            if(card.number==11) points=points+2;
+            if(card.number==12) points=points+3;
+            if(card.number==1) points=points+4;
+            if(card.number==9) points=points+5;
+        }
+        //Four cards are valued 1 point. 
+        return ++points;
+    }
+    
+    /*
+        Returns the team that wins the hand.
+    */
+    this.getWinner = function(){
+
+        var higherCard,winner;
+        for(i in this.rolls)
+        {
+            var team = this.rolls[i].player.team;
+            var card = this.rolls[i].card;
+
+            if(!higherCard)
+            {
+                higherCard=card;
+                winner=team;
+            }
+            if(card.suit == thriumph && higherCard.suit!=thriumph)
+            {
+                higherCard=card;
+                winner=team;
+            }
+            if(higherCard.suit==card.suit && card.isHigher(higherCard))
+            {
+                higherCard=card;
+                winner=team;
+            }
+        }
+        return winner;
+    }
+    
 };
 
 module.exports.create = function(thriumph) {
