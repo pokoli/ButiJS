@@ -15,22 +15,22 @@ var ButifarraRoll = function(player,card) {
 */
 
 var ButifarraMove = function(thriumph) {
-    _moves=[]; //Private variable
-    this.moves = _moves; //Expose it to the public;
+    _rolls=[]; //Private variable
+    this.rolls = _rolls; //Expose it to the public;
     
     /*
         Validate the roll.
         The callback gets the error. 
     */
-    function validateRoll(roll,moves,callback)
+    function validateRoll(roll,rolls,callback)
     {
-        if(moves.length==0)
+        if(rolls.length==0)
         {
             if(callback) callback();
             return;
         }
         //Maximum 4 rolls per movement (1 forEach player)   
-        if(moves.length==4)
+        if(rolls.length==4)
         {
             if(callback) callback(new Error('Only 4 rolls allowed'));
             return;
@@ -40,8 +40,8 @@ var ButifarraMove = function(thriumph) {
         var higherCard; //Hols the other team higer's card in the Move.
         //A player can not roll twice in the same move.
         //A card can not be rolled twice in the same move.
-        for(i in moves){
-            var move = moves[i];
+        for(i in rolls){
+            var move = rolls[i];
             if(move.player==roll.player)
             { 
                 if(callback) callback(new Error('A player can roll only once'));
@@ -60,11 +60,11 @@ var ButifarraMove = function(thriumph) {
         }
 
         //The move must be from the same suit,
-        var initSuit = moves[0].card.suit;
+        var initSuit = rolls[0].card.suit;
         if(roll.card.suit!=initSuit)
         {
             var hasTriumph=false;
-            //Loop players cards to know if they have valid moves or not.
+            //Loop players cards to know if they have valid rolls or not.
             for(i in roll.player.cards)
             {
                 var card = roll.player.cards[i];
@@ -108,9 +108,9 @@ var ButifarraMove = function(thriumph) {
     */
     this.addRoll = function(player,card){
         var roll = new ButifarraRoll(player,card);
-        validateRoll(roll,this.moves,function(err){
+        validateRoll(roll,this.rolls,function(err){
             if(err) throw new Error('Invalid Movement');
-            _moves.push(roll);
+            _rolls.push(roll);
         });
 
     }
