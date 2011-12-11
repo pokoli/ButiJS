@@ -29,6 +29,11 @@ module.exports = {
         card.isHigher(Card.create(12,'Espases')).should.eql(false);
 	    card.isHigher(Card.create(1,'Espases')).should.eql(false);
 	    card.isHigher(Card.create(9,'Espases')).should.eql(false);
+	    //Random test cases
+        Card.create(2,'Espases').isHigher(Card.create(11,'Espases')).should.eql(false);    
+        Card.create(11,'Espases').isHigher(Card.create(2,'Espases')).should.eql(true);
+        Card.create(6,'Espases').isHigher(Card.create(12,'Espases')).should.eql(false);
+        Card.create(12,'Espases').isHigher(Card.create(6,'Espases')).should.eql(true);
 	},
 	" Is not defined if a card is higher than another card of another suit " : function(){
         should.not.exist(card.isHigher(Card.create(1,'Copes')));
