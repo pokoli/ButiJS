@@ -1,9 +1,26 @@
+var util = require('util'),
+    event = require('events');
+
+function notifyAll(type,data,fn) {
+    this.players.forEach(function(player){
+        player.notify(type,data,fn);
+    });
+    this.watchers.forEach(function(player){
+        player.notify(type,data,fn);
+    });
+}; 
+
 var Game = function() {
 	this.players = [];
 	this.watchers = [];
 	this.state = 'waiting';
 	this.min_players = 0;
+	
+	this.on('notifyAll',notifyAll); 
 };
+
+//Inherits from EventEmitter so we can manage the events of the game.
+util.inherits(Game, event.EventEmitter);
 
 module.exports.create = function() {
 	return new Game();
@@ -15,19 +32,14 @@ module.exports.clone = function(game) {
 		return _game;
 	if(game.players)
 		_game.players=game.players;
+	if(game._events)
+	    _game._events=game._events;	
 	return _game;
 };
 
 module.exports.Game = Game;
 
-Game.prototype.notifyAll = function(type,data,fn) {
-	this.players.forEach(function(player){
-		player.notify(type,data,fn);
-	});
-	this.watchers.forEach(function(player){
-		player.notify(type,data,fn);
-	});
-};
+Game.prototype.notifyAll = notifyAll;
 
 Game.prototype.addPlayer = function(player){
 	this.players.push(player);

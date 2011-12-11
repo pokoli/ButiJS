@@ -1,4 +1,5 @@
 var Game = require('../src/butifarraGame'), 
+    Card = require('../src/card'),     
     Round = require('../src/butifarraRound'),
 	Player = require('../src/player'),	
 	should = require ('should');
@@ -47,12 +48,13 @@ module.exports = {
             round.makeThriumph('Copes');
         },Error,"Make thriumph is allowed once per round");
         round.delegated.should.eql(false);
+        round.thriumph.should.eql('Copes');
         should.throws(function(){
             round.makeThriumph('Copes');
         },Error,"Make thriumph is allowed once per round");
     },
     "If the thriumphs is delegated, the other player is allowed to make thriumph. " : function(){
-        var round = setUp();
+        round = setUp();
         round.should.respondTo('makeThriumph');
         should.doesNotThrow(function(){
             round.makeThriumph('Delega');
@@ -61,8 +63,57 @@ module.exports = {
             round.makeThriumph('Botifarra');
         },Error,"Make thriumph is allowed once per round");
         round.delegated.should.eql(true);
+        round.thriumph.should.eql('Botifarra');
         should.throws(function(){
             round.makeThriumph('Copes');
         },Error,"Make thriumph is allowed once per round");
+    }, 
+    "When a player makes thriumph an made-thriumph event is fired" : function(done){
+        round = setUp();
+        round.on('made-thriumph',function(data){
+            data.should.be.eql('Copes');
+            done();
+        });
+        round.emit('made-thriumph','Copes');
+    },
+    "After making thriumph a startRound event is fired" : function(done){
+        round = setUp();
+        round.on('new-move',function(){
+            done();
+        });
+        round.emit('made-thriumph','Bastos');
+    },
+    "After 4 rolls the move is endend and a new-round event is fired" : function(done){
+        var events=2;
+        function myDone(){
+            console.log("mydone");
+            round.moves.should.be.instanceof(Array);
+            round.moves.length.should.eql(1);
+            console.log(round.moves[0]);
+            round.moves[0].rolls.length.should.eql(4);
+            for(i in round.moves[0].rolls)
+            {   
+                console.log(round.moves[0].rolls[i]);
+                var roll = round.moves[0].rolls[i];
+                roll.card.suit.should.eql('Espases');
+            }
+            done();
+        }
+        round.on('end-move',function(){
+            console.log('end-move'+events);
+            events--;
+            if(events==0) myDone();
+        })
+        round.on('new-move',function(){
+            console.log('new-move'+events);
+            events--;
+            if(events==0) myDone();
+        })
+    
+        round.emit('new-roll',Card.create(2,'Espases'));
+        round.emit('new-roll',Card.create(3,'Espases'));
+        round.emit('new-roll',Card.create(4,'Espases'));
+        round.emit('new-roll',Card.create(5,'Espases'));
+                
     }
 }   

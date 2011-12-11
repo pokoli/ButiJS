@@ -1,4 +1,9 @@
+var util = require('util'),
+    event = require('events');
+
+
 var ButifarraGame = require('./butifarraGame'),
+    ButifarraMove = require('./butifarraMove'),
     Stack = require('./spanishCardStack');
 
 
@@ -12,6 +17,11 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.thriumpher=thriumpher;
     this.delegated=false;
     this.teams = teams;
+    
+    //Holds the information about the current move. 
+    var _move;
+    //Holds the indexOf the last played player.
+    var _lastPlayed=-1;
 
     //Internally hold the order of the players
     var _players = teams[1].concat(teams[2]);
@@ -52,9 +62,69 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         });
     }
     
+    /*
+        Called every time that a new move is Started.    
+    */
+    this.newMove = function(firstPlayer){
+        //Put the players in the correct order
+        _players=ButifarraGame.orderPlayers(_players,this.teams,firstPlayer);
+        _move = ButifarraMove.create();
+        _players[0].notify('play-card');
+        _lastPlayed=-1;
+    }
+    //Add the newMove function to the new-move events
+    this.on('new-move',this.newMove);
+    
+    /*
+        Called every time that a move is Ended
+    */
+    this.moveEnded = function(move){
+        this.moves.push(move);
+        this.emit('new-move');
+        //TODO: Put the wining cards in the correct team.
+        
+        //TODO: If the Round is ended emmit an event too.
+    }
+    //Add the newMove function to the new-move events
+    this.on('end-move',this.moveEnded);
+    
+    /*
+        Called every time that a player Rolls a card
+    */
+    this.newRoll = function(card){
+        var player= _players[_lastPlayed+1];
+        try{
+            _move.addRoll(player,card);
+            _lastPlayed++;
+            var data = {
+                "player" : player,
+                "card" : card,
+            };
+            //Notify all the players the played card 
+            this.emit('notifyAll','card-played',data);
+            if(_lastPlayed==3)
+            {
+                //The move is ended
+                this.emit('end-move',_move);
+            }
+            else
+            {
+                //Notify the next player to play a card: 
+                _players[_lastPlayed+1].notify('play-card');
+            }
+            
+        }catch(Error){
+            player.notify('invalid-roll',card);
+            console.log(Error);      
+        }
+    }
+    //Add the newRoll function to the new-roll events
+    this.on('new-roll',this.newRoll);
+    
+    
+    
     this.makeThriumph = function(choise){
         if(this.thriumph) throw new Error('Make thriumph is allowed once per round');
-        
         if(choise=='Delega')
         {
             this.delegated=true;
@@ -73,12 +143,22 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         else
         {
             this.thriumph=choise;
-            //TODO: Start the moves
+            this.emit('new-move',_players[1]);
         }
+        
+        //Notify all the players with the selected option
+        _players.forEach(function(player){
+            player.notify('thriumph',choise);
+        });
 
     }
+    //Add the makeThriumph function to the made-triumph events
+    this.on('made-thriumph',this.makeThriumph);
     
 };
+
+//Inherits from EventEmitter so we can manage the events of the round.
+util.inherits(ButifarraRound, event.EventEmitter);
 
 
 module.exports.create = function(teams,triumpher,firstPlayer) {
