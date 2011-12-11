@@ -86,34 +86,51 @@ module.exports = {
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
         var events=2;
         function myDone(){
-            console.log("mydone");
             round.moves.should.be.instanceof(Array);
             round.moves.length.should.eql(1);
-            console.log(round.moves[0]);
             round.moves[0].rolls.length.should.eql(4);
             for(i in round.moves[0].rolls)
             {   
-                console.log(round.moves[0].rolls[i]);
                 var roll = round.moves[0].rolls[i];
                 roll.card.suit.should.eql('Espases');
             }
             done();
         }
         round.on('end-move',function(){
-            console.log('end-move'+events);
             events--;
             if(events==0) myDone();
-        })
+        });
         round.on('new-move',function(){
-            console.log('new-move'+events);
             events--;
             if(events==0) myDone();
-        })
+        });
     
         round.emit('new-roll',Card.create(2,'Espases'));
         round.emit('new-roll',Card.create(3,'Espases'));
         round.emit('new-roll',Card.create(4,'Espases'));
-        round.emit('new-roll',Card.create(5,'Espases'));
-                
+        round.emit('new-roll',Card.create(5,'Espases'));     
+    },
+    "Each round constits of 12 moves, when it's finished it fires an round-ended event'" : function(done){
+        var round2 = setUp();
+        
+        function doMove(){
+            round2.emit('new-roll',Card.create(2,'Espases'));
+            round2.emit('new-roll',Card.create(3,'Espases'));
+            round2.emit('new-roll',Card.create(4,'Espases'));
+            round2.emit('new-roll',Card.create(5,'Espases'));  
+        }
+        
+        round2.on('round-ended',function(data){
+            data.moves.should.be.instanceof(Array);
+            data.moves.length.should.eql(12);
+            done();
+        });
+        round2.on('new-move',function(){
+            doMove();
+        });
+        //Start the round 
+        round2.emit('made-thriumph','Bastos');
+    
     }
+
 }   

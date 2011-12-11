@@ -60,6 +60,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             }
             player.notify('cards',player.cards);
         });
+        this.emit('round-started');
     }
     
     /*
@@ -80,10 +81,17 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     */
     this.moveEnded = function(move){
         this.moves.push(move);
-        this.emit('new-move');
         //TODO: Put the wining cards in the correct team.
-        
-        //TODO: If the Round is ended emmit an event too.
+        if(this.moves.length<12)
+        {
+            this.emit('new-move');
+        }
+        else
+        {
+            //TODO: If the Round is ended emmit an event too.
+            this.emit('round-ended',this);
+
+        }
     }
     //Add the newMove function to the new-move events
     this.on('end-move',this.moveEnded);
@@ -114,8 +122,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             }
             
         }catch(Error){
-            player.notify('invalid-roll',card);
-            console.log(Error);      
+            player.notify('invalid-roll',card);   
         }
     }
     //Add the newRoll function to the new-roll events
