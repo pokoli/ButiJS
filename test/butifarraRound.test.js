@@ -14,11 +14,13 @@ function setUp(){
     player2.join(game);
     player3.join(game);
     player4.join(game);
+    game.test=true;
     game.start();
     return game.playedRounds[0];
 }
 
 var round = setUp();
+
 
 module.exports = {
     "Butifarra Round consits of and of array moves, and a thriumpher " : function() {
@@ -104,20 +106,20 @@ module.exports = {
             events--;
             if(events==0) myDone();
         });
-    
+
         round.emit('new-roll',Card.create(2,'Espases'));
         round.emit('new-roll',Card.create(3,'Espases'));
         round.emit('new-roll',Card.create(4,'Espases'));
-        round.emit('new-roll',Card.create(5,'Espases'));     
+        round.emit('new-roll',Card.create(5,'Espases'));
     },
     "Each round constits of 12 moves, when it's finished it fires an round-ended event'" : function(done){
         var round2 = setUp();
-        
+        var i=0;
         function doMove(){
             round2.emit('new-roll',Card.create(2,'Espases'));
             round2.emit('new-roll',Card.create(3,'Espases'));
             round2.emit('new-roll',Card.create(4,'Espases'));
-            round2.emit('new-roll',Card.create(5,'Espases'));  
+            round2.emit('new-roll',Card.create(5,'Espases')); 
         }
         
         round2.on('round-ended',function(data){

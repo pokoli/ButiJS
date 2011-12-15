@@ -93,7 +93,7 @@ var ButifarraGame = function() {
         });
     }
     
-    function roundEnded(roundData){
+    this.roundEnded = function(roundData){
         this.playedRounds[this.round]=roundData; //Refresh the round data.
         //TODO: Calculate Scores, show to the players.
         //TODO: See if we have to play another round or the game has ended.
@@ -110,8 +110,13 @@ var ButifarraGame = function() {
         var idFristplayer = _thriumpher+1;
         idFristplayer = idFristplayer % 4;
         var currentRound = Round.create(this.teams,this.players[_thriumpher],this.players[idFristplayer]);
+        if(this.test)
+            currentRound.test=true;
         currentRound.start();
-        currentRound.on('round-ended',roundEnded);
+        var game=this; //Save the object to call it latter.
+        currentRound.on('round-ended',function(roundData){
+            game.roundEnded(roundData);
+        });
         this.playedRounds.push(currentRound);
         
     }

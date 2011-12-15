@@ -107,10 +107,24 @@ var ButifarraMove = function(thriumph) {
         Adds the roll for one player to the current move.
     */
     this.addRoll = function(player,card){
+        //Validate that the player has the card in the stack.
+        var doesntHaveCard=true;
+        for(i in player.cards)
+        {
+            if(player.cards[i]==card)
+            {
+                doesntHaveCard=false;
+                break;
+            }
+        }
+        if(doesntHaveCard && !this.test) //If this.test is defined we are in a test case that needs this to be deactivated
+            throw new Error("You can not play a card you don't have in the stack");
         var roll = new ButifarraRoll(player,card);
         validateRoll(roll,this.rolls,function(err){
-            if(err) throw new Error('Invalid Movement');
+            if(err) throw err;
             _rolls.push(roll);
+            var idx = player.cards.indexOf(card); // Find the index
+            if(idx!=-1) player.cards.splice(idx, 1);
         });
 
     }

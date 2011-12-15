@@ -28,7 +28,8 @@ module.exports = {
         move.should.respondTo('addRoll');
     },
     "The first Roll of a move could be any card" : function(){
-        CavallEspases = Card.create(11,'Espases');
+        var CavallEspases = Card.create(11,'Espases');
+        player1.cards=[CavallEspases];
         should.doesNotThrow(function(){
             move.addRoll(player1,CavallEspases);
         },Error,"Invalid movement");
@@ -38,23 +39,25 @@ module.exports = {
     },
     "A player can't roll twice in the same move " : function(){
         should.throws(function(){
+            player1.cards=[Card.create(11,'Espases')];
             move.addRoll(player1,Card.create(11,'Espases'));
         },Error,"Invalid movement");
     },
     "A card can't be rolled twice in the same move " : function(){
         should.throws(function(){
+            player2.cards=[Card.create(11,'Espases')];
             move.addRoll(player2,Card.create(11,'Espases'));
         },Error,"Invalid movement");
     },
     "The next rolls should be from the same suit or thriumph (if doesn't have thriumph)" : function(){
-        player3.cards=[Card.create(2,'Copes')];
+        var ReiEspases = Card.create(12,'Espases');
+        player3.cards=[Card.create(11,'Oros'),Card.create(11,'Bastos'),ReiEspases,Card.create(2,'Copes')];
         should.throws(function(){
             move.addRoll(player3,Card.create(11,'Oros'));
         },Error,"Invalid movement"); 
         should.throws(function(){
             move.addRoll(player3,Card.create(11,'Bastos'));
         },Error,"Invalid movement"); 
-        ReiEspases = Card.create(12,'Espases');
         should.doesNotThrow(function(){
             move.addRoll(player3,ReiEspases);
         },Error,"Invalid movement");
@@ -62,6 +65,7 @@ module.exports = {
         move.rolls[1].card.should.eql(ReiEspases);
         move.rolls[1].player.should.eql(player3);
         ReiCopes = Card.create(12,'Copes');
+        player2.cards=[ReiCopes];
         should.doesNotThrow(function(){
             move.addRoll(player2,ReiCopes);
         },Error,"Invalid movement");
@@ -72,7 +76,8 @@ module.exports = {
     "The next roll must be higher than the higest roll from the other team (when possible)" : function(){
         function setUp(){
             move = Move.create();
-            move.addRoll(player1,Card.create(5,'Espases'));
+            player1.cards=[Card.create(5,'Espases')];
+            move.addRoll(player1,player1.cards[0]);
             player3.cards = [
                 Card.create(1,'Espases'),
                 Card.create(2,'Espases'),
@@ -110,32 +115,52 @@ module.exports = {
         move.should.respondTo('getValue');
         move.should.respondTo('getWinner');
         var move0 = Move.create('Copes');
-        move0.addRoll(player1,Card.create(2,'Espases'));
-        move0.addRoll(player2,Card.create(3,'Espases'));
-        move0.addRoll(player3,Card.create(4,'Espases'));
-        move0.addRoll(player4,Card.create(5,'Espases'));
+        player1.cards=[Card.create(2,'Espases')];
+        player2.cards=[Card.create(3,'Espases')];
+        player3.cards=[Card.create(4,'Espases')];
+        player4.cards=[Card.create(5,'Espases')];
+        move0.addRoll(player1,player1.cards[0]);
+        move0.addRoll(player2,player2.cards[0]);
+        move0.addRoll(player3,player3.cards[0]);
+        move0.addRoll(player4,player4.cards[0]);
         move0.getWinner().should.eql(player4.team);
         move0.getValue().should.eql(1);
         var move1 = Move.create('Copes');
-        move1.addRoll(player1,Card.create(11,'Espases'));
-        move1.addRoll(player2,Card.create(12,'Espases'));
-        move1.addRoll(player3,Card.create(1,'Espases'));
-        move1.addRoll(player4,Card.create(9,'Espases'));
+        player1.cards=[Card.create(11,'Espases')];
+        player2.cards=[Card.create(12,'Espases')];
+        player3.cards=[Card.create(1,'Espases')];
+        player4.cards=[Card.create(9,'Espases')];
+        move1.addRoll(player1,player1.cards[0]);
+        move1.addRoll(player2,player2.cards[0]);
+        move1.addRoll(player3,player3.cards[0]);
+        move1.addRoll(player4,player4.cards[0]);
         move1.getWinner().should.eql(player4.team);
         move1.getValue().should.eql(15);
-        //TODO: Review it
-//        var move2 = Move.create('Copes');
-//        console.log(2);
-//        move2.addRoll(player1,Card.create(2,'Espases'));
-//        console.log(11);
-//        move2.addRoll(player2,Card.create(11,'Espases'));
-//        console.log(8);
-//        move2.addRoll(player3,Card.create(8,'Espases'));
-//        console.log(5);
-//        move2.addRoll(player4,Card.create(5,'Espases'));
-//        move2.getWinner().should.eql(player2.team);
-//        move2.getValue().should.eql(3);
-        
+        var move2 = Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        player2.cards=[Card.create(11,'Espases')];
+        player3.cards=[Card.create(8,'Espases')];
+        player4.cards=[Card.create(5,'Espases')];
+        move2.addRoll(player1,player1.cards[0]);
+        move2.addRoll(player2,player2.cards[0]);
+        move2.addRoll(player3,player3.cards[0]);
+        move2.addRoll(player4,player4.cards[0]);
+        move2.getWinner().should.eql(player2.team);
+        move2.getValue().should.eql(3);
+    },
+    "A player can only play a card that he/she has in the stack" : function(){
+        move0=Move.create('Copes');
+        should.throws(function(){
+            move.addRoll(player1,Card.create(2,'Espases'));
+        },Error,"Invalid movement");
+    },
+    "After the player has played a card it gets removed for him/her stack" : function(){
+        move0=Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        should.doesNotThrow(function(){
+            move0.addRoll(player1,player1.cards[0]);
+        },Error,"Invalid movement");
+        player1.cards.length.should.eql(0);
     }
-    //TODO: Write more test cases. Is very important that those functions work properly.
+    
 }   

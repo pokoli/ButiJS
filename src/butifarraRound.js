@@ -70,6 +70,8 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         //Put the players in the correct order
         _players=ButifarraGame.orderPlayers(_players,this.teams,firstPlayer);
         _move = ButifarraMove.create();
+        if(this.test)
+            _move.test=true;
         _players[0].notify('play-card');
         _lastPlayed=-1;
     }
@@ -81,7 +83,6 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     */
     this.moveEnded = function(move){
         this.moves.push(move);
-        //TODO: Put the wining cards in the correct team.
         if(this.moves.length<12)
         {
             this.emit('new-move');
@@ -122,7 +123,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             }
             
         }catch(Error){
-            player.notify('invalid-roll',card);   
+            player.notify('invalid-roll',Error);   
         }
     }
     //Add the newRoll function to the new-roll events
