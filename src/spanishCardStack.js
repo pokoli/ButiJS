@@ -84,6 +84,11 @@ SpanishCardStack.prototype.toString = function()
 	return this._toString();
 }
 
+/*
+Returns a shufled stack
+*/
 module.exports.create = function() {
-	return new SpanishCardStack();
+    var stack = new SpanishCardStack();
+    stack.shuffle();
+	return stack;
 };
