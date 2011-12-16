@@ -17,6 +17,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.thriumpher=thriumpher;
     this.delegated=false;
     this.teams = teams;
+    this.winnedCards = {1: [], 2: []};
     
     //Holds the information about the current move. 
     var _move;
@@ -85,13 +86,18 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         this.moves.push(move);
         if(this.moves.length<12)
         {
-            this.emit('new-move');
+            var winner = move.getWinner();
+            for(i in move.rolls)
+            {
+                var card=move.rolls[i].card;
+                this.winnedCards[winner.team].push(card);
+            }
+            this.emit('new-move',winner);
         }
         else
         {
             //TODO: If the Round is ended emmit an event too.
             this.emit('round-ended',this);
-
         }
     }
     //Add the newMove function to the new-move events

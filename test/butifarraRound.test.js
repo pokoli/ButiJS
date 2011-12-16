@@ -1,8 +1,8 @@
 var Game = require('../src/butifarraGame'), 
     Card = require('../src/card'),     
     Round = require('../src/butifarraRound'),
-	Player = require('../src/player'),	
-	should = require ('should');
+    Player = require('../src/player'),	
+    should = require ('should');
 
 function setUp(){
     var game = Game.create();
@@ -31,6 +31,13 @@ module.exports = {
     "We should know if the thriumpher has delegated the thriump" : function(){
         round.should.have.property('delegated');
         round.delegated.should.eql(false);
+    },
+    "We should know the winned cards of each team" : function(){
+        round.should.have.property('winnedCards');
+        round.winnedCards[1].should.be.instanceof(Array);
+        round.winnedCards[1].should.eql([]);
+        round.winnedCards[2].should.be.instanceof(Array);
+        round.winnedCards[2].should.eql([]);
     },
     "When the round is started each player has 12 cards " : function(){
         round.teams[1].forEach(function(player){
@@ -87,26 +94,45 @@ module.exports = {
     },
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
         var events=2;
-        function myDone(){
-            round.moves.should.be.instanceof(Array);
-            round.moves.length.should.eql(1);
-            round.moves[0].rolls.length.should.eql(4);
-            for(i in round.moves[0].rolls)
+        function myDone(moveData){
+            events.should.eql(0);
+            moveData.rolls.length.should.eql(4);
+            for(i in moveData.rolls)
             {   
-                var roll = round.moves[0].rolls[i];
+                var roll = moveData.rolls[i];
                 roll.card.suit.should.eql('Espases');
             }
             done();
         }
-        round.on('end-move',function(){
+        round.on('end-move',function(roundData){
             events--;
-            if(events==0) myDone();
+            myDone(roundData);
         });
         round.on('new-move',function(){
             events--;
-            if(events==0) myDone();
         });
 
+        round.emit('new-roll',Card.create(2,'Espases'));
+        round.emit('new-roll',Card.create(3,'Espases'));
+        round.emit('new-roll',Card.create(4,'Espases'));
+        round.emit('new-roll',Card.create(5,'Espases'));
+    },
+    "When the round is ended the played cards should be in the winning team's winned cards " : function(done){
+        round = setUp();
+        round.on('end-move',function(move){
+            move.getValue().should.eql(1);
+            var winner = move.getWinner();
+            var winnedCards = []
+            for(i in move.rolls)
+            {
+                var card=move.rolls[i].card;
+                winnedCards.push(card);
+            }
+            winnedCards.length.should.eql(4);
+            done();
+        });
+        
+        round.emit('made-thriumph','Bastos');
         round.emit('new-roll',Card.create(2,'Espases'));
         round.emit('new-roll',Card.create(3,'Espases'));
         round.emit('new-roll',Card.create(4,'Espases'));

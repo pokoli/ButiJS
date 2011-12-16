@@ -156,23 +156,23 @@ var ButifarraMove = function(thriumph) {
         var higherCard,winner;
         for(i in this.rolls)
         {
-            var team = this.rolls[i].player.team;
+            var player = this.rolls[i].player;
             var card = this.rolls[i].card;
 
             if(!higherCard)
             {
                 higherCard=card;
-                winner=team;
+                winner=player;
             }
             if(card.suit == thriumph && higherCard.suit!=thriumph)
             {
                 higherCard=card;
-                winner=team;
+                winner=player;
             }
             if(higherCard.suit==card.suit && card.isHigher(higherCard))
             {
                 higherCard=card;
-                winner=team;
+                winner=player;
             }
         }
         return winner;

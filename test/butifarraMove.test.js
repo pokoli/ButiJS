@@ -123,7 +123,7 @@ module.exports = {
         move0.addRoll(player2,player2.cards[0]);
         move0.addRoll(player3,player3.cards[0]);
         move0.addRoll(player4,player4.cards[0]);
-        move0.getWinner().should.eql(player4.team);
+        move0.getWinner().should.eql(player4);
         move0.getValue().should.eql(1);
         var move1 = Move.create('Copes');
         player1.cards=[Card.create(11,'Espases')];
@@ -134,7 +134,7 @@ module.exports = {
         move1.addRoll(player2,player2.cards[0]);
         move1.addRoll(player3,player3.cards[0]);
         move1.addRoll(player4,player4.cards[0]);
-        move1.getWinner().should.eql(player4.team);
+        move1.getWinner().should.eql(player4);
         move1.getValue().should.eql(15);
         var move2 = Move.create('Copes');
         player1.cards=[Card.create(2,'Espases')];
@@ -145,7 +145,7 @@ module.exports = {
         move2.addRoll(player2,player2.cards[0]);
         move2.addRoll(player3,player3.cards[0]);
         move2.addRoll(player4,player4.cards[0]);
-        move2.getWinner().should.eql(player2.team);
+        move2.getWinner().should.eql(player2);
         move2.getValue().should.eql(3);
     },
     "A player can only play a card that he/she has in the stack" : function(){
