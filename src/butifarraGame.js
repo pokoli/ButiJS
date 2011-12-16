@@ -30,7 +30,7 @@ function orderPlayers(players,teams,firstPlayer)
 var ButifarraGame = function() {
     Game.Game.call(this);
     this.teams = {};
-    this.score = {};
+    this.score = {1:0,2:0};
 
     //Holds the number of the actual round
     this.round=0;
@@ -95,8 +95,39 @@ var ButifarraGame = function() {
     
     this.roundEnded = function(roundData){
         this.playedRounds[this.round]=roundData; //Refresh the round data.
-        //TODO: Calculate Scores, show to the players.
-        //TODO: See if we have to play another round or the game has ended.
+        var roundScores=roundData.getScores();
+        var winnerTeam,result;
+        var tie=false;
+        for(i in roundScores)
+        {
+            if(roundScores[i]>36) //We only compute the points above 36 (half of the stack)
+            {
+                winnerTeam=i;
+                result=roundScores[i]-36;
+            }
+            else if (roundScores[i]==36) //Tie round
+            {
+                tie=true;
+            }
+        }
+        var gameEnded=false;
+        if(winnerTeam)
+        {
+            this.scores[winnerTeam]+=result;
+            if(this.scores[winnerTeam]>100)
+            {
+                gameEnded=true;
+            }
+        }
+        //TODO: Notify the players with the round result
+        if(gameEnded)
+        {
+            this.emit('game-ended',this);
+        }
+        else
+        {
+            this.startNewRound();
+        }
     }
     
         

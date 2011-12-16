@@ -7,6 +7,23 @@ var ButifarraRoll = function(player,card) {
     this.card=card;    
 };
 
+/*
+    Calculates the points of a set of 4 cards
+*/
+function calculatePoints(cards){
+    var points = 0;
+    for(i in cards)
+    {
+        var card = cards[i];
+        if(card.number==10) points++;
+        if(card.number==11) points=points+2;
+        if(card.number==12) points=points+3;
+        if(card.number==1) points=points+4;
+        if(card.number==9) points=points+5;
+    }
+    //Four cards are valued 1 point.
+    return ++points;
+}
 
 /*  
     Holds the information of each Move. 
@@ -129,23 +146,20 @@ var ButifarraMove = function(thriumph) {
 
     }
     
+
+    
     /*
         Returns the value of the current hand. 
     */
     this.getValue = function(){
         if(this.rolls.length!=4) return 0;
-        var points = 0;
+        var cards = [];
         for(i in this.rolls)
         {
             var card = this.rolls[i].card;
-            if(card.number==10) points++;
-            if(card.number==11) points=points+2;
-            if(card.number==12) points=points+3;
-            if(card.number==1) points=points+4;
-            if(card.number==9) points=points+5;
+            cards.push(card);
         }
-        //Four cards are valued 1 point. 
-        return ++points;
+        return calculatePoints(cards);
     }
     
     /*
@@ -183,4 +197,6 @@ var ButifarraMove = function(thriumph) {
 module.exports.create = function(thriumph) {
     return new ButifarraMove(thriumph);
 };
+
+module.exports.calculatePoints = calculatePoints;
 

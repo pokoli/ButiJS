@@ -138,6 +138,12 @@ module.exports = {
         round.emit('new-roll',Card.create(4,'Espases'));
         round.emit('new-roll',Card.create(5,'Espases'));
     },
+    "We should know the score of the round " : function(){
+        round.should.respondTo('getScores');
+        var scores = round.getScores();
+        scores[1].should.within(0,36);
+        scores[2].should.within(0,36);
+    },
     "Each round constits of 12 moves, when it's finished it fires an round-ended event'" : function(done){
         var round2 = setUp();
         var i=0;
@@ -158,7 +164,6 @@ module.exports = {
         });
         //Start the round 
         round2.emit('made-thriumph','Bastos');
-    
     }
 
 }   

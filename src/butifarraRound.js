@@ -96,7 +96,6 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         }
         else
         {
-            //TODO: If the Round is ended emmit an event too.
             this.emit('round-ended',this);
         }
     }
@@ -168,7 +167,28 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     }
     //Add the makeThriumph function to the made-triumph events
     this.on('made-thriumph',this.makeThriumph);
-    
+
+    /*
+        Returns the score for each team.
+    */
+    this.getScores = function(){
+        var ret = {1:0, 2:0};
+        var temp = []
+        for(team in [1,2])
+        {
+            for(i in this.winnedCards[team])
+            {
+                var card = this.winnedCards[team][i];
+                temp.push(card);
+                if(temp.length==4)
+                {
+                    ret[team]= ret[team]+ButifarraMove.calculatePoints(temp);
+                    temp=[];
+                }
+            }
+        }
+        return ret;
+    }
 };
 
 //Inherits from EventEmitter so we can manage the events of the round.
