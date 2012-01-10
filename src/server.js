@@ -1,28 +1,36 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
+var express = require('express') 
+  , socketio = require('socket.io')
   , fs = require('fs')
   , url = require('url')
   , sanitize = require('validator').sanitize
   , Game = require('./game')
   , Player = require('./player');
+  
+var app = express.createServer();
+
+//Static files configuration
+var pub = __dirname + '/public'; 
+
+
+app.configure(function(){
+    //TODO: Configure express
+      app.use(express.bodyParser());
+      app.use(express.methodOverride());
+      app.use(app.router);
+      app.use(express.static(__dirname + '/public'));
+    app.set('view engine', 'jade');
+    app.set('view options', { layout: false});
+});
+
+
+
+app.get('/', function(req,res){
+    res.render('index');
+});
 
 app.listen(8000);
+var io = socketio.listen(app);
 
-function handler (req, res) {
-  var pathname = url.parse(req.url).pathname;
-  console.log(pathname);
-  var file = (pathname.match('^/public') ?  pathname : '/index.html') ;
-  fs.readFile(__dirname +  file,
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading '+file);
-    }
-
-    res.writeHead(200);
-    res.end(data);
-  });
-}
 
 //Variable for hosting the current games and players on the server
 var _games = [];
