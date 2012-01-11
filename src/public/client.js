@@ -2,9 +2,7 @@ var socket = io.connect('http://localhost:8000');
   
 socket.on('welcome', function (data) {
 	var name = prompt(data.msg);
-  	socket.emit('login',{'name' : name}, function(data){
-  		alert('Hello '+ data.name);		
-  	});
+  	socket.emit('login',{'name' : name});
 });  
 
 
@@ -26,10 +24,12 @@ socket.on('message', function(data){
 
 /*Called onLoad of the html. Loads all the data needed:
 	1. Refresh games-list (every 5 seconds)
+	2. Refresh player-list (every 5 seconds)
 */
 function doLoad()
 {
 	setInterval("refreshGames()",5000);
+	setInterval("refreshPlayers()",5000);
 }
 
 function send() {
@@ -46,9 +46,25 @@ function refreshGames(){
 			$('#game-list').append('<li>No games found</li>');
 			return;
 		}
-		for(var game in data)
+		for(var i in data)
 		{
-			$('#game-list').append('<li>'+game+'</li>');
+			$('#game-list').append('<li>'+game[i]+'</li>');
+		}	
+	});
+	
+}
+
+function refreshPlayers(){
+	socket.emit('list-players',null,function(data){
+		$('#player-list').children().remove();
+		if(!data || data==[] || data.length ==0)
+		{
+			$('#player-list').append('<li>No players on the server</li>');
+			return;
+		}
+		for(var i in data)
+		{
+			$('#player-list').append('<li>'+data[i].name+'</li>');
 		}	
 	});
 	

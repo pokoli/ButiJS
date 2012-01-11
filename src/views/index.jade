@@ -1,18 +1,32 @@
+!!! 5
 html
     head
-        script(type="text/javascript",src="/socket.io/socket.io.js")
-        script(type="text/javascript",src="/public/jquery-1.7.min.js")
-        script(type="text/javascript",src="/public/client.js")
-        link(rel="stylesheet",type="text/css",href="/public/style.css")
-    body(onLoad="doLoad();")
+        title Butifarra's Game Server
+        script(type='text/javascript',src='/socket.io/socket.io.js')
+        script(type='text/javascript',src='/public/jquery-1.7.1.min.js')
+        script(type='text/javascript',src='/public/jquery-ui-1.8.17.custom.min.js')
+        script(type='text/javascript',src='/public/ui.js')
+        script(type='text/javascript',src='/public/client.js')
+        link(rel='stylesheet',type='text/css',href='/public/style.css')
+        link(rel='stylesheet',type='text/css',href='/public/jquery-ui.css')
+    body(onLoad='doLoad();')
     #container
-        #chat
-            ul#message
-            form#chat-form(action="javascript:send();")
-                input#msg(type="text",value="")
-                input#send(type="submit",value="send")
-        #games
-            ul#game-list
-            form#game-form(action="javascript:createGame();")
-                input#create(type="submit",value="Create game")
-        
+        div#tabs
+            ul
+                li 
+                    a(href='#chat') Chat
+                li 
+                    a(href='#games') Games 
+            div#chat.row
+                div#chat-messages.cell
+                    ul#messages
+                        li Welcome to the Chat!
+                    form#chat-form(action='javascript:send();')
+                       input#msg(type='text',value='')
+                       input#send(type='submit',value='send')  
+                div#chat-players.cell
+                    ul#player-list
+            div#games.row
+                ul#game-list
+                form#game-form(action='javascript:createGame();')
+                    input#create(type='submit',value='Create game')
