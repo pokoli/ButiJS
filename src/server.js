@@ -9,15 +9,17 @@ var express = require('express')
 var app = express.createServer();
 
 //Static files configuration
-var pub = __dirname + '/public'; 
+var pub = __dirname + '/public/'; 
 
 
 app.configure(function(){
     //TODO: Configure express
       app.use(express.bodyParser());
+      //The static content is exposed in the /public/ directory
+      app.use('/public/',express.static(pub));
       app.use(express.methodOverride());
       app.use(app.router);
-      app.use(express.static(__dirname + '/public'));
+
     app.set('view engine', 'jade');
     app.set('view options', { layout: false});
 });
