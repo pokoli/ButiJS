@@ -108,18 +108,25 @@ io.sockets.on('connection', function (socket) {
   	
   	socket.on('disconnect', function(){
   	    var player = getCurrentPlayer();
-  		_games.forEach(function(game,idx){
-  			if(game.hasPlayer(player))
-  			{
-  				game.removePlayer(player);
-  				if(game.numberOfPlayers()==0)
-  					_games.splice(idx,1);
-  			}
-  		})
-
-  		socket.broadcast.emit('message',player.name + ' left the server');
-  		delete _players[_playerid];
-  		delete _playerid=null;
+  	    
+  	    if(player)
+  	    {
+      		_games.forEach(function(game,idx){
+      			if(game.hasPlayer(player))
+      			{
+      				game.removePlayer(player);
+      				if(game.numberOfPlayers()==0)
+      					_games.splice(idx,1);
+      			}
+      		})
+      		socket.broadcast.emit('message',player.name + ' left the server');
+      	}
+      	
+  		if(_playerid)
+  		{
+      		delete _players[_playerid];
+      		delete _playerid;
+  		}
   	});
 });
 
