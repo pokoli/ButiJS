@@ -18,15 +18,15 @@ html
                 li 
                     a(href='#games') Games 
             div#chat.row
-                div#chat-messages.cell
-                    ul#messages
+                div#chat-messages.cell.bordered
+                    ul#messages.scrolled
                         li Welcome to the Chat!
-                    form#chat-form(action='javascript:send();')
-                       input#msg(type='text',value='')
-                       input#send(type='submit',value='send')  
-                div#chat-players.cell
+                div#chat-players.cell.bordered
+                    p Players
                     ul#player-list
+                form#chat-form(action='javascript:send();')
+                   input#msg(type='text',value='')
             div#games.row
-                ul#game-list
+                ul#game-list.bordered
                 form#game-form(action='javascript:createGame();')
                     input#create(type='submit',value='Create game')
