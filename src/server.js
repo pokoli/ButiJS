@@ -13,18 +13,20 @@ var pub = __dirname + '/public/';
 
 
 app.configure(function(){
-    //TODO: Configure express
-      app.use(express.bodyParser());
-      //The static content is exposed in the /public/ directory
-      app.use('/public/',express.static(pub));
-      app.use(express.methodOverride());
-      app.use(app.router);
-
+    app.use(express.bodyParser());
+    //The static content is exposed in the /public/ directory
+    app.use('/public/',express.static(pub));
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use(express.errorHandler());
     app.set('view engine', 'jade');
     app.set('view options', { layout: false});
 });
 
-
+app.configure('development',function(){
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+    app.set('view options', { pretty: true , layout: false});
+});
 
 app.get('/', function(req,res){
     res.render('index');
