@@ -48,7 +48,7 @@ function refreshGames(){
 		}
 		for(var i in data)
 		{
-			$('#game-list').append('<li>'+game[i]+'</li>');
+			$('#game-list').append('<li>'+data[i]+'</li>');
 		}	
 	});
 	
