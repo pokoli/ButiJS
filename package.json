@@ -2,7 +2,7 @@
   "author": "Sergi Almacellas <pokoli@gmail.com>",
   "name": "ButiJS",
   "description": "Butifarra's game server on the top of node.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/pokoli/ButiJS.git"
