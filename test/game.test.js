@@ -2,11 +2,13 @@ var Game = require('../src/game'),
 	Player = require('../src/player'),
 	should = require ('should');
 
-var game = Game.create();
+var game = Game.create('New game');
 var newPlayer = Player.create('new Player');
 
 module.exports = {
     "Game's initials number of players should be 0" : function() {
+        game.should.have.property('name');
+        game.name.should.eql('New game');
 		game.should.have.property('players');
 		game.players.should.be.instanceof(Array);
 		game.numberOfPlayers().should.eql(0);

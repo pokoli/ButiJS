@@ -10,7 +10,8 @@ function notifyAll(type,data,fn) {
     });
 }; 
 
-var Game = function() {
+var Game = function(name) {
+    this.name=name;
 	this.players = [];
 	this.watchers = [];
 	this.state = 'waiting';
@@ -22,14 +23,15 @@ var Game = function() {
 //Inherits from EventEmitter so we can manage the events of the game.
 util.inherits(Game, event.EventEmitter);
 
-module.exports.create = function() {
-	return new Game();
+module.exports.create = function(name) {
+	return new Game(name);
 };
 
 module.exports.clone = function(game) {
-	var _game = new Game();
+
 	if(!game)
-		return _game;
+		return new Game();
+	var _game = new Game(game.name);
 	if(game.players)
 		_game.players=game.players;
 	if(game._events)

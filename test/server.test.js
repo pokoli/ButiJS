@@ -75,7 +75,7 @@ module.exports = {
 		});
 	},
 	"When we create a game, the server stores it" : function(done){
-		game = Game.create();
+		game = Game.create('New Game');
 		socket.emit('create-game',game,function(data){
 			recivedGame = Game.clone(data);
 			recivedGame.numberOfPlayers().should.eql(1); //The player automatically joins the game
