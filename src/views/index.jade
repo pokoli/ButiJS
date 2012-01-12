@@ -32,6 +32,10 @@ html
                 form#chat-form(action='javascript:send();')
                    input#msg(type='text',value='')
             div#games.row
-                ul#game-list.bordered
-                form#game-form(action='javascript:createGame();')
-                    input#create(type='submit',value='Create game')
+                table#game-list.cell.bordered
+                div#game-details.cell.bordered
+                    p Game Details
+                form#game-form
+                    input#join(type='button',value='Join game')
+                    input#watch(type='button',value='Watch game')
+                    input#create(type='button',value='Create game')

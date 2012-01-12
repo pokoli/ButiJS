@@ -40,14 +40,14 @@ function send() {
 function refreshGames(){
 	socket.emit('list-games',null,function(data){
 		$('#game-list').children().remove();
+		$('#game-list').append('<thead><tr><th>Name</th><th>State</th><th>Players</th><th>Watchers</th></thead>')
 		if(!data || data==[] || data.length ==0)
 		{
-			$('#game-list').append('<li>No games found</li>');
 			return;
 		}
 		for(var i in data)
 		{
-			$('#game-list').append('<li>'+data[i]+'</li>');
+			$('#game-list').append('<tr onClick="selectGame(this)"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
 		}	
 	});
 	
@@ -70,8 +70,9 @@ function refreshPlayers(){
 }
 
 function createGame(){
-	socket.emit('create-game', null,refreshGames());
-
+	socket.emit('create-game', {name: 'Test game'},refreshGames());
+	//Refresh game list after creating the new game.
+	refreshGames();
 }
 
   

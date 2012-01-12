@@ -64,6 +64,15 @@ div
     height: 4%;
     width:95%;
 }
+
+#game-list
+{
+    width:75%;
+}
+#game-details
+{
+    width:20%;
+}
  
 
 

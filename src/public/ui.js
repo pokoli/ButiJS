@@ -7,6 +7,8 @@ $(function() {
     var height = $('#tabs').height() -85;
     $('#chat-messages').height(height);
     $('#chat-players').height(height);
+    $('#game-details').height(height - 100);
+    $('#game-form').height(100);
     //Create a dialog for asking the user her login.
     $("#login-dialog").dialog({
 	autoOpen: true,
@@ -24,6 +26,10 @@ $(function() {
 		    $(this).dialog('close');
 	    }
     });
+    //Game manipulation functions
+    $('#join').click(function(){ alert("Not yet implemented");return;});
+    $('#watch').click(function(){ alert("Not yet implemented");return;});
+    $('#create').click(createGame);
 });
     
 
