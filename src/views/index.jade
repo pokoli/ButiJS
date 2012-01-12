@@ -15,7 +15,12 @@ html
             form
             fieldset
                 label(for='login-name') Enter your name
-                input#login-name(type='text',name='login-name',class='text ui-widget-content ui-corner-all') 
+                input#login-name(type='text',name='login-name',class='text ui-widget-content ui-corner-all')
+        div#create-game-dialog(title='New Game')
+            form
+            fieldset
+                label(for='game-name') Name
+                input#game-name(type='text',name='game-name',class='text ui-widget-content ui-corner-all')
         div#tabs
             ul
                 li 
