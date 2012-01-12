@@ -32,6 +32,8 @@ module.exports.clone = function(game) {
 	if(!game)
 		return new Game();
 	var _game = new Game(game.name);
+	if(game.id)
+	    _game.id=game.id;
 	if(game.players)
 		_game.players=game.players;
 	if(game._events)

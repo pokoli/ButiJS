@@ -4,23 +4,11 @@ var should = require('should'),
 	Player = require('../src/player.js'),
 	Game = require('../src/game.js');
 
-
 var connected = false;
 //var connectedB = false;
-
 	
 var socket = client.connect('http://localhost', {port : 8000});
-//Hem de fer aixo perque es reconnecti de forma automatica
-socket.on('error', function(data){
-	if(!connected) socket.socket.reconnect();
-});
-
-
 //var socketB = client.connect('http://localhost', {port : 8000});
-//socketB.on('error', function(data){
-//	if(!connectedB) socketB.socket.reconnect();
-//});
-
 
 function finish(done) {
 	console.log('Finish');
@@ -44,7 +32,7 @@ module.exports = {
 //			connectedB=true;
 //			should.isUndefined(err);
 //			socketB.disconnect();
-//			done();
+//           done();
 //		});
 //	},
 	"We are recibing a welcome event after connecting" : function(done){
@@ -79,10 +67,11 @@ module.exports = {
 		socket.emit('create-game',game,function(data){
 			recivedGame = Game.clone(data);
 			recivedGame.numberOfPlayers().should.eql(1); //The player automatically joins the game
+			recivedGame.should.have.property('id'); //The server automatically assigns an id to the game
 			socket.emit('list-games',null,function(data){
 				data.should.be.an.instanceof(Array);
 				data.length.should.eql(1);
-				data.shift().should.eql(recivedGame);
+                data.shift().should.eql(recivedGame);
 				done();
 			});
 		});	
@@ -96,6 +85,13 @@ module.exports = {
 		});
 		socket.emit('send',msg);
 	
+	},
+	"A player should be able to join a game" : function(done){
+	    socket.emit('join-game',1,function(err,data){
+	        should.ifError(err);
+	        data.players.length.should.eql(2);
+	        done();
+	    });
 	},
 	"The server must be able to notify a player in a Game" : function(done){
 		//Todo:

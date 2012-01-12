@@ -25,6 +25,12 @@ Expects the new game.
 
 Returns the created game. 
 
+### join-game
+
+Make the current player join the game. 
+
+If the player is currently on a game should throw an error. 
+
 ### list-games
 
 Returns the current game's on the server

@@ -41,6 +41,15 @@ var _games = [];
 //The _players is a dict, with the id of the player, and the player object.
 var _players = {};
 
+/*
+This function is used to generate an unique ID foreach game.
+The unique ID is associated with a game when created. 
+*/
+var gameCounter=0;
+function generateGameID(){
+    gameCounter++;
+    return gameCounter;
+}
 
 /*
 This function is used to generate an unique ID foreach player.
@@ -62,6 +71,7 @@ function getPlayers()
     }
     return ret;
 }
+
 
 io.sockets.on('connection', function (socket) {
     
@@ -96,8 +106,29 @@ io.sockets.on('connection', function (socket) {
   	socket.on('create-game', function(data, fn){
   		var game = Game.clone(data);
   		game.addPlayer(getCurrentPlayer());
+  		game.id=generateGameID();
   		_games.push(game);
-  		if(fn) fn(data);
+  		if(fn) fn(game);
+  	});
+  	
+  	socket.on('join-game', function(data, fn){
+  	    //1. Find the game.
+  	    var game;
+  	    for(var i in _games)
+  	    {
+  	        if(_games[i].id == data)
+  	        {
+  	            game=i;
+  	            break;
+  	        }
+  	    }
+  	    if(!game)
+  	    {
+  	        if(fn) fn(new Error('Game '+data+' does not exist'));
+  	        return;
+  	    }
+  		_games[i].addPlayer(getCurrentPlayer());
+  		if(fn) fn(false,_games[i]);
   	});
   	
   	socket.on('send', function(data){
