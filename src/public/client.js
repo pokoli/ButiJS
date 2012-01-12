@@ -1,8 +1,7 @@
 var socket = io.connect('http://localhost:8000');
   
 socket.on('welcome', function (data) {
-	var name = prompt(data.msg);
-  	socket.emit('login',{'name' : name});
+  	$('#login-dialog').dialog('open');
 });  
 
 

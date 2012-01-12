@@ -7,6 +7,24 @@ $(function() {
     var height = $('#tabs').height() -85;
     $('#chat-messages').height(height);
     $('#chat-players').height(height);
+    //Create a dialog for asking the user her login.
+    $("#login-dialog").dialog({
+	autoOpen: true,
+	height: 200,
+	width: 350,
+	modal: true,
+	buttons: {
+		"Login": function() {
+                socket.emit('login',{'name' : $('#login-name').val() });
+				$(this).dialog( "close" );
+			}
+		},
+		"Cancel": function() {
+	        socket.emit('login',{'name' : 'Unlogged'});
+		    $(this).dialog('close');
+	    }
+    });
 });
     
+
 

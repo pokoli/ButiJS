@@ -11,6 +11,11 @@ html
         link(rel='stylesheet',type='text/css',href='/public/jquery-ui.css')
     body(onLoad='doLoad();')
     #container
+        div#login-dialog(title='Login')
+            form
+            fieldset
+                label(for='login-name') Enter your name
+                input#login-name(type='text',name='login-name',class='text ui-widget-content ui-corner-all') 
         div#tabs
             ul
                 li 
