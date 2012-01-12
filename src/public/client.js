@@ -53,7 +53,10 @@ function refreshGames(){
 		for(var i in games)
 		{
 			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
-		}	
+		}
+		//Refresh the game data if it has changed.
+		if(selected || selected == 0)
+	       showGameDetails(games[selected]);
 	});
 }
 
@@ -105,10 +108,18 @@ function createGame(gameData){
 }
 
 function joinGame(){
-    alert('Not yet implemented');
-    return;
-    //TODO: Impelment it!!!!
-	//socket.emit('join-game', {name: 'Test game'},refreshGames);
+    if(!selected && selected != 0)
+    {
+        alert("You should select a game.");
+        return;
+    }
+	socket.emit('join-game', games[selected].id,function(err,data){
+	    if(err)
+	    {
+	        alert(err);
+	    }
+	    refreshGames();
+	});
 }
 
   
