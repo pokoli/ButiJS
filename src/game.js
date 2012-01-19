@@ -27,11 +27,18 @@ module.exports.create = function(name) {
 	return new Game(name);
 };
 
-module.exports.clone = function(game) {
-
+module.exports.clone = function(game,type) {
 	if(!game)
 		return new Game();
-	var _game = new Game(game.name);
+	var _game;
+	if(type)
+	{
+	    _game = new type(game.name);
+	}
+	else
+	{
+	    _game = new Game(game.name);
+    }
 	if(game.id)
 	    _game.id=game.id;
 	if(game.players)
@@ -78,19 +85,9 @@ Game.prototype.numberOfWatchers = function(){
 	return this.watchers.length;
 }
 
-/*
-This function only does the common things for a game. 
-The game inits must be done in a doStart function 
-*/
 Game.prototype.start = function(){
     if(this.players.length < this.min_players) throw new Error('Not enough players');
     this.state='running';
     this.notifyAll('start',this);
 }
-
-
-
-
-
-
 

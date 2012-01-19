@@ -33,6 +33,13 @@ module.exports = {
             game.start();
         },Error,"Not enough players");        
     },
+    "A butifarraGame can't hold more than 4 players" : function() {
+        game.min_players.should.eql(4);
+        should.throws(function(){
+            var newPlayer = Player.create('Tom');
+            newPlayer.join(game);
+        },Error,"The game is full");
+    },
     "When the game is started round should be 1 and state running" : function() {
         game.round.should.eql(1);
         game.state.should.eql('running');
