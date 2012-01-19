@@ -27,8 +27,8 @@ function orderPlayers(players,teams,firstPlayer)
 }    
     
 
-var ButifarraGame = function() {
-    Game.Game.call(this);
+var ButifarraGame = function(name) {
+    Game.Game.call(this,name);
     this.teams = {};
     this.score = {1:0,2:0};
 
@@ -171,15 +171,32 @@ var ButifarraGame = function() {
         this.startNewRound();
     }
     
+    var super_addPlayer = this.addPlayer;
+    /*
+        Override addPlayer to validate the number of players.
+    */
+    this.addPlayer = function(player){
+        if(this.players.length == 4) throw new Error('The game is full');
+        super_addPlayer.call(this,player)
+    }
 };
 //Inherits from game
 util.inherits(ButifarraGame, Game.Game);
 
-module.exports.create = function() {
-	var buti = new ButifarraGame();
+module.exports.create = function(name) {
+	var buti = new ButifarraGame(name);
 	buti.min_players=4;
 	return buti;
 };
+
+module.exports.clone = function(game) {
+    var _game = Game.clone(game,ButifarraGame);
+    _game.teams = game.teams;
+    _game.score = game.score;
+    _game.round = game.round;
+    _game.playedRounds= game.playedRounds;
+    return _game;
+}
 //Export orderPlayers function to reuse it in the Round Engine
 module.exports.orderPlayers = orderPlayers;
 

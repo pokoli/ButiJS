@@ -3,7 +3,7 @@ var express = require('express')
   , fs = require('fs')
   , url = require('url')
   , sanitize = require('validator').sanitize
-  , Game = require('./game')
+  , Game = require('./butifarraGame')
   , Player = require('./player');
   
 var app = express.createServer();
@@ -127,8 +127,15 @@ io.sockets.on('connection', function (socket) {
   	        if(fn) fn(new Error('Game '+data+' does not exist'));
   	        return;
   	    }
-  		_games[i].addPlayer(getCurrentPlayer());
-  		if(fn) fn(false,_games[i]);
+  	    try{
+            _games[i].addPlayer(getCurrentPlayer());
+            if(fn) fn(false,_games[i]);
+        }
+        catch(err)
+        {
+            if(fn) fn(err);
+        }
+
   	});
   	
   	socket.on('send', function(data){
