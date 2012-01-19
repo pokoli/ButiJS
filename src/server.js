@@ -128,6 +128,7 @@ io.sockets.on('connection', function (socket) {
   	        return;
   	    }
   	    try{
+<<<<<<< HEAD
             _games[i].addPlayer(getCurrentPlayer());
             if(fn) fn(false,_games[i]);
         }
@@ -135,6 +136,15 @@ io.sockets.on('connection', function (socket) {
         {
             if(fn) fn(err);
         }
+=======
+  		    _games[i].addPlayer(getCurrentPlayer());
+      		if(fn) fn(false,_games[i]);
+  		}
+  		catch(err)
+  		{
+      		if(fn) fn(err);
+  		}
+>>>>>>> f32b4dc9faee06c99f24027528021b20e2e93136
 
   	});
   	
