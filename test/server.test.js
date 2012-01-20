@@ -2,7 +2,7 @@ var should = require('should'),
 	client = require('socket.io-client'),
 	server = require('../src/server.js'),
 	Player = require('../src/player.js'),
-	Game = require('../src/game.js');
+	Game = require('../src/butifarraGame.js');
 
 var connected = false;
 //var connectedB = false;
@@ -66,12 +66,13 @@ module.exports = {
 		game = Game.create('New Game');
 		socket.emit('create-game',game,function(data){
 			recivedGame = Game.clone(data);
+			var tempData = data;
 			recivedGame.numberOfPlayers().should.eql(1); //The player automatically joins the game
 			recivedGame.should.have.property('id'); //The server automatically assigns an id to the game
 			socket.emit('list-games',null,function(data){
 				data.should.be.an.instanceof(Array);
 				data.length.should.eql(1);
-                data.shift().should.eql(recivedGame);
+                data.shift().should.eql(tempData);
 				done();
 			});
 		});	
