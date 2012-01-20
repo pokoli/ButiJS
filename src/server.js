@@ -133,7 +133,7 @@ io.sockets.on('connection', function (socket) {
         }
         catch(err)
         {
-            if(fn) fn(err);
+            if(fn) fn(err.message);
         }
 
   	});
