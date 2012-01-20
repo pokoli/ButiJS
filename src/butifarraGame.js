@@ -45,9 +45,9 @@ var ButifarraGame = function(name) {
         Also assigns an empty tuple to each player for holding their cards
         Also initializes the scores for each team. 
     */
-    function assignTeams(players,teams,score){
+     this.assignTeams = function(){
         var teamA = [], teamB = [];
-        players.forEach(function(player){
+        this.players.forEach(function(player){
             var randomNumber = Math.floor(Math.random()*2000);
             if(randomNumber%2==0 && teamA.length < 2) {
                 teamA.push(player);
@@ -64,11 +64,11 @@ var ButifarraGame = function(name) {
             }
             player.cards=[];
         });
-        teams[1] = teamA;
-        teams[2] = teamB;
+        this.teams[1] = teamA;
+        this.teams[2] = teamB;
         
-        score[1]=0;
-        score[2]=0;
+        this.score[1]=0;
+        this.score[2]=0;
     }
     /*
         Assigns a suit forEach player. 
@@ -165,7 +165,7 @@ var ButifarraGame = function(name) {
     */
     this.start = function(){
         super_start.call(this);
-        assignTeams(this.players,this.teams,this.score);
+        this.assignTeams();
         this.players=orderPlayers(this.players,this.teams);
         assignFirstPlayerToChooseTriumph(this.players);
         this.startNewRound();
@@ -176,7 +176,7 @@ var ButifarraGame = function(name) {
         Override addPlayer to validate the number of players.
     */
     this.addPlayer = function(player){
-        if(this.players.length == 4) throw new Error('The game is full');
+        if(this.numberOfPlayers() == 4) throw new Error('The game is full');
         super_addPlayer.call(this,player)
     }
 };
@@ -191,10 +191,10 @@ module.exports.create = function(name) {
 
 module.exports.clone = function(game) {
     var _game = Game.clone(game,ButifarraGame);
-    _game.teams = game.teams;
-    _game.score = game.score;
-    _game.round = game.round;
-    _game.playedRounds= game.playedRounds;
+    _game.teams = game.teams || {};
+    _game.score = game.score || {1:0,2:0};
+    _game.round = game.round || 0;
+    _game.playedRounds= game.playedRounds || [];
     return _game;
 }
 //Export orderPlayers function to reuse it in the Round Engine

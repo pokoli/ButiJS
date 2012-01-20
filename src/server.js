@@ -129,6 +129,8 @@ io.sockets.on('connection', function (socket) {
   	    }
   	    try{
             _games[i].addPlayer(getCurrentPlayer());
+            if(_games[i].numberOfPlayers()==4)
+                _games[i].start();
             if(fn) fn(false,_games[i]);
         }
         catch(err)

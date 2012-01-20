@@ -86,7 +86,7 @@ Game.prototype.numberOfWatchers = function(){
 }
 
 Game.prototype.start = function(){
-    if(this.players.length < this.min_players) throw new Error('Not enough players');
+    if(this.numberOfPlayers() < this.min_players) throw new Error('Not enough players');
     this.state='running';
     this.notifyAll('start',this);
 }
