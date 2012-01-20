@@ -17,9 +17,8 @@ Player.prototype.join = function(game){
 	game.addPlayer(this);
 };
 
-
 module.exports.create = function(name,email,socket) {
-	return new Player(name,email);
+	return new Player(name,email,socket);
 };
 
 

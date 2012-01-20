@@ -88,7 +88,7 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('welcome', { msg : 'Welcome, who you are?'});
   
 	socket.on('login', function(data, fn){
-		var player = Player.create(data.name,'',this);
+		var player = Player.create(data.name,'',socket);
 		_playerid = generateUniqueID();
 		_players[_playerid]=player;
 		if(fn) fn(player);
