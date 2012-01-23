@@ -32,6 +32,10 @@ app.get('/', function(req,res){
     res.render('index');
 });
 
+app.get('/game', function(req,res){
+    res.render('game');
+});
+
 app.listen(8000);
 var io = socketio.listen(app);
 

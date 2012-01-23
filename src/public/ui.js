@@ -1,10 +1,18 @@
+var height;
+
 $(function() {
     //Container must fill all the screen  
     $('#container').height($(window).height()-40);
     $('#tabs').height($(window).height()-40);
     //Create the tabs
     $('#tabs').tabs().find( ".ui-tabs-nav" ).sortable({ axis: "x" });
-    var height = $('#tabs').height() -85;
+    //Automatically select the new added tab
+    var $tabs = $('#tabs').tabs({
+        add: function(event, ui) {
+            $tabs.tabs('select', '#' + ui.panel.id);
+        }
+    });
+    height = $('#tabs').height() -85;
     $('#chat-messages').height(height);
     $('#chat-players').height(height);
     $('#game-details').height(height - 100);
@@ -58,6 +66,20 @@ $(function() {
     $('#watch').click(function(){ alert("Not yet implemented");return;});
     $('#create').click(function(){$("#create-game-dialog").dialog('open')});
 });
+
+function addNewGame(gameData)
+{
+    $('#tabs').tabs("add",'#current-game',gameData.name);
+    $('#current-game').height(height);
+    $('#current-game').addClass('row');
+    $.ajax({
+        url : 'game',
+        success : function(data) {
+             $('#current-game').html(data);
+        },
+     });
+
+}
     
 
 

@@ -73,6 +73,27 @@ div
 {
     width:20%;
 }
- 
+
+#game,#summary,#score
+{
+    border: 1px solid black;
+}
+
+#game
+{
+    width:75%;
+}
+
+#game-info
+{
+    width:20%;
+}
+
+#summary,#score
+{
+
+    height: 50%;
+}
+
 
 
