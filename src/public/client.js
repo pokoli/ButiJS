@@ -25,6 +25,10 @@ socket.on('start', function(gameData){
     addNewGame(gameData);
 });
 
+socket.on('cards', function(data){
+   placeCards(data);
+});
+
 /*Called onLoad of the html. Loads all the data needed:
 	1. Refresh games-list (every 5 seconds)
 	2. Refresh player-list (every 5 seconds)

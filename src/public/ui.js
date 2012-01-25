@@ -87,25 +87,41 @@ function addNewGame(gameData)
      });
 }
 
+
+
+//Canvas 2d Context Holder. 
+var context;
+
+//Positions of the Player Cards Holder
+var cardHolderHeight;
+var cardHolderWidth;
+var cardHolderXOffset;
+var cardHolderYOffset;
+
 /* 
     Inits the game Canvas with all the elements
 */
 function initCanvas(canvasElement)
 {
     canvasElement = canvasElement || $('#game');
-    var ctx=canvasElement[0].getContext("2d");
-    var width=ctx.canvas.width;
-    var height=ctx.canvas.height;
+    this.context=canvasElement[0].getContext("2d");
+    var width=context.canvas.width;
+    var height=context.canvas.height;
 
+    //Save the heightOf the current player cardsHolder
+    cardHolderHeight=height*0.3;
+    cardHolderWidth=width*0.85;
+    cardHolderXOffset=width*0.07;
+    cardHolderYOffset=height-(height*0.3);
     
     //Player 1 cards Holder
-    ctx.strokeRect(0,height*0.185,width*0.15,height*0.485);
+    this.context.strokeRect(0,height*0.185,width*0.15,height*0.485);
     //Player 2 cards Holder
-    ctx.strokeRect(width*0.2,0,width*0.6,height*0.185);
+    this.context.strokeRect(width*0.2,0,width*0.6,height*0.185);
     //Player 3 cards Holder
-    ctx.strokeRect(width-(width*0.15),height*0.185,width*0.15,height*0.485);
+    this.context.strokeRect(width-(width*0.15),height*0.185,width*0.15,height*0.485);
     //Player 4 cards Holder
-    ctx.strokeRect(width*0.07,height-(height*0.3),width*0.85,height*0.3);
+    this.context.strokeRect(cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight);
 }
 
 /*
@@ -133,3 +149,16 @@ function preloadImages()
 //Call the image preloading
 preloadImages();
 
+
+function placeCards(cards)
+{
+    //TODO: Sort the cards based on suit and numberBeforePlacing it
+    for(var i=0;i<cards.length;i++)
+    {
+        var card = cards[i];
+        var image = cachedImages[card.number+'-'+card.suit.toString().toLowerCase()];
+        var x= cardHolderXOffset+((cardHolderWidth/cards.length)*i);
+        var y = cardHolderYOffset;
+        this.context.drawImage(image,x,y,cardHolderWidth/cards.length,cardHolderHeight);
+    }
+}
