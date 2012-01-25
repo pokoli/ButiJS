@@ -52,15 +52,17 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             _players[i].cards = _players[i].cards.concat(stack.next(4));            
 
         }
-        _players.forEach(function(player){
-            if(player==this.thriumpher) 
+        for(i in _players)
+        {
+            var player = _players[i];
+            if(player.name == this.thriumpher.name)
             {
-                player.notify('make-triumph',
+                player.notify('make-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra','Delegar'],
                     this.makeThriumph);
             }
             player.notify('cards',player.cards);
-        });
+        }
         this.emit('round-started');
     }
     
