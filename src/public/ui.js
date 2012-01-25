@@ -167,3 +167,43 @@ function placeCards(cards)
         this.context.drawImage(image,x,y,cardHolderWidth/cards.length,cardHolderHeight);
     }
 }
+
+function showThriumphDialog(selections,callback)
+{
+    //Create the div
+    if($('#show-thriumph-dialog').length==0)
+    {
+        var oDiv = '<div id="show-thriumph-dialog" title="Select Thriumph"><form><fieldset>';
+        oDiv += '<label for="thriumph">Select Thriumph</label>';
+        oDiv += '<select id="thriumph-selector" name="thriumph-selector">';
+        for(var i=0;i<selections.length;i++)
+        {
+            oDiv += '<option value="'+selections[i]+'">'+selections[i]+'</option>';
+        }
+        oDiv += '<select>';
+        oDiv += '</fieldset></form></div>';
+        $(oDiv).appendTo($('#container'));
+        $('#show-thriumph-dialog').dialog({
+	    autoOpen: false ,
+	    height: 200,
+	    width: 350,
+	    modal: false,
+	    buttons: {
+		    "Select": function() {
+                        if(callback) callback($('#thriumph-selector').val());
+                        $(this).dialog( "close" );
+				    }
+			    },	
+        });
+    }
+    else
+    {
+        //If exist we must refresh the options.
+        $('#thriumph-selector').children().remove();
+        for(var i=0;i<selections.length;i++)
+        {
+            $('#show-thriumph-dialog > #thriumph').append('<option value="'+selections[i]+'">'+selections[i]+'</option>');
+        }
+    }
+    $('#show-thriumph-dialog').dialog('open');
+}

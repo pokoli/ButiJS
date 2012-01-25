@@ -140,16 +140,16 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     
     this.makeThriumph = function(choise){
         if(this.thriumph) throw new Error('Make thriumph is allowed once per round');
-        if(choise=='Delega')
+        if(choise=='Delegar')
         {
             this.delegated=true;
             var team = this.teams[this.thriumpher.team];
             for(i in team)
             {
-                if(team[i]!=this.thriumpher)
+                if(team[i].name!=this.thriumpher.name)
                 {
                     this.thriumpher=team[i];
-                    team[i].notify('make-triumph',
+                    team[i].notify('make-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra'],
                     this.makeThriumph);
                 }

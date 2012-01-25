@@ -29,6 +29,14 @@ socket.on('cards', function(data){
    placeCards(sortCards(data));
 });
 
+socket.on('make-thriumph', function(data,callback){
+    alert('make-thriumph');
+    showThriumphDialog(data,callback)
+});
+
+socket.on('thriumph', function (data){
+    alert('Thriumph: '+data);
+});
 /*Called onLoad of the html. Loads all the data needed:
 	1. Refresh games-list (every 5 seconds)
 	2. Refresh player-list (every 5 seconds)
