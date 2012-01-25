@@ -82,6 +82,7 @@ div
 #game
 {
     width:75%;
+    height:100%;
     position: relative;
 }
 
@@ -94,64 +95,4 @@ div
 {
 
     height: 50%;
-}
-
-#game > div
-{
-    border: 1px solid black;
-}
-
-/******
-Div's for positioning all the player cards.
-********/
-
-/*Sizes */
-#player1-cards,#player3-cards
-{
-    width:  15%;
-    height: 48.5%;
-}
-
-#player2-cards
-{
-    width:  60%;
-    height: 18.5%;
-}
-
-#player4-cards
-{
-    width:  85%;
-    height: 30%;
-}
-
-/*Positions*/
-#player1-cards,#player2-cards,#player3-cards,#player4-cards
-{
-    position:absolute;
-}
-
-#player1-cards,#player3-cards
-{
-    top: 18.5%;
-}
-#player1-cards
-{
-    left:0;
-}
-
-#player2-cards
-{
-    top: 0;
-    left:20%;
-}
-
-#player3-cards
-{
-    right:0;
-}
-
-#player4-cards
-{
-    bottom: 0;
-    left:7%;
 }

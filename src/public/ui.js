@@ -66,7 +66,9 @@ $(function() {
     $('#watch').click(function(){ alert("Not yet implemented");return;});
     $('#create').click(function(){$("#create-game-dialog").dialog('open')});
 });
-
+/*
+    Creates a new Tab where the game is placed.
+*/
 function addNewGame(gameData)
 {
     $('#tabs').tabs("add",'#current-game',gameData.name);
@@ -76,10 +78,30 @@ function addNewGame(gameData)
         url : 'game',
         success : function(data) {
              $('#current-game').html(data);
+             initCanvas($('#game'));
         },
      });
+}
+
+/* 
+    Inits the game Canvas with all the elements
+*/
+function initCanvas(canvasElement)
+{
+    canvasElement = canvasElement || $('#game');
+    var ctx=canvasElement[0].getContext("2d");
+    var width=ctx.canvas.width;
+    var height=ctx.canvas.height;
+
+    
+    //Player 1 cards Holder
+    ctx.strokeRect(0,height*0.185,width*0.15,height*0.485);
+    //Player 2 cards Holder
+    ctx.strokeRect(width*0.2,0,width*0.6,height*0.185);
+    //Player 3 cards Holder
+    ctx.strokeRect(width-(width*0.15),height*0.185,width*0.15,height*0.485);
+    //Player 4 cards Holder
+    ctx.strokeRect(width*0.07,height-(height*0.3),width*0.85,height*0.3);
 
 }
-    
-
 
