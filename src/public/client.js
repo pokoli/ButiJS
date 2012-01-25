@@ -26,7 +26,7 @@ socket.on('start', function(gameData){
 });
 
 socket.on('cards', function(data){
-   placeCards(data);
+   placeCards(sortCards(data));
 });
 
 /*Called onLoad of the html. Loads all the data needed:
@@ -130,4 +130,38 @@ function joinGame(){
 	});
 }
 
-  
+/*
+    Calculates the weight of a card in the order of the player card
+    Based on the following relations:
+    Suit: Oros > Copes > Espases -> Bastos
+    Number: 9 > 1 > 12 > 11 > 10 > ... > 2
+*/
+function cardWeight(card)
+{
+    var score=0;
+    if(card.suit=='Oros')
+        score+=300;
+    else if(card.suit=='Copes')
+        score+=200;
+    else if(card.suit=='Espases')
+        score+=100;
+    if(card.number==9 || card.number==1)
+        score+=13;
+    score+=card.number;
+    return score;
+}
+
+/*
+    Sorts the players based on the follwing order:
+     - Per suit: Oros > Copes > Espases -> Bastos
+     - Per Number: 9 > 1 > 12 > 11 > 10 > ... > 2
+*/
+function sortCards(unsorted)
+{
+    function cardSort(a,b)
+    {
+        return (cardWeight(a)-cardWeight(b))*-1
+    }
+    return unsorted.sort(cardSort);
+}
+

@@ -152,7 +152,12 @@ preloadImages();
 
 function placeCards(cards)
 {
-    //TODO: Sort the cards based on suit and numberBeforePlacing it
+    //If the context is not initialized wait 100 miliseconds.
+    if(!this.context)
+    {
+        setTimeout(function(){placeCards(cards)},100);
+        return;
+    }
     for(var i=0;i<cards.length;i++)
     {
         var card = cards[i];
