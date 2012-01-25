@@ -45,9 +45,20 @@ Sends messages to all the players connected on the server (public chat)
 
 Expects a string message.
 
+### Butifarra's specific events
+
+The following events are specific to the Butifirra game. 
+
+#### made-thriumph
+
+Make thriumph on the active game. 
+
+
+
 ##Client API
 
 The client is supposed to recibe the following events. 
+
 
 ### welcome
 
@@ -56,6 +67,36 @@ Returns the server welcome message
 ### mesage
 
 Returns a message sent by the server
+
+### start
+
+A game (which the player plays) is started. All the game data is on the first parameter
+
+### Butifarra's specific events
+
+The following events are specific to the Butifirra game. 
+
+#### make-thriumph
+
+Fired when the player has to make thriumph on the current round.
+
+#### thriumph
+
+Returns the choiced thriumph of the current round. 
+
+#### play-card
+
+Fired when the player has to select a card to move
+
+#### played-card
+
+Fired when a card has been played. Data contains the played card and the player who played it.
+
+#### end-move
+
+Fired when the move (4 played cards) is ended. 
+
+
 
 
 ##License
