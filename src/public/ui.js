@@ -1,4 +1,8 @@
 var height;
+/*
+    Holds the cached images
+*/
+var cachedImages={};
 
 $(function() {
     //Container must fill all the screen  
@@ -12,7 +16,7 @@ $(function() {
             $tabs.tabs('select', '#' + ui.panel.id);
         }
     });
-    height = $('#tabs').height() -85;
+    height = $('#tabs').height() -65;
     $('#chat-messages').height(height);
     $('#chat-players').height(height);
     $('#game-details').height(height - 100);
@@ -102,6 +106,30 @@ function initCanvas(canvasElement)
     ctx.strokeRect(width-(width*0.15),height*0.185,width*0.15,height*0.485);
     //Player 4 cards Holder
     ctx.strokeRect(width*0.07,height-(height*0.3),width*0.85,height*0.3);
+}
+
+/*
+    Preloads the following images. 
+        1.-Card Images
+*/
+function preloadImages()
+{
+    var _suits = ['Oros','Copes','Espases','Bastos'];
+    var _numbers = [1,2,3,4,5,6,7,8,9,10,11,12];
+    for(i in _suits)
+    {
+        var suit = _suits[i];
+        for(j in _numbers)
+        {
+            var num = _numbers[j];
+		    var image = new Image();
+		    var name = num+'-'+suit.toString().toLowerCase();
+		    image.src = 'public/img/'+ name +'.png'
+			cachedImages[name]=image;
+		}
+	}
 
 }
+//Call the image preloading
+preloadImages();
 
