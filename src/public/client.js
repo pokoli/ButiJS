@@ -20,8 +20,13 @@ socket.on('message', function(data){
 	}
 });
 
+//Holds info about the current game.
+var currentGame;
+
 socket.on('start', function(gameData){
+    currentGame=gameData;
     addNewGame(gameData);
+    updateGameInfo(gameData);
 });
 
 socket.on('cards', function(data){

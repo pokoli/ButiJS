@@ -181,6 +181,42 @@ function addNewGame(gameData)
      });
 }
 
+/*
+    Updates the game info: 
+    - Teams
+    - Current score
+*/
+function updateGameInfo(gameData)
+{
+
+    if($('#summary').length==0)
+    {
+        setTimeout(function(){updateGameInfo(gameData)},100);
+        return;
+    }
+    alert($('#summary').length);
+    $('#summary').children().remove();
+    $('#summary').append('<table>');
+    $('#summary').append('<tr><th>Name</th><td>'+gameData.name+'</td><tr>');
+    $('#summary').append('<tr><th>Round</th><td> '+gameData.round+'</td><tr>');
+    if(gameData.teams && gameData.teams[1])
+    {
+        $('#summary').append('<tr><table>');
+        $('#summary').append('<tr><th>Team 1</th><th>Team 2</th><tr>');
+        for(var i=0;i<gameData.teams[1].length;i++)
+        {
+            $('#summary').append('<tr><td>'+gameData.teams[1][i].name+'</td><th>'+gameData.teams[1][i].name+'</th><tr>');
+        }
+        $('#summary').append('</tr></table>');
+    }
+    if(gameData.score && gameData.score[1])
+    {
+        $('#summary').append('<tr><th>Score</th></tr>');
+        $('#summary').append('<tr><td>Team 1</td><td>'+gameData.score[1]+'</td><tr>');
+        $('#summary').append('<tr><td>Team 2</td><td>'+gameData.score[2]+'</td><tr>');
+    }
+    $('#summary').append('</table>');
+}
 
 //Canvas 2d Context Holder. 
 var context;
