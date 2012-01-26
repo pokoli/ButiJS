@@ -9,15 +9,14 @@ socket.on('message', function(data){
 	var text;
 	if(typeof(data)=='string')
 	{
-		//That's a server message
-		$('#messages').append('<li>' + data + '</li>');
+		addMessage(data);
 	}
 	else
 	{
 		if(data.player)
 			text = ''+data.player.name+': ';
 		text+=data.msg;
-		$('#messages').append('<li>' + text + '</li>');
+		addMessage(text);
 	}
 });
 
@@ -47,76 +46,20 @@ function doLoad()
 	setInterval("refreshPlayers()",5000);
 }
 
-function send() {
-	var msg = $('#msg').val();
-	socket.emit('send',msg);
-	$('#msg').val('');
+function sendMsg(msg) {
+    socket.emit('send',msg);
 }
 
 var games=[];
 var selected;
 
 function refreshGames(){
-	socket.emit('list-games',null,function(data){
-		$('#game-list').children().remove();
-		$('#game-list').append('<thead><tr><th>Name</th><th>State</th><th>Players</th><th>Watchers</th></thead>')
-		if(!data || data==[] || data.length ==0)
-		{
-		    games=[];
-			return;
-		}
-		games=data;
-		for(var i in games)
-		{
-			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
-		}
-		//Refresh the game data if it has changed.
-		if(selected || selected == 0)
-	       showGameDetails(games[selected]);
-	});
+	socket.emit('list-games',null,drawGameData);
 }
 
-function selectGame(i)
-{
-    selected=i;
-    showGameDetails(games[i]);
-}
-
-function showGameDetails(gameData)
-{
-    $('#game-details').children().remove();
-    $('#game-details').append('<table>');
-    $('#game-details').append('<tr><th>Name</th><td>'+gameData.name+'</td><tr>');
-    $('#game-details').append('<tr><th>State</th><td>'+gameData.state+'</td><tr>');
-    $('#game-details').append('<tr><th colspan="2">Players</th>');
-    for(var i in gameData.players)
-    {
-        $('#game-details').append('<tr><td colspan="2">'+gameData.players[i].name+'</td><tr>');
-    }
-    if(gameData.watchers.length > 0)
-    {
-        $('#game-details').append('<tr><th colspan="2">Wathcers</th>');
-        for(var i in gameData.watchers)
-        {
-            $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i]+'</td><tr>');
-        }
-    }
-    $('#game-details').append('</table>');
-}
 
 function refreshPlayers(){
-	socket.emit('list-players',null,function(data){
-		$('#player-list').children().remove();
-		if(!data || data==[] || data.length ==0)
-		{
-			$('#player-list').append('<li>No players on the server</li>');
-			return;
-		}
-		for(var i in data)
-		{
-			$('#player-list').append('<li>'+data[i].name+'</li>');
-		}	
-	});
+	socket.emit('list-players',null,drawPlayersList);
 }
 
 function createGame(gameData){    
