@@ -34,7 +34,6 @@ socket.on('cards', function(data){
 });
 
 socket.on('make-thriumph', function(data,callback){
-    alert('make-thriumph');
     showThriumphDialog(data,callback)
 });
 

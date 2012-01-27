@@ -194,7 +194,6 @@ function updateGameInfo(gameData)
         setTimeout(function(){updateGameInfo(gameData)},100);
         return;
     }
-    alert($('#summary').length);
     $('#summary').children().remove();
     $('#summary').append('<table>');
     $('#summary').append('<tr><th>Name</th><td>'+gameData.name+'</td><tr>');
