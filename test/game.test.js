@@ -17,11 +17,19 @@ module.exports = {
 	"We can add players to the game":function(){
 		game.should.respondTo('addPlayer');
 	},
-	"We have to now if a player has joined the game " : function(){
+	"We have to now if a player has joined the game " : function(done){
+	    function Ok(){
+	        game.removeAllListeners('updated');
+	        done();
+	    }
+	    function test(data){
+            data.hasPlayer(newPlayer).should.be.true;
+            data.hasPlayer(Player.create('no player')).should.be.false;
+            Ok();
+	    }
 		game.should.respondTo('hasPlayer');
+		game.on('updated',test);
 		game.addPlayer(newPlayer);
-		game.hasPlayer(newPlayer).should.be.true;
-		game.hasPlayer(Player.create('no player')).should.be.false;
 	},
 	"We can remove players from a game" : function(){
 		game.numberOfPlayers().should.eql(1);
@@ -33,8 +41,8 @@ module.exports = {
 	"A game should remeber each player that joins it" : function (){
 		var playerA = Player.create('Player A');
 		var playerB = Player.create('Player B');
-		playerA.join(game);
-		playerB.join(game);
+		game.addPlayer(playerA);
+		game.addPlayer(playerB);
 		game.numberOfPlayers().should.eql(2);
 		var players = game.players;
 		players.shift().should.eql(playerA);

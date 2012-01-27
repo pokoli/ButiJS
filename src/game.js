@@ -2,12 +2,18 @@ var util = require('util'),
     event = require('events');
 
 function notifyAll(type,data,fn) {
-    this.players.forEach(function(player){
-        player.notify(type,data,fn);
-    });
-    this.watchers.forEach(function(player){
-        player.notify(type,data,fn);
-    });
+    if(this.players)
+    {
+        this.players.forEach(function(player){
+            player.notify(type,data,fn);
+        });
+    }
+    if(this.watchers)
+    {
+        this.watchers.forEach(function(player){
+            player.notify(type,data,fn);
+        });
+    }
 }; 
 
 var Game = function(name) {
@@ -18,10 +24,17 @@ var Game = function(name) {
 	this.min_players = 0;
 	
 	this.on('notifyAll',notifyAll); 
+	/*
+	    When the game data is updated notify all the players
+	*/
+	this.on('updated',function(game){
+	    game.notifyAll('updated-game',game)
+    });
 };
 
 //Inherits from EventEmitter so we can manage the events of the game.
 util.inherits(Game, event.EventEmitter);
+
 
 module.exports.create = function(name) {
 	return new Game(name);
@@ -54,10 +67,12 @@ Game.prototype.notifyAll = notifyAll;
 
 Game.prototype.addPlayer = function(player){
 	this.players.push(player);
+	this.emit('updated',this);
 }
 
 Game.prototype.addWatcher = function(watcher){
 	this.watchers.push(watcher);
+	this.emit('updated',this);
 }
 
 Game.prototype.hasPlayer = function(player){
@@ -72,6 +87,7 @@ Game.prototype.removePlayer = function(player){
 	if(idx != -1) 
 	{
 		this.players.splice(idx,1);
+		this.emit('updated',this);
 		return true;
 	}
 	return false;
