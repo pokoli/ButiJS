@@ -90,6 +90,20 @@ io.sockets.on('connection', function (socket) {
         }
         return;
     }
+    
+    /*
+        Process an event on the current game. 
+    */
+    function processGameEvent(event,data,callback)
+    {
+        var game = getCurrentGame();
+        if(game && game.state=='running')
+        {
+            getCurrentGame().emit(event,data,callback)
+        }
+        else
+          callback && callback('No current game running');
+    }
 
 	socket.emit('welcome', { msg : 'Welcome, who you are?'});
   
@@ -165,6 +179,7 @@ io.sockets.on('connection', function (socket) {
   	    }
   	    try{
             _games[i].addPlayer(getCurrentPlayer());
+      		_currentGameId=_games[i].id;
             if(_games[i].numberOfPlayers()==4)
                 _games[i].start();
             if(fn) fn(false,_games[i]);
@@ -206,6 +221,15 @@ io.sockets.on('connection', function (socket) {
       		delete _playerid;
   		}
   	});
+  	
+  	/*
+  	 Game specific functions
+  	*/
+  	socket.on('new-roll',function(data,callback){ processGameEvent('new-roll',data,callback)});
+  	socket.on('new-move',function(data,callback){ processGameEvent('new-move',data,callback)});
+  	socket.on('end-move',function(data,callback){ processGameEvent('end-move',data,callback)});
+  	socket.on('made-thriumph',function(data,callback){ processGameEvent('made-thriumph',data,callback)});
+
 });
 
 

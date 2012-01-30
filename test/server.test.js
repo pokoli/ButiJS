@@ -94,13 +94,12 @@ module.exports = {
 	        done();
 	    });
 	},
-	"The server must be able to notify a player in a Game" : function(done){
-		//Todo:
-		done();
-	},
-	"The server must be able to notify ALL player in a Game" : function(done){
-		//Todo:
-		done();
+	"The server must respond to rounds events. If no current game with an error": function(done){
+	    socket.emit('made-thriumph',25,function(err){
+	        err.should.eql('No current game running');
+	        done();
+	    
+	    });
 	},
 	"When a player disconnects the server removes it's reference " : function(done){
 		//Todo;
