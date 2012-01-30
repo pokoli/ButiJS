@@ -64,17 +64,6 @@ function generateUniqueID(){
     uniqueCounter++;
     return uniqueCounter;
 }
-/**
-Gets a list of all the players (without the id)
-*/
-function getPlayers()
-{
-    var ret=[];
-    for (var i in _players){
-        ret.push(_players[i])
-    }
-    return ret;
-}
 
 io.sockets.on('connection', function (socket) {
     
@@ -111,18 +100,41 @@ io.sockets.on('connection', function (socket) {
 		if(fn) fn(player);
   		socket.broadcast.emit('message',player.name + ' joined the server');
   	});
-  	
+  	/*
+  	    data: Holds the filter to apply
+  	*/
   	socket.on('list-games', function(data, fn){
-  		if(fn) fn(_games);
+  	    var returnData=[];
+  	    for(i in _games)
+  	    {
+  	        var game = Game.clone(_games[i]);
+  	        if(game.players && game.players.length > 0 && game.players[0].cards 
+  	            && game.players[0].cards.length > 0 )
+  	        {
+      	        for(j in game.players)
+      	        {
+      	            game.players[j].cards =[]
+      	        }
+      	    }
+      	    returnData.push(game);
+  	    }
+  		if(fn) fn(returnData);
   	});
   	
   	socket.on('list-players', function(data, fn){
-  		if(fn) fn(getPlayers());
+        var ret=[];
+        for (var i in _players){
+            ret.push({
+                    'name' : _players[i].name,
+                    'id' : _players[i].id,
+                    });
+        }
+  		if(fn) fn(ret);
   	});
   	
   	
   	socket.on('create-game', function(data, fn){
-        var game = Game.create(data.name || 'Unnamed');
+        var game = Game.clone(data);
         //Every time the game recives a new evenet listener it's exposed to 
         //the server whe expose their events to the socket
         game.on('newListener',function(event,listener){
