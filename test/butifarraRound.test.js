@@ -66,7 +66,7 @@ module.exports = {
         round = setUp();
         round.should.respondTo('makeThriumph');
         should.doesNotThrow(function(){
-            round.makeThriumph('Delega');
+            round.makeThriumph('Delegar');
         },Error,"Make thriumph is allowed once per round");
         should.doesNotThrow(function(){
             round.makeThriumph('Botifarra');
