@@ -51,7 +51,7 @@ socket.on('cards', function(data){
 });
 
 socket.on('make-thriumph', function(data){
-    showThriumphDialog(data,currentRound.makeThriumph);
+    showThriumphDialog(data,makeThriumph);
 });
 
 
@@ -87,6 +87,10 @@ function refreshPlayers(){
 
 function createGame(gameData){    
 	socket.emit('create-game',gameData,refreshGames);
+}
+
+function makeThriumph(choise){
+    socket.emit('made-thriumph',choise);
 }
 
 function joinGame(){
