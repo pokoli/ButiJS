@@ -76,17 +76,30 @@ function getPlayers()
     return ret;
 }
 
-
 io.sockets.on('connection', function (socket) {
     
     /*
-    Used to get the curent player info
+    Used to get the curent player/player info
     */
     var _playerid;
+    var _currentGameId;
+    
     function getCurrentPlayer()
     {
         if(_playerid) return _players[_playerid];
-        return null;
+        return;
+    }
+
+    function getCurrentGame()
+    {
+        if(!_currentGameId)
+            return;
+        for(i in _games)
+        {
+            if(_games[i].id =  _currentGameId)
+                return _games[i];
+        }
+        return;
     }
 
 	socket.emit('welcome', { msg : 'Welcome, who you are?'});
@@ -107,10 +120,17 @@ io.sockets.on('connection', function (socket) {
   		if(fn) fn(getPlayers());
   	});
   	
+  	
   	socket.on('create-game', function(data, fn){
-  		var game = Game.clone(data);
+        var game = Game.create(data.name || 'Unnamed');
+        //Every time the game recives a new evenet listener it's exposed to 
+        //the server whe expose their events to the socket
+        game.on('newListener',function(event,listener){
+            socket.on(event,listener);
+        });
   		game.addPlayer(getCurrentPlayer());
   		game.id=generateGameID();
+  		_currentGameId=game.id;
   		_games.push(game);
   		if(fn) fn(game);
   	});

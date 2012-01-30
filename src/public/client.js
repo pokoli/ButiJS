@@ -22,20 +22,39 @@ socket.on('message', function(data){
 
 //Holds info about the current game.
 var currentGame;
+//Holds the info of the current round.
+var currentRound;
 
+/*
+    Fired when a game we are playing is started
+*/
 socket.on('start', function(gameData){
     currentGame=gameData;
     addNewGame(gameData);
     updateGameInfo(gameData);
+});
+/*
+    Fired when the data of a game we are playing is updated
+*/
+socket.on('updated-game',function(gameData){
+    if(!currentGame)
+        return;   
+    if(gameData.round!=currentGame.round);
+    {
+        currentRound=gameData.playedRounds[gameData.round-1];  
+    }
+    currentGame=gameData;    
 });
 
 socket.on('cards', function(data){
    placeCards(sortCards(data));
 });
 
-socket.on('make-thriumph', function(data,callback){
-    showThriumphDialog(data,callback)
+socket.on('make-thriumph', function(data){
+    showThriumphDialog(data,currentRound.makeThriumph);
 });
+
+
 
 socket.on('thriumph', function (data){
     alert('Thriumph: '+data);

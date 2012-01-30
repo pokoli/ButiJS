@@ -35,11 +35,15 @@ var ButifarraGame = function(name) {
     //Holds the number of the actual round
     this.round=0;
     //Holds the rounds played in the past;
-    this.playedRounds=[]
-    
+    this.playedRounds=[];
 
     //Holds the last player to choose Thriumph
     var _thriumpher;
+
+    this.getCurrentRound = function()
+    {
+        return this.playedRounds[this.round-1];
+    }
     /*
         Asigns a player to a team.
         Also assigns an empty tuple to each player for holding their cards
@@ -129,7 +133,6 @@ var ButifarraGame = function(name) {
             this.startNewRound();
         }
     }
-    
         
     /*
         Starts a new round. Has the following responsabilities: 
@@ -148,8 +151,18 @@ var ButifarraGame = function(name) {
         currentRound.on('round-ended',function(roundData){
             game.roundEnded(roundData);
         });
-        this.playedRounds.push(currentRound);
         
+        this.playedRounds.push(currentRound);
+        //Listen to the round Events
+        for (event in currentRound._events)
+        {
+            this.on(event,function(){
+                //Call the function with the current round an the arguments
+                currentRound._events[event].call(this.getCurrentRound(),arguments);
+            });
+        }
+
+        this.emit('updated',this);
     }
     
     
