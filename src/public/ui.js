@@ -29,11 +29,17 @@ $(function() {
 	modal: true,
 	buttons: {
 		"Login": function() {
-                socket.emit('login',{'name' : $('#login-name').val() },refreshPlayers);
+                socket.emit('login',{'name' : $('#login-name').val() },function(){
+                    refreshPlayers();
+                    refreshGames();
+                });
 				$(this).dialog( "close" );
 			},
 		"Cancel": function() {
-	            socket.emit('login',{'name' : 'Unlogged'},refreshPlayers);
+	            socket.emit('login',{'name' : 'Unlogged'},function(){
+                    refreshPlayers();
+                    refreshGames();
+                });
 		        $(this).dialog('close');
 	        }
 		}
