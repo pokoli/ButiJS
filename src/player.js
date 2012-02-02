@@ -8,7 +8,21 @@ var Player = function(name,email,socket) {
 	
 	this.notify = function (type,data,fn){
 	    if(_socket)
-	        _socket.emit(type,data,fn);
+	    {
+	        if(fn && data)
+	        {
+    	        _socket.emit(type,data,fn);
+    	    }
+	        else if(data)
+	        {
+    	        _socket.emit(type,data);
+    	    }
+    	    else
+    	    {
+    	        _socket.emit(type);
+    	    }
+	        
+	    }
 	}
 };
 
