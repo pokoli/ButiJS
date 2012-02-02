@@ -4,16 +4,19 @@ var should = require('should'),
 	Player = require('../src/player.js'),
 	Game = require('../src/butifarraGame.js');
 
-var connected = false;
-//var connectedB = false;
+var connected = false,connectedB = false,connectedC = false,connectedD = false;
 	
 var socket = client.connect('http://localhost', {port : 8000});
-//var socketB = client.connect('http://localhost', {port : 8000});
+var socketB = client.connect('http://localhost', {port : 8000,'force new connection': true});
+var socketC = client.connect('http://localhost', {port : 8000,'force new connection': true});
+var socketD = client.connect('http://localhost', {port : 8000,'force new connection': true});
 
 function finish(done) {
 	console.log('Finish');
 	connected.should.be.true;
-//	connectedB.should.be.true;
+	connectedB.should.be.true;
+	connectedC.should.be.true;
+	connectedD.should.be.true;
 	done();
   	server.server.close();
 }
@@ -25,16 +28,21 @@ module.exports = {
 			should.isUndefined(err);
 			done();
 		});
+	},	 
+	"Two (or more) connections could be established on the same time ": function(){
+		socketB.on('connect', function (err) {
+    		connectedB=true;
+			should.isUndefined(err);
+		});
+		socketC.on('connect', function (err) {
+    		connectedC=true;
+			should.isUndefined(err);
+		});
+		socketD.on('connect', function (err) {
+    		connectedD=true;
+			should.isUndefined(err);
+		});
 	},
-//  TODO: Review it, strange things happens.	 
-//	"Two (or more) connections could be established on the same time ": function(done){
-//		socketB.on('connect', function (err) {
-//			connectedB=true;
-//			should.isUndefined(err);
-//			socketB.disconnect();
-//           done();
-//		});
-//	},
 	"We are recibing a welcome event after connecting" : function(done){
 		socket.on('welcome', function (data){
 			connected.should.be.true;
@@ -43,10 +51,28 @@ module.exports = {
 		});
 	},
 	"When we send a name event the server stores our name and acknowledgets it" : function (done){
+	    var logins=4;
+	    function doLogin(){
+	        logins--;
+	        if(logins==0) done();
+	    }
 		socket.emit('login',{'name' : 'Luiggi'}, function(data){
 			data.name.should.eql('Luiggi');
-			done();
+			doLogin();
 		});
+		socketB.emit('login',{'name' : 'Mario'}, function(data){
+			data.name.should.eql('Mario');
+			doLogin();
+		});
+		socketC.emit('login',{'name' : 'Yoshi'}, function(data){
+			data.name.should.eql('Yoshi');
+			doLogin();
+		});
+		socketD.emit('login',{'name' : 'Peach'}, function(data){
+			data.name.should.eql('Peach');
+			doLogin();
+		});
+		
 	},
 	"When we querry for the available games we get a list of games " : function(done){
 		socket.emit('list-games',null,function(data){
@@ -58,7 +84,13 @@ module.exports = {
 	"When we query for the connected players we get a list of players " : function(done){
 		socket.emit('list-players',null,function(data){
 			data.should.be.an.instanceof(Array);
-			data.shift().name.should.eql('Luiggi');
+			data.length.should.eql(4);
+			var names = ['Peach','Yoshi','Mario','Luiggi'].sort();
+            var sorted = [];
+            for(var i=0;i<data.length;i++)
+                sorted.push(data[i].name);
+            sorted = sorted.sort();
+            sorted.should.eql(names);
 			done();
 		});
 	},
@@ -79,16 +111,23 @@ module.exports = {
 	},
 	"You cand send messages to all players in the server " : function(done) {
 		var msg = 'Hello, how are you';
-		socket.on('message',function(data){
+		var recived=4;
+		function message(data){
 			data.player.name.should.eql('Luiggi');
 			data.msg.should.eql(msg);
-			done();
-		});
+			recived--;
+			if(recived==0) done();
+		}
+		
+		socket.on('message',message);
+		socketB.on('message',message);
+		socketC.on('message',message);
+		socketD.on('message',message);
 		socket.emit('send',msg);
 	
 	},
 	"A player should be able to join a game" : function(done){
-	    socket.emit('join-game',1,function(err,data){
+	    socketB.emit('join-game',1,function(err,data){
 	        should.ifError(err);
 	        data.players.length.should.eql(2);
 	        done();
@@ -100,6 +139,28 @@ module.exports = {
 	        done();
 	    
 	    });
+	},
+	"When 4 players join a game a start event must occur foreach player " : function(done){
+	    var startedEvents=4;
+	    
+	    function started(game)
+	    {
+	        startedEvents--;
+	        if(startedEvents==0) done();
+	    }
+	    
+	    socket.on('start',started);
+	    socketB.on('start',started);
+	    socketC.on('start',started);
+	    socketD.on('start',started);
+	
+	    function joinGame(game){
+	        socketB.emit('join-game',game.id);
+	        socketC.emit('join-game',game.id);
+            socketD.emit('join-game',game.id);
+	    }
+    	game = Game.create('New Game');
+		socket.emit('create-game',game,joinGame);
 	},
 	"When a player disconnects the server removes it's reference " : function(done){
 		//Todo;
