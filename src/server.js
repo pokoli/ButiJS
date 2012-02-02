@@ -178,7 +178,13 @@ io.sockets.on('connection', function (socket) {
   	        return;
   	    }
   	    try{
-            _games[i].addPlayer(getCurrentPlayer());
+  	        var current = getCurrentPlayer();
+  	        if(_games[i].hasPlayer(current))
+  	        {
+      	        if(fn) fn('You are already in the game');
+      	        return;
+  	        }
+            _games[i].addPlayer(current);
       		_currentGameId=_games[i].id;
             if(_games[i].numberOfPlayers()==4)
                 _games[i].start();

@@ -133,6 +133,12 @@ module.exports = {
 	        done();
 	    });
 	},
+	"A player should be able a game only one time. " : function(done){
+	    socket.emit('join-game',1,function(err,data){
+	        err.should.eql('You are already in the game');
+	        done();
+	    });
+	},
 	"The server must respond to rounds events. If no current game with an error": function(done){
 	    socket.emit('made-thriumph',25,function(err){
 	        err.should.eql('No current game running');
