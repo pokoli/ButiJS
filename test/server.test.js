@@ -11,6 +11,8 @@ var socketB = client.connect('http://localhost', {port : 8000,'force new connect
 var socketC = client.connect('http://localhost', {port : 8000,'force new connection': true});
 var socketD = client.connect('http://localhost', {port : 8000,'force new connection': true});
 
+var toMakeThriumph;
+
 function finish(done) {
 	console.log('Finish');
 	connected.should.be.true;
@@ -146,19 +148,59 @@ module.exports = {
 	    
 	    });
 	},
-	"When 4 players join a game a start event must occur foreach player " : function(done){
+	"When 4 players join a game a start event must occur foreach player, cards should be distribuited, and one player should have recived a make-thiumph event. " : function(done){
 	    var startedEvents=4;
+	    var cardEvents=4;
+	    var endCalled=3;
+
+	    function end()
+	    {
+            endCalled--;
+	        if(endCalled==0) done();
+	    }
 	    
 	    function started(game)
 	    {
 	        startedEvents--;
-	        if(startedEvents==0) done();
+            if(startedEvents==0) end();
+	    }
+
+	    function recivedThriumph(selections)
+	    {
+	        //Something strange happens here
+	        if(selections[0])
+	            selections=selections[0];
+			selections.should.be.an.instanceof(Array);
+			end();
+	    }
+
+	    function recivedCards(cards)
+	    {
+			cards.should.be.an.instanceof(Array);
+			cards.length.should.eql(12);
+            for(var i=0;i<cards.length;i++)
+            {
+	            cards[i].should.have.property('number');
+	            cards[i].should.have.property('suit');
+            }
+	        cardEvents--;
+	        if(cardEvents==0) end();
 	    }
 	    
 	    socket.on('start',started);
 	    socketB.on('start',started);
 	    socketC.on('start',started);
 	    socketD.on('start',started);
+
+	    socket.on('cards',recivedCards);
+	    socketB.on('cards',recivedCards);
+	    socketC.on('cards',recivedCards);
+	    socketD.on('cards',recivedCards);
+
+	    socket.on('make-thriumph',function(){ toMakeThriumph=socket;recivedThriumph(arguments);});
+	    socketB.on('make-thriumph',function(){ toMakeThriumph=socketB;recivedThriumph(arguments);});
+	    socketC.on('make-thriumph',function(){ toMakeThriumph=socketC;recivedThriumph(arguments);});
+	    socketD.on('make-thriumph',function(){ toMakeThriumph=socketD;recivedThriumph(arguments);});
 	
 	    function joinGame(game){
 	        socketB.emit('join-game',game.id);
