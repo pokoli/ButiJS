@@ -150,19 +150,20 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
                     this.thriumpher=team[i];
                     team[i].notify('make-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra']);
+                    break;
                 }
             }
         }
         else
         {
+            //Notify all the players with the selected option
+            _players.forEach(function(player){
+                player.notify('thriumph',choise);
+            });
+            //Notify the player who has to roll the first card
             this.thriumph=choise;
             this.emit('new-move',_players[1]);
         }
-        
-        //Notify all the players with the selected option
-        _players.forEach(function(player){
-            player.notify('thriumph',choise);
-        });
 
     }
     //Add the makeThriumph function to the made-triumph events

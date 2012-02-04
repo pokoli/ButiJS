@@ -167,9 +167,6 @@ module.exports = {
 
 	    function recivedThriumph(selections)
 	    {
-	        //Something strange happens here
-	        if(selections[0])
-	            selections=selections[0];
 			selections.should.be.an.instanceof(Array);
 			end();
 	    }
@@ -197,10 +194,10 @@ module.exports = {
 	    socketC.on('cards',recivedCards);
 	    socketD.on('cards',recivedCards);
 
-	    socket.on('make-thriumph',function(){ toMakeThriumph=socket;recivedThriumph(arguments);});
-	    socketB.on('make-thriumph',function(){ toMakeThriumph=socketB;recivedThriumph(arguments);});
-	    socketC.on('make-thriumph',function(){ toMakeThriumph=socketC;recivedThriumph(arguments);});
-	    socketD.on('make-thriumph',function(){ toMakeThriumph=socketD;recivedThriumph(arguments);});
+	    socket.on('make-thriumph',function(){ toMakeThriumph=socket;recivedThriumph(arguments[0]);});
+	    socketB.on('make-thriumph',function(){ toMakeThriumph=socketB;recivedThriumph(arguments[0]);});
+	    socketC.on('make-thriumph',function(){ toMakeThriumph=socketC;recivedThriumph(arguments[0]);});
+	    socketD.on('make-thriumph',function(){ toMakeThriumph=socketD;recivedThriumph(arguments[0]);});
 	
 	    function joinGame(game){
 	        socketB.emit('join-game',game.id);
@@ -210,6 +207,38 @@ module.exports = {
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);
 	},
+	"The thriumpher should be able to makeThriumph and the other players must recive it" : function(done){
+	    var thriumphs=4;
+	    toMakeThriumph.should.not.eql(undefined);
+	    function thriumphed(choise)
+	    {
+            choise.should.eql('Copes');
+            thriumphs--;
+            if(thriumphs==0) done();
+	    }
+
+	    //Remove the listener from the previous test
+	    socket.removeAllListeners('make-thriumph');
+	    socketB.removeAllListeners('make-thriumph');
+	    socketC.removeAllListeners('make-thriumph');
+	    socketD.removeAllListeners('make-thriumph');
+
+	    //Make thriumph after the other player has delegated
+	    socket.on('make-thriumph',function(){ socket.emit('made-thriumph','Copes');});
+	    socketB.on('make-thriumph',function(){ socketB.emit('made-thriumph','Copes');});
+	    socketC.on('make-thriumph',function(){ socketC.emit('made-thriumph','Copes');});
+	    socketD.on('make-thriumph',function(){ socketD.emit('made-thriumph','Copes');});
+
+	    socket.on('thriumph',thriumphed);
+	    socketB.on('thriumph',thriumphed);
+	    socketC.on('thriumph',thriumphed);
+	    socketD.on('thriumph',thriumphed);
+
+	    toMakeThriumph.emit('made-thriumph','Delegar', function(err){
+            should.ifError(err);
+	    });
+
+    },
 	"When a player disconnects the server removes it's reference " : function(done){
 		//Todo;
 		finish(done);

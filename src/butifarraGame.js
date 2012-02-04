@@ -157,8 +157,10 @@ var ButifarraGame = function(name) {
         for (event in currentRound._events)
         {
             this.on(event,function(){
-                //Call the function with the current round an the arguments
-                currentRound._events[event].call(this.getCurrentRound(),arguments);
+                //Properly get the event from the arguments.
+                var event = arguments.callee.caller.arguments[0];
+                //Call the function with the current round an the first argument
+                currentRound._events[event].call(this.getCurrentRound(),arguments[0]);
             });
         }
 

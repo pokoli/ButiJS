@@ -5,7 +5,6 @@ var express = require('express')
   , sanitize = require('validator').sanitize
   , Game = require('./butifarraGame')
   , Player = require('./player');
-  
 var app = express.createServer();
 
 //Static files configuration
@@ -85,7 +84,7 @@ io.sockets.on('connection', function (socket) {
             return;
         for(i in _games)
         {
-            if(_games[i].id =  _currentGameId)
+            if(_games[i].id ==  _currentGameId)
                 return _games[i];
         }
         return;
@@ -98,9 +97,7 @@ io.sockets.on('connection', function (socket) {
     {
         var game = getCurrentGame();
         if(game && game.state=='running')
-        {
-            getCurrentGame().emit(event,data,callback)
-        }
+            game.emit(event,data,callback);
         else
           callback && callback('No current game running');
     }
@@ -156,6 +153,12 @@ io.sockets.on('connection', function (socket) {
         });
   		game.addPlayer(getCurrentPlayer());
   		game.id=generateGameID();
+  		game.on('updated', function(data){
+  		    var newGame = Game.clone(data);
+  		    _games.forEach(function (game,idx){
+  		        _games[idx]=game;
+  		    });
+  		});
   		_currentGameId=game.id;
   		_games.push(game);
   		if(fn) fn(game);
@@ -187,7 +190,10 @@ io.sockets.on('connection', function (socket) {
             _games[i].addPlayer(current);
       		_currentGameId=_games[i].id;
             if(_games[i].numberOfPlayers()==4)
+            {
+                _games[i].state='running';
                 _games[i].start();
+            }
             if(fn) fn(false,_games[i]);
         }
         catch(err)
