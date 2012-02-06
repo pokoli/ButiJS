@@ -128,7 +128,8 @@ var ButifarraMove = function(thriumph) {
         var doesntHaveCard=true;
         for(i in player.cards)
         {
-            if(player.cards[i]==card)
+            if(player.cards[i].number ==card.number && 
+                player.cards[i].suit ==card.suit)
             {
                 doesntHaveCard=false;
                 break;

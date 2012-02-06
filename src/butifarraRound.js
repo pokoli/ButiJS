@@ -106,7 +106,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     /*
         Called every time that a player Rolls a card
     */
-    this.newRoll = function(card){
+    this.newRoll = function(card,callback){
         var player= _players[_lastPlayed+1];
         try{
             _move.addRoll(player,card);
@@ -129,8 +129,10 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             }
             
         }catch(Error){
-            player.notify('invalid-roll',Error);   
+            callback && callback(Error.message);   
         }
+        callback && callback();
+        
     }
     //Add the newRoll function to the new-roll events
     this.on('new-roll',this.newRoll);

@@ -151,6 +151,9 @@ var ButifarraGame = function(name) {
         currentRound.on('round-ended',function(roundData){
             game.roundEnded(roundData);
         });
+        currentRound.on('notifyAll',function(event,data,callback){
+            game.notifyAll(event,data,callback);
+        });
         
         this.playedRounds.push(currentRound);
         //Listen to the round Events
@@ -160,7 +163,7 @@ var ButifarraGame = function(name) {
                 //Properly get the event from the arguments.
                 var event = arguments.callee.caller.arguments[0];
                 //Call the function with the current round an the first argument
-                currentRound._events[event].call(this.getCurrentRound(),arguments[0]);
+                currentRound._events[event].call(this.getCurrentRound(),arguments[0], arguments.length > 1 ? arguments[1] : arguments[0]);
             });
         }
 

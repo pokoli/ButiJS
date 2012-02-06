@@ -189,10 +189,10 @@ module.exports = {
 	    socketC.on('start',started);
 	    socketD.on('start',started);
 
-	    socket.on('cards',recivedCards);
-	    socketB.on('cards',recivedCards);
-	    socketC.on('cards',recivedCards);
-	    socketD.on('cards',recivedCards);
+	    socket.on('cards',function(data){socket.cards=data;recivedCards(data);});
+	    socketB.on('cards',function(data){socketB.cards=data;recivedCards(data);});
+	    socketC.on('cards',function(data){socketC.cards=data;recivedCards(data);});
+	    socketD.on('cards',function(data){socketD.cards=data;recivedCards(data);});
 
 	    socket.on('make-thriumph',function(){ toMakeThriumph=socket;recivedThriumph(arguments[0]);});
 	    socketB.on('make-thriumph',function(){ toMakeThriumph=socketB;recivedThriumph(arguments[0]);});
@@ -207,14 +207,33 @@ module.exports = {
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);
 	},
-	"The thriumpher should be able to makeThriumph and the other players must recive it" : function(done){
+	"The thriumpher should be able to makeThriumph and the other players must recive it. The first player to play must recibe a play-card event also." : function(done){
 	    var thriumphs=4;
+	    var playCard=1;
 	    toMakeThriumph.should.not.eql(undefined);
+	    function end()
+	    {
+	        if(thriumphs==0 && playCard==0) {
+        	    socket.removeAllListeners('play-card');
+        	    socketB.removeAllListeners('play-card');
+	            socketC.removeAllListeners('play-card');
+        	    socketD.removeAllListeners('play-card');
+	            done();
+	        }
+	    }
+	    
+	    function recivedPlayCard()
+	    {
+	        playCard--;
+	        if(playCard ==0) end();
+	        playCard.should.be.eql(0);
+	    }
+	    
 	    function thriumphed(choise)
 	    {
             choise.should.eql('Copes');
             thriumphs--;
-            if(thriumphs==0) done();
+            if(thriumphs==0) end();
 	    }
 
 	    //Remove the listener from the previous test
@@ -233,15 +252,76 @@ module.exports = {
 	    socketB.on('thriumph',thriumphed);
 	    socketC.on('thriumph',thriumphed);
 	    socketD.on('thriumph',thriumphed);
+	    
+	    socket.on('play-card',function(){ toPlay=socket;recivedPlayCard();});
+	    socketB.on('play-card',function(){ toPlay=socketB;recivedPlayCard();});
+	    socketC.on('play-card',function(){ toPlay=socketC;recivedPlayCard();});
+	    socketD.on('play-card',function(){ toPlay=socketD;recivedPlayCard();});
 
 	    toMakeThriumph.emit('made-thriumph','Delegar', function(err){
             should.ifError(err);
 	    });
 
     },
+    "When a player plays a card all the other players must recive a notification" : function(done){
+	    toPlay.should.not.eql(undefined);
+	    var plays = 4;
+	    var callback=1;
+	    var cardToPlay = toPlay.cards[0];
+	    
+	    function end(){
+	        if(plays == 0 && callback ==0) done();
+	    }
+	    
+	    function cardPlayed(data){
+	        var card=data.card;
+	        card.number.should.eql(cardToPlay.number);
+	        card.suit.should.eql(cardToPlay.suit);
+	        plays--;
+	        if(plays==0) end();
+	    }
+	    
+	    socket.on('card-played',cardPlayed);
+	    socketB.on('card-played',cardPlayed);
+	    socketC.on('card-played',cardPlayed);
+	    socketD.on('card-played',cardPlayed);
+	    toPlay.emit('new-roll',cardToPlay, function(err){
+            should.ifError(err);
+            callback--;
+            if(callback==0) end();
+	    });
+    
+    },
 	"When a player disconnects the server removes it's reference " : function(done){
-		//Todo;
-		finish(done);
+        finish(done);
+		//TODO: Improve, not working very well.
+//		var disconnects=3;
+
+//		function disconnected(){
+//		    disconnects--;
+//		    if(disconnects==0) test();
+//		}
+
+		//function test()
+		//{
+		//	socket.emit('list-players',null,function(data){
+		//	    data.should.be.an.instanceof(Array);
+		//	    data.length.should.eql(1);
+		//	    var names = ['Peach'].sort();
+        //        var sorted = [];
+         //       for(var i=0;i<data.length;i++)
+        //            sorted.push(data[i].name);
+        //        sorted = sorted.sort();
+         //       sorted.should.eql(names);
+		 //       finish(done);
+		 //   });
+		    
+		//}
+		
+		//socketD.disconnect(disconnected);
+		//socketC.disconnect(disconnected);
+		//socketB.disconnect(disconnected);
+
 	}
 };
 
