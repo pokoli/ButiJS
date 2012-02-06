@@ -241,7 +241,7 @@ function createCardHolder(name,x,y,width,height)
         context.rect(x,y,width,height);
         context.stroke();
         context.closePath();
-    });
+    },name);
     return ret;
 }
 
@@ -278,13 +278,17 @@ function initCanvas(canvasElement)
     
     var holders = []; 
     //Player 1 cards Holder
-    holders.push(createCardHolder('player1',0,height*0.185,width*0.15,height*0.485));
+    holders.push(createCardHolder('cards1',0,height*0.185,width*0.15,height*0.485));
+    holders.push(createCardHolder('played1',width*0.22,height*0.33,width*0.14,height*0.20));
     //Player 2 cards Holder
-    holders.push(createCardHolder('player2',width*0.2,0,width*0.6,height*0.185));
+    holders.push(createCardHolder('cards2',width*0.2,0,width*0.6,height*0.185));
+    holders.push(createCardHolder('played2',width*0.43,height*0.23,width*0.14,height*0.20));
     //Player 3 cards Holder
-    holders.push(createCardHolder('player3',width-(width*0.15),height*0.185,width*0.15,height*0.485));
+    holders.push(createCardHolder('cards3',width-(width*0.15),height*0.185,width*0.15,height*0.485));
+    holders.push(createCardHolder('played3',width-(width*0.22+width*0.14),height*0.33,width*0.14,height*0.20));
     //Player 4 cards Holder
-    holders.push(createCardHolder('player4',cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
+    holders.push(createCardHolder('cards4',cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
+    holders.push(createCardHolder('played1',width*0.43,height*0.47,width*0.14,height*0.20));
     
     for(i in holders)
     {
@@ -351,7 +355,11 @@ function placeCards(cards)
                     });
         cardImage.card = cards[i];
         cardImage.on('dblclick', function(){
-            alert('try to play card'+this.card.number+'-'+this.card.suit);
+            playCard(this.card,function(){
+                var idx = cards.indexOf(this.card); // Find the index
+                if(idx!=-1) cards.splice(idx, 1);
+                placeCards(cards);
+            }
             
         }); 
         cardsLayer.add(cardImage);

@@ -24,6 +24,8 @@ socket.on('message', function(data){
 var currentGame;
 //Holds the info of the current round.
 var currentRound;
+//True if is the player current turn. False if not. 
+var yourTurn=false;
 
 /*
     Fired when a game we are playing is started
@@ -50,11 +52,11 @@ socket.on('cards', function(data){
    placeCards(sortCards(data));
 });
 
+socket.on('card-played',placePlayedCard);
+
 socket.on('make-thriumph', function(data){
     showThriumphDialog(data,makeThriumph);
 });
-
-
 
 socket.on('thriumph', function (data){
     alert('Thriumph: '+data);
@@ -91,6 +93,16 @@ function createGame(gameData){
 
 function makeThriumph(choise){
     socket.emit('made-thriumph',choise);
+}
+
+function playCard(card,callback)
+{
+    if(!yourTurn)
+        alert('Is not your turn');
+    socket.emit('new-roll',card,function(){
+        yourTurn=false;
+        callback && callback();
+   });
 }
 
 function joinGame(){
