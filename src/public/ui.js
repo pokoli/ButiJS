@@ -223,24 +223,52 @@ function updateGameInfo(gameData)
     $('#summary').append('</table>');
 }
 
-//Canvas 2d Context Holder. 
-var context;
-
 //Positions of the Player Cards Holder
 var cardHolderHeight;
 var cardHolderWidth;
 var cardHolderXOffset;
 var cardHolderYOffset;
 
+/*
+    Function for creating a CardHolder
+*/
+
+function createCardHolder(name,x,y,width,height)
+{
+    var ret = new Kinetic.Shape(function(){
+        var context = this.getContext();
+        context.beginPath();
+        context.rect(x,y,width,height);
+        context.stroke();
+        context.closePath();
+    });
+    return ret;
+}
+
+/*
+    Holds if the canvas had been initiated.
+*/
+var canvasInit=false;
+
+/*
+    Holds the Stage where all the layers are placed.
+*/
+var mainStage;
+
+/*
+    Holds the layer where the cards are played.
+*/
+var cardsLayer;
 /* 
     Inits the game Canvas with all the elements
 */
 function initCanvas(canvasElement)
 {
-    canvasElement = canvasElement || $('#game');
-    this.context=canvasElement[0].getContext("2d");
-    var width=context.canvas.width;
-    var height=context.canvas.height;
+    var width=canvasElement.width();
+    var height=canvasElement.height();
+
+    mainStage = new Kinetic.Stage(canvasElement.attr('id'), width, height);
+    holdersLayer= new Kinetic.Layer();
 
     //Save the heightOf the current player cardsHolder
     cardHolderHeight=height*0.3;
@@ -248,14 +276,23 @@ function initCanvas(canvasElement)
     cardHolderXOffset=width*0.07;
     cardHolderYOffset=height-(height*0.3);
     
+    var holders = []; 
     //Player 1 cards Holder
-    this.context.strokeRect(0,height*0.185,width*0.15,height*0.485);
+    holders.push(createCardHolder('player1',0,height*0.185,width*0.15,height*0.485));
     //Player 2 cards Holder
-    this.context.strokeRect(width*0.2,0,width*0.6,height*0.185);
+    holders.push(createCardHolder('player2',width*0.2,0,width*0.6,height*0.185));
     //Player 3 cards Holder
-    this.context.strokeRect(width-(width*0.15),height*0.185,width*0.15,height*0.485);
+    holders.push(createCardHolder('player3',width-(width*0.15),height*0.185,width*0.15,height*0.485));
     //Player 4 cards Holder
-    this.context.strokeRect(cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight);
+    holders.push(createCardHolder('player4',cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
+    
+    for(i in holders)
+    {
+        holdersLayer.add(holders[i]);
+    }
+    
+    mainStage.add(holdersLayer);
+    canvasInit=true;
 }
 
 /*
@@ -283,23 +320,44 @@ function preloadImages()
 //Call the image preloading
 preloadImages();
 
-
+/*
+    Places the player cards in the correct place.
+*/
 function placeCards(cards)
 {
     //If the context is not initialized wait 100 miliseconds.
-    if(!this.context)
+    if(!canvasInit)
     {
         setTimeout(function(){placeCards(cards)},100);
         return;
     }
+    if(cardsLayer)
+        stage.remove(cardsLayer);
+    else
+        cardsLayer= new Kinetic.Layer();
+    
     for(var i=0;i<cards.length;i++)
     {
         var card = cards[i];
-        var image = cachedImages[card.number+'-'+card.suit.toString().toLowerCase()];
-        var x= cardHolderXOffset+((cardHolderWidth/cards.length)*i);
-        var y = cardHolderYOffset;
-        this.context.drawImage(image,x,y,cardHolderWidth/cards.length,cardHolderHeight);
+        var key = card.number+'-'+card.suit.toString().toLowerCase()
+        var imgx= cardHolderXOffset+((cardHolderWidth/cards.length)*i);
+        var imgy = cardHolderYOffset;
+        var cardImage = new Kinetic.Image({
+                        image: cachedImages[key],
+                        x : imgx,
+                        y : imgy,
+                        width : cardHolderWidth/cards.length,
+                        heigth : cardHolderHeight
+                    });
+        cardImage.card = cards[i];
+        cardImage.on('dblclick', function(){
+            alert('try to play card'+this.card.number+'-'+this.card.suit);
+            
+        }); 
+        cardsLayer.add(cardImage);
     }
+    mainStage.add(cardsLayer);
+    mainStage.draw();
 }
 
 function showThriumphDialog(selections,callback)
