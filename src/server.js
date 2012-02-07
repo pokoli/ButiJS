@@ -108,6 +108,7 @@ io.sockets.on('connection', function (socket) {
 		var player = Player.create(data.name,'',socket);
 		_playerid = generateUniqueID();
 		_players[_playerid]=player;
+		player.id=_playerid;
 		if(fn) fn(player);
   		socket.broadcast.emit('message',player.name + ' joined the server');
   	});

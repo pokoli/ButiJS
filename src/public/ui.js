@@ -29,7 +29,8 @@ $(function() {
 	modal: true,
 	buttons: {
 		"Login": function() {
-                socket.emit('login',{'name' : $('#login-name').val() },function(){
+                socket.emit('login',{'name' : $('#login-name').val() },function(data){
+                    savePlayerId(data.id);
                     refreshPlayers();
                     refreshGames();
                 });
@@ -182,7 +183,7 @@ function addNewGame(gameData)
         url : 'game',
         success : function(data) {
              $('#current-game').html(data);
-             initCanvas($('#game'));
+             initCanvas($('#game'),gameData);
         },
      });
 }
@@ -256,25 +257,51 @@ var canvasInit=false;
 var mainStage;
 
 /*
-    Holds the layer where the cards are played.
+    Writes a message to a Layer.
+    @params:
+        - message: The message to write.
+        - x: The X offset where we have to write the message
+        - y: The Y offset where we have to write the message
 */
-var cardsLayer;
+function writeMessage(message, x,y){
+        var messageLayer = mainStage.getChild('messageLayer');
+        var x = 0; var y=0;
+        x = x || messageLayer.getCanvas().width*0.33;
+        y = y || messageLayer.getCanvas().height*0.45;
+        var context = messageLayer.getContext();
+        messageLayer.clear();
+        context.font = "18pt Calibri";
+        context.fillStyle = "Red";
+        context.fillText(message, x, y);
+        setTimeout(3000,function(){
+            messageLayer.clear();
+        });
+}
+
 /* 
     Inits the game Canvas with all the elements
 */
-function initCanvas(canvasElement)
+function initCanvas(canvasElement,gameData)
 {
     var width=canvasElement.width();
     var height=canvasElement.height();
 
     mainStage = new Kinetic.Stage(canvasElement.attr('id'), width, height);
-    holdersLayer= new Kinetic.Layer();
+    var holdersLayer= new Kinetic.Layer('holdersLayer');
+    var context = holdersLayer.getContext();
 
     //Save the heightOf the current player cardsHolder
     cardHolderHeight=height*0.3;
     cardHolderWidth=width*0.85;
     cardHolderXOffset=width*0.07;
     cardHolderYOffset=height-(height*0.3);
+    
+    var playerName;
+    for(var i in gameData.players)
+    {
+        if(gameData.players[i].id == playerid)
+            playerName=gameData.players[i].id;
+    }
     
     var holders = []; 
     //Player 1 cards Holder
@@ -296,6 +323,11 @@ function initCanvas(canvasElement)
     }
     
     mainStage.add(holdersLayer);
+    //Layer for writing messages to the player.
+    var messageLayer = new Kinetic.Layer('messageLayer');
+    mainStage.add(messageLayer);
+    messageLayer.moveToTop();
+
     canvasInit=true;
 }
 
@@ -335,10 +367,11 @@ function placeCards(cards)
         setTimeout(function(){placeCards(cards)},100);
         return;
     }
+    var cardsLayer = mainStage.getChild('cardsLayer');
     if(cardsLayer)
-        stage.remove(cardsLayer);
-    else
-        cardsLayer= new Kinetic.Layer();
+        mainStage.remove(cardsLayer);
+    
+    cardsLayer= new Kinetic.Layer('cardsLayer');
     
     for(var i=0;i<cards.length;i++)
     {

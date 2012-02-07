@@ -20,6 +20,8 @@ socket.on('message', function(data){
 	}
 });
 
+//Holds the player id.
+var playerid;
 //Holds info about the current game.
 var currentGame;
 //Holds the info of the current round.
@@ -54,12 +56,17 @@ socket.on('cards', function(data){
 
 socket.on('card-played',placePlayedCard);
 
+socket.on('play-card',function(){
+    yourTurn=true;
+    writeMessage('Is your turn');
+});
+
 socket.on('make-thriumph', function(data){
     showThriumphDialog(data,makeThriumph);
 });
 
 socket.on('thriumph', function (data){
-    alert('Thriumph: '+data);
+    writeMessage('Thriumph: '+data);
 });
 /*Called onLoad of the html. Loads all the data needed:
 	1. Refresh games-list (every 5 seconds)
@@ -77,6 +84,11 @@ function sendMsg(msg) {
 
 var games=[];
 var selected;
+
+function savePlayerId(id)
+{
+    playerid=id;
+}
 
 function refreshGames(){
 	socket.emit('list-games',null,drawGameData);
@@ -98,8 +110,13 @@ function makeThriumph(choise){
 function playCard(card,callback)
 {
     if(!yourTurn)
-        alert('Is not your turn');
-    socket.emit('new-roll',card,function(){
+        writeMessage('Is not your turn');
+    socket.emit('new-roll',card,function(err){
+        if(err)
+        {
+            writeMessage(err);
+            return;
+        }
         yourTurn=false;
         callback && callback();
    });
