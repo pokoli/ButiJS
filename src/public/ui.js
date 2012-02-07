@@ -359,13 +359,23 @@ function placeCards(cards)
                 var idx = cards.indexOf(this.card); // Find the index
                 if(idx!=-1) cards.splice(idx, 1);
                 placeCards(cards);
-            }
+            });
             
         }); 
         cardsLayer.add(cardImage);
     }
     mainStage.add(cardsLayer);
     mainStage.draw();
+}
+
+/*
+    Places the player cards in the correct place.
+*/
+function placePlayedCard(data)
+{
+    var player = data.player;
+    var card = data.card;
+    alert('Player='+player.name+' played card '+card.number+'-'+card.suit);
 }
 
 function showThriumphDialog(selections,callback)
