@@ -207,32 +207,44 @@ function updateGameInfo(gameData)
     sHTML += '<table>';
     sHTML += '<tr><th>Name</th><td>'+gameData.name+'</td></tr>';
     sHTML += '<tr><th>Round</th><td>'+gameData.round+'</td></tr>';
+    sHTML += '</table>';
     if(gameData.teams && gameData.teams[1])
     {
-        sHTML += '<tr><table>';
-        sHTML += '<tr><th>Team 1</th><th>Team 2</th><tr>';
+        sHTML += '<table>';
+        sHTML += '<tr><th>Team 1</th><th>Team 2</th></tr>';
         for(var i=0;i<gameData.teams[1].length;i++)
         {
-            sHTML += '<tr><td>'+gameData.teams[1][i].name+'</td><td>'+gameData.teams[2][i].name+'</td><tr>';
+            sHTML += '<tr><td>'+gameData.teams[1][i].name+'</td><td>'+gameData.teams[2][i].name+'</td></tr>';
         }
-        sHTML += '</tr></table>';
+        sHTML += '</table>';
     }
     if(gameData.score && gameData.score[1])
     {
+        sHTML += '<table>';
         sHTML += '<tr><th>Score</th></tr>';
-        sHTML += '<tr><td>Team 1</td><td>'+gameData.score[1]+'</td><tr>';
-        sHTML += '<tr><td>Team 2</td><td>'+gameData.score[2]+'</td><tr>';
+        sHTML += '<tr><td>Team 1</td><td>'+gameData.score[1]+'</td></tr>';
+        sHTML += '<tr><td>Team 2</td><td>'+gameData.score[2]+'</td></tr>';
+        sHTML += '</table>';
     }
-    if(gameData.playedRounds && gameData.playedRounds[gameData.round])
+    if(console)
     {
-        var round = gameData.playedRounds[gameData.round];
-        sHTML += '<tr><td>Round Info</td></tr>';
+        console.log(gameData);
+        console.log(gameData.playedRounds)
+        console.log(gameData.round);
+        console.log(gameData.playedRounds[gameData.round-1]);
+    }
+    if(gameData.playedRounds && gameData.playedRounds[gameData.round-1])
+    {
+        var round = gameData.playedRounds[gameData.round-1];
+        sHTML += '<table>';
+        sHTML += '<tr><th>Round Info</th></tr>';
         if(round.thriumph)
             sHTML += '<tr><td>Thriumph:</td><td>'+round.thriumph+'</td></tr>';
         if(round.thriumpher)
             sHTML += '<tr><td>Thriumpher:</td><td>'+round.thriumpher.name+'</td></tr>';
+        sHTML += '</table>';
     }
-    sHTML += '</table>';
+
     $('#summary').children().remove();
     $('#summary').append(sHTML);
 }
