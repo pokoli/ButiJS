@@ -164,6 +164,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             });
             //Notify the player who has to roll the first card
             this.thriumph=choise;
+            this.emit('update-thriumph',this.thriumph,this.thriumpher);
             this.emit('new-move',_players[1]);
         }
 

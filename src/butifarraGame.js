@@ -147,6 +147,7 @@ var ButifarraGame = function(name) {
         if(this.test)
             currentRound.test=true;
         currentRound.start();
+
         var game=this; //Save the object to call it latter.
         currentRound.on('round-ended',function(roundData){
             game.roundEnded(roundData);
@@ -154,7 +155,16 @@ var ButifarraGame = function(name) {
         currentRound.on('notifyAll',function(event,data,callback){
             game.notifyAll(event,data,callback);
         });
-        
+
+        currentRound.on('update-thriumph',function(choise,thriumpher){
+            if(game.round)
+            {
+                game.playedRounds[game.round-1].thriumph=choise;
+                game.playedRounds[game.round-1].thriumpher=thriumpher;
+                game.notifyAll('updated-game',game);
+            }
+        });
+
         this.playedRounds.push(currentRound);
         //Listen to the round Events
         for (event in currentRound._events)
@@ -162,11 +172,28 @@ var ButifarraGame = function(name) {
             this.on(event,function(){
                 //Properly get the event from the arguments.
                 var event = arguments.callee.caller.arguments[0];
-                //Call the function with the current round an the first argument
-                currentRound._events[event].call(this.getCurrentRound(),arguments[0], arguments.length > 1 ? arguments[1] : arguments[0]);
+                /*
+                    I don't know why it happens but randomly when testing the app
+                    i get an error: Object.#socket has no method getCurrentRound
+                    That's the reason why I put the if here.
+                */
+                if(!this.getCurrentRound)
+                    return;
+                //Call the functions with the current round an the first argument
+                if(Array.isArray(currentRound._events[event].length))
+                {
+                    for(i in currentRound._events[event])
+                    {
+                        fn.call(this.getCurrentRound(),arguments[0],arguments[1]);
+                    }
+                }
+                else
+                {
+                    var fn = currentRound._events[event];
+                    fn.call(this.getCurrentRound(),arguments[0],arguments[1]);
+                }
             });
         }
-
         this.emit('updated',this);
     }
     

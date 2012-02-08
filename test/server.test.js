@@ -207,21 +207,39 @@ module.exports = {
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);
 	},
-	"The thriumpher should be able to makeThriumph and the other players must recive it. The first player to play must recibe a play-card event also." : function(done){
+	"The thriumpher should be able to makeThriumph and the other players must recive it. The first player to play must recibe a play-card event also. The game info must be updated with the round info and the thriumpher. " : function(done){
 	    var thriumphs=4;
+	    var updated=4;
 	    var playCard=1;
 	    toMakeThriumph.should.not.eql(undefined);
 	    function end()
 	    {
-	        if(thriumphs==0 && playCard==0) {
+	        if(thriumphs==0 && playCard==0 && updated==0) {
         	    socket.removeAllListeners('play-card');
         	    socketB.removeAllListeners('play-card');
 	            socketC.removeAllListeners('play-card');
         	    socketD.removeAllListeners('play-card');
+                socket.removeAllListeners('updated-game');
+                socketB.removeAllListeners('updated-game');
+                socketC.removeAllListeners('updated-game');
+                socketD.removeAllListeners('updated-game');
 	            done();
 	        }
 	    }
-	    
+
+	    function updatedGame(gameData)
+	    {
+	        if(!gameData.playedRounds || !gameData.round)
+	            return;
+	        var round = gameData.playedRounds[gameData.round-1];
+	        if(round.thriumph)
+	        {
+	            round.thriumph.should.eql('Copes');
+	            updated--;
+	            if(updated==0) end();
+	        }
+	    }
+
 	    function recivedPlayCard()
 	    {
 	        playCard--;
@@ -243,10 +261,15 @@ module.exports = {
 	    socketD.removeAllListeners('make-thriumph');
 
 	    //Make thriumph after the other player has delegated
-	    socket.on('make-thriumph',function(){ socket.emit('made-thriumph','Copes');});
-	    socketB.on('make-thriumph',function(){ socketB.emit('made-thriumph','Copes');});
-	    socketC.on('make-thriumph',function(){ socketC.emit('made-thriumph','Copes');});
-	    socketD.on('make-thriumph',function(){ socketD.emit('made-thriumph','Copes');});
+	    socket.on('make-thriumph',function(){ console.log('make');socket.emit('made-thriumph','Copes');});
+	    socketB.on('make-thriumph',function(){ console.log('make');socketB.emit('made-thriumph','Copes');});
+	    socketC.on('make-thriumph',function(){ console.log('make');socketC.emit('made-thriumph','Copes');});
+	    socketD.on('make-thriumph',function(){ console.log('make');socketD.emit('made-thriumph','Copes');});
+
+	    socket.on('updated-game',updatedGame);
+	    socketB.on('updated-game',updatedGame);
+	    socketC.on('updated-game',updatedGame);
+	    socketD.on('updated-game',updatedGame);
 
 	    socket.on('thriumph',thriumphed);
 	    socketB.on('thriumph',thriumphed);
