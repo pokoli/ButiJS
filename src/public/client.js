@@ -47,7 +47,8 @@ socket.on('updated-game',function(gameData){
     {
         currentRound=gameData.playedRounds[gameData.round-1];  
     }
-    currentGame=gameData;    
+    currentGame=gameData;
+    updateGameInfo(gameData);
 });
 
 socket.on('cards', function(data){

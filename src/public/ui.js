@@ -192,36 +192,49 @@ function addNewGame(gameData)
     Updates the game info: 
     - Teams
     - Current score
+    - Round Info
 */
 function updateGameInfo(gameData)
 {
-
     if($('#summary').length==0)
     {
         setTimeout(function(){updateGameInfo(gameData)},100);
         return;
     }
-    $('#summary').children().remove();
-    $('#summary').append('<table>');
-    $('#summary').append('<tr><th>Name</th><td>'+gameData.name+'</td><tr>');
-    $('#summary').append('<tr><th>Round</th><td> '+gameData.round+'</td><tr>');
+
+    var sHTML = '';
+
+    sHTML += '<table>';
+    sHTML += '<tr><th>Name</th><td>'+gameData.name+'</td></tr>';
+    sHTML += '<tr><th>Round</th><td>'+gameData.round+'</td></tr>';
     if(gameData.teams && gameData.teams[1])
     {
-        $('#summary').append('<tr><table>');
-        $('#summary').append('<tr><th>Team 1</th><th>Team 2</th><tr>');
+        sHTML += '<tr><table>';
+        sHTML += '<tr><th>Team 1</th><th>Team 2</th><tr>';
         for(var i=0;i<gameData.teams[1].length;i++)
         {
-            $('#summary').append('<tr><td>'+gameData.teams[1][i].name+'</td><th>'+gameData.teams[1][i].name+'</th><tr>');
+            sHTML += '<tr><td>'+gameData.teams[1][i].name+'</td><td>'+gameData.teams[2][i].name+'</td><tr>';
         }
-        $('#summary').append('</tr></table>');
+        sHTML += '</tr></table>';
     }
     if(gameData.score && gameData.score[1])
     {
-        $('#summary').append('<tr><th>Score</th></tr>');
-        $('#summary').append('<tr><td>Team 1</td><td>'+gameData.score[1]+'</td><tr>');
-        $('#summary').append('<tr><td>Team 2</td><td>'+gameData.score[2]+'</td><tr>');
+        sHTML += '<tr><th>Score</th></tr>';
+        sHTML += '<tr><td>Team 1</td><td>'+gameData.score[1]+'</td><tr>';
+        sHTML += '<tr><td>Team 2</td><td>'+gameData.score[2]+'</td><tr>';
     }
-    $('#summary').append('</table>');
+    if(gameData.playedRounds && gameData.playedRounds[gameData.round])
+    {
+        var round = gameData.playedRounds[gameData.round];
+        sHTML += '<tr><td>Round Info</td></tr>';
+        if(round.thriumph)
+            sHTML += '<tr><td>Thriumph:</td><td>'+round.thriumph+'</td></tr>';
+        if(round.thriumpher)
+            sHTML += '<tr><td>Thriumpher:</td><td>'+round.thriumpher.name+'</td></tr>';
+    }
+    sHTML += '</table>';
+    $('#summary').children().remove();
+    $('#summary').append(sHTML);
 }
 
 //Positions of the Player Cards Holder
