@@ -233,8 +233,6 @@ io.sockets.on('connection', function (socket) {
   	 Game specific functions
   	*/
   	socket.on('new-roll',function(data,callback){ debugger; processGameEvent('new-roll',data,callback)});
-  	socket.on('new-move',function(data,callback){ processGameEvent('new-move',data,callback)});
-  	socket.on('end-move',function(data,callback){ processGameEvent('end-move',data,callback)});
   	socket.on('made-thriumph',function(data,callback){ processGameEvent('made-thriumph',data,callback)});
 
 });

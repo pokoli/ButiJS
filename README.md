@@ -53,6 +53,10 @@ The following events are specific to the Butifirra game.
 
 Make thriumph on the active game. 
 
+#### new-roll
+
+Roll a new card on the active game.
+
 
 
 ##Client API
@@ -67,6 +71,10 @@ Returns the server welcome message
 ### mesage
 
 Returns a message sent by the server
+
+### updated-game
+
+Fired when the info of the game has been updated. 
 
 ### start
 
@@ -84,6 +92,7 @@ Fired when the player has to make thriumph on the current round.
 
 Returns the choiced thriumph of the current round. 
 
+
 #### play-card
 
 Fired when the player has to select a card to move
@@ -91,6 +100,10 @@ Fired when the player has to select a card to move
 #### played-card
 
 Fired when a card has been played. Data contains the played card and the player who played it.
+
+#### new-move
+
+Fired when the move (4 played cards) is ended. 
 
 #### end-move
 
