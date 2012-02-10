@@ -431,6 +431,33 @@ function placePlayedCard(data)
     alert('Player='+player.name+' played card '+card.number+'-'+card.suit);
 }
 
+function showControDialog(selections,callback)
+{
+    //Create the div
+    if($('#show-contro-dialog').length==0)
+    {
+        var oDiv = '<div id="show-contro-dialog" title="Do you want to make a contro?"><form><fieldset>';
+        oDiv += '<label for="contro">Do you want to make a contro?</label>';
+        oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="true">Yes';
+        oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="false">No';
+        oDiv += '</fieldset></form></div>';
+        $(oDiv).appendTo($('#container'));
+        $('#show-contro-dialog').dialog({
+	    autoOpen: false ,
+	    height: 200,
+	    width: 350,
+	    modal: false,
+	    buttons: {
+		    "Accept": function() {
+                        if(callback) callback($('#contro-selector').val());
+                        $(this).dialog( "close" );
+				    }
+			    },	
+        });
+    }
+    $('#show-contro-dialog').dialog('open');
+}
+
 function showThriumphDialog(selections,callback)
 {
     //Create the div

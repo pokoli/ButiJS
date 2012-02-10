@@ -234,7 +234,11 @@ io.sockets.on('connection', function (socket) {
   	*/
   	socket.on('new-roll',function(data,callback){ debugger; processGameEvent('new-roll',data,callback)});
   	socket.on('made-thriumph',function(data,callback){ processGameEvent('made-thriumph',data,callback)});
-    socket.on('do-contro',function(data,callback){ processGameEvent('do-contro',data,callback)});
+    socket.on('do-contro',function(data,callback){ 
+            var player = getCurrentPlayer();
+            data.player = player.name;
+            processGameEvent('do-contro',data,callback)
+    });
 
 });
 

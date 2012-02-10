@@ -28,6 +28,8 @@ var currentGame;
 var currentRound;
 //True if is the player current turn. False if not. 
 var yourTurn=false;
+//Holds the current thriumph
+var currentThriumph;
 
 /*
     Fired when a game we are playing is started
@@ -66,7 +68,17 @@ socket.on('make-thriumph', function(data){
     showThriumphDialog(data,makeThriumph);
 });
 
+socket.on('new-round',function(){
+    currentThriumph=undefined;
+});
+
+socket.on('contro', function(){
+    console && console.log('contro');
+    showControDialog(currentThriumph,doContro);
+});
+
 socket.on('thriumph', function (data){
+    currentThriumph=data;
     writeMessage('Thriumph: '+data);
 });
 /*Called onLoad of the html. Loads all the data needed:
@@ -106,6 +118,10 @@ function createGame(gameData){
 
 function makeThriumph(choise){
     socket.emit('made-thriumph',choise);
+}
+
+function doContro(value){
+    socket.emit('do-contro',value);
 }
 
 function playCard(card,callback)
