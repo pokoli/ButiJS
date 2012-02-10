@@ -171,6 +171,8 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
                 this.emit('new-move',_players[1]);
             else
                 this.emit('contro');
+            //Notify the game that the round contro has been updated
+            this.emit('update-contro',ret);
         }
         else
         {

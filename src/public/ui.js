@@ -242,6 +242,8 @@ function updateGameInfo(gameData)
             sHTML += '<tr><td>Thriumph:</td><td>'+round.thriumph+'</td></tr>';
         if(round.thriumpher)
             sHTML += '<tr><td>Thriumpher:</td><td>'+round.thriumpher.name+'</td></tr>';
+        if(round.multiplier>1)
+            sHTML += '<tr><td>Contro:</td><td> x'+round.multiplier+'</td></tr>';
         sHTML += '</table>';
     }
 

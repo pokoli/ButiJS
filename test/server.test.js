@@ -209,7 +209,7 @@ module.exports = {
 	},
 	"The thriumpher should be able to makeThriumph and the other players must recive it. The first player to play must recibe a play-card event also. The game info must be updated with the round info and the thriumpher. " : function(done){
 	    var thriumphs=4;
-	    var updated=4;
+	    var updated=8; //Four for thriumph and Four for contros
 	    var playCard=1;
 	    var contros=4;
 	    toMakeThriumph.should.not.eql(undefined);
