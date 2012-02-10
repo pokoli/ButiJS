@@ -226,13 +226,6 @@ function updateGameInfo(gameData)
         sHTML += '<tr><td>Team 2</td><td>'+gameData.score[2]+'</td></tr>';
         sHTML += '</table>';
     }
-    if(console)
-    {
-        console.log(gameData);
-        console.log(gameData.playedRounds)
-        console.log(gameData.round);
-        console.log(gameData.playedRounds[gameData.round-1]);
-    }
     if(gameData.playedRounds && gameData.playedRounds[gameData.round-1])
     {
         var round = gameData.playedRounds[gameData.round-1];
