@@ -57,6 +57,9 @@ Make thriumph on the active game.
 
 Roll a new card on the active game.
 
+#### do-contro
+
+Fired when the player wants to make a contro.
 
 
 ##Client API
@@ -109,6 +112,13 @@ Fired when the move (4 played cards) is ended.
 
 Fired when the move (4 played cards) is ended. 
 
+#### contro
+
+Fired when the player has the posibilty of make a contro.
+
+#### contro-done
+
+Fired when the another player has countred the game.
 
 
 

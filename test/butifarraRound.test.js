@@ -85,14 +85,28 @@ module.exports = {
         });
         round.emit('made-thriumph','Copes');
     },
-    "After making thriumph a startRound event is fired" : function(done){
+    "After making thriumph a contro event event is fired, if anybody does contro the multiplier must be set to 2" : function(done){
+        var contros=0;
         round = setUp();
-        round.on('new-move',function(){
-            done();
+        round.on('contro-done',function(data)
+        {
+            contros++;
+            data.value.should.eql(2*contros);
+            round.multiplier.should.eql(2*contros);
+            data.player.should.eql('Mark');
+            if(contros==2) done();
+        });
+        round.on('contro',function(){
+            round.emit('do-contro',{'value': true, 'player': {'name': 'Mark'}});
         });
         round.emit('made-thriumph','Bastos');
     },
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
+        round = setUp();
+        round.on('contro',function(){
+            round.emit('do-contro',{'value': false});
+        });
+        round.emit('made-thriumph','Bastos');
         var events=2;
         function myDone(moveData){
             events.should.eql(0);
@@ -119,6 +133,9 @@ module.exports = {
     },
     "When the round is ended the played cards should be in the winning team's winned cards " : function(done){
         round = setUp();
+        round.on('contro',function(){
+            round.emit('do-contro',{'value': false});
+        });
         round.on('end-move',function(move){
             move.getValue().should.eql(1);
             var winner = move.getWinner();
@@ -146,17 +163,27 @@ module.exports = {
     },
     "Each round constits of 12 moves, when it's finished it fires an round-ended event'" : function(done){
         var round2 = setUp();
+        round2.on('contro',function(){
+            round2.emit('do-contro',{'value': false});
+        });
         var i=0;
+        function testErr(err)
+        {
+            should.ifError(err);
+        }
+
         function doMove(){
-            round2.emit('new-roll',Card.create(2,'Espases'));
-            round2.emit('new-roll',Card.create(3,'Espases'));
-            round2.emit('new-roll',Card.create(4,'Espases'));
-            round2.emit('new-roll',Card.create(5,'Espases')); 
+            i++;
+            round2.emit('new-roll',Card.create(2,'Espases'),testErr);
+            round2.emit('new-roll',Card.create(3,'Espases'),testErr);
+            round2.emit('new-roll',Card.create(4,'Espases'),testErr);
+            round2.emit('new-roll',Card.create(5,'Espases'),testErr);
         }
         
         round2.on('round-ended',function(data){
             data.moves.should.be.instanceof(Array);
             data.moves.length.should.eql(12);
+            i.should.eql(12);
             done();
         });
         round2.on('new-move',function(){

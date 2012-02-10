@@ -211,10 +211,11 @@ module.exports = {
 	    var thriumphs=4;
 	    var updated=4;
 	    var playCard=1;
+	    var contros=4;
 	    toMakeThriumph.should.not.eql(undefined);
 	    function end()
 	    {
-	        if(thriumphs==0 && playCard==0 && updated==0) {
+	        if(thriumphs==0 && playCard==0 && updated==0 && contros==0) {
         	    socket.removeAllListeners('play-card');
         	    socketB.removeAllListeners('play-card');
 	            socketC.removeAllListeners('play-card');
@@ -254,6 +255,14 @@ module.exports = {
             if(thriumphs==0) end();
 	    }
 
+	    function controed()
+	    {
+	        if(contros==4 || contros==2)
+                this.emit('do-contro',{'value': true, 'player': {'name': 'Mario'}});
+	        contros--;
+	        if(contros==0) end();
+	    }
+
 	    //Remove the listener from the previous test
 	    socket.removeAllListeners('make-thriumph');
 	    socketB.removeAllListeners('make-thriumph');
@@ -261,15 +270,20 @@ module.exports = {
 	    socketD.removeAllListeners('make-thriumph');
 
 	    //Make thriumph after the other player has delegated
-	    socket.on('make-thriumph',function(){ console.log('make');socket.emit('made-thriumph','Copes');});
-	    socketB.on('make-thriumph',function(){ console.log('make');socketB.emit('made-thriumph','Copes');});
-	    socketC.on('make-thriumph',function(){ console.log('make');socketC.emit('made-thriumph','Copes');});
-	    socketD.on('make-thriumph',function(){ console.log('make');socketD.emit('made-thriumph','Copes');});
+	    socket.on('make-thriumph',function(){ socket.emit('made-thriumph','Copes');});
+	    socketB.on('make-thriumph',function(){ socketB.emit('made-thriumph','Copes');});
+	    socketC.on('make-thriumph',function(){ socketC.emit('made-thriumph','Copes');});
+	    socketD.on('make-thriumph',function(){ socketD.emit('made-thriumph','Copes');});
 
 	    socket.on('updated-game',updatedGame);
 	    socketB.on('updated-game',updatedGame);
 	    socketC.on('updated-game',updatedGame);
 	    socketD.on('updated-game',updatedGame);
+
+	    socket.on('contro',controed);
+	    socketB.on('contro',controed);
+	    socketC.on('contro',controed);
+	    socketD.on('contro',controed);
 
 	    socket.on('thriumph',thriumphed);
 	    socketB.on('thriumph',thriumphed);

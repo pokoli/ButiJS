@@ -18,6 +18,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.delegated=false;
     this.teams = teams;
     this.winnedCards = {1: [], 2: []};
+    this.multiplier=1;
     
     //Holds the information about the current move. 
     var _move;
@@ -40,6 +41,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     */
     this.start = function(){
         var stack = Stack.create();
+        this.multiplier=1;
         _players=ButifarraGame.orderPlayers(_players,this.teams, this.thriumpher);
         /*
             Deliver cards to the players.
@@ -129,7 +131,8 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             }
             
         }catch(Error){
-            callback && callback(Error.message);   
+            callback && callback(Error.message);
+            return;
         }
         callback && callback();
         
@@ -137,7 +140,44 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     //Add the newRoll function to the new-roll events
     this.on('new-roll',this.newRoll);
     
+    //Notify the correct players with the contro event.
+    this.on('contro',function(){
+        //We have to notify the players that they have the option of doing a contro
+        var team;
+        if(this.multiplier == 2)
+            team=this.thriumpher.team;
+        else
+            team=(this.thriumpher.team+1)%2;
+        _players.forEach(function(player){
+            if(player.team==team)
+                player.notify('contro');
+        });
+    });
     
+    this.doContro = function(data){
+        var val  = data.value || false;
+        var player = data.player;
+        if(val && this.multiplier<4)
+        {
+            this.multiplier=this.multiplier*2;
+            var ret = {
+                'value' : this.multiplier,
+                'player' : data.player.name
+            }
+            this.emit('contro-done',ret);
+            this.emit('notifyAll','contro-done',ret);
+            //There is the posibility of the other players to do a contro
+            if(this.multiplier==4)
+                this.emit('new-move',_players[1]);
+            else
+                this.emit('contro');
+        }
+        else
+        {
+            this.emit('new-move',_players[1]);
+        }
+    }
+    this.on('do-contro',this.doContro);
     
     this.makeThriumph = function(choise){
         if(this.thriumph) throw new Error('Make thriumph is allowed once per round');
@@ -159,13 +199,11 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         else
         {
             //Notify all the players with the selected option
-            _players.forEach(function(player){
-                player.notify('thriumph',choise);
-            });
+            this.emit('notifyAll','thriumph',choise);
             //Notify the player who has to roll the first card
             this.thriumph=choise;
             this.emit('update-thriumph',this.thriumph,this.thriumpher);
-            this.emit('new-move',_players[1]);
+            this.emit('contro');
         }
 
     }

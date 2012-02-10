@@ -117,8 +117,8 @@ var ButifarraGame = function(name) {
         var gameEnded=false;
         if(winnerTeam)
         {
-            this.scores[winnerTeam]+=result;
-            if(this.scores[winnerTeam]>100)
+            this.score[winnerTeam]+=result;
+            if(this.score[winnerTeam]>100)
             {
                 gameEnded=true;
             }
@@ -130,7 +130,7 @@ var ButifarraGame = function(name) {
         }
         else
         {
-            this.startNewRound();
+            this.emit('start-new-round');
         }
     }
         
@@ -196,6 +196,7 @@ var ButifarraGame = function(name) {
         }
         this.emit('updated',this);
     }
+    this.on('start-new-round',this.startNewRound);
     
     
     //Reference to the super start function.
