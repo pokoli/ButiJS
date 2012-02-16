@@ -73,7 +73,6 @@ socket.on('new-round',function(){
 });
 
 socket.on('contro', function(){
-    console && console.log('contro');
     showControDialog(currentThriumph,doContro);
 });
 

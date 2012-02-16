@@ -148,10 +148,12 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             team=this.thriumpher.team;
         else
             team=(this.thriumpher.team+1)%2;
-        _players.forEach(function(player){
+        for(var i in _players)
+        {
+            var player = _players[i];
             if(player.team==team)
                 player.notify('contro');
-        });
+        }
     });
     
     this.doContro = function(data){
