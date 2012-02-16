@@ -186,20 +186,20 @@ var ButifarraGame = function(name) {
                     i get an error: Object.#socket has no method getCurrentRound
                     That's the reason why I put the if here.
                 */
-                if(!this.getCurrentRound)
-                    return;
+                //if(!this.getCurrentRound)
+                //    return;
                 //Call the functions with the current round an the first argument
                 if(Array.isArray(currentRound._events[event].length))
                 {
                     for(i in currentRound._events[event])
                     {
-                        fn.call(this.getCurrentRound(),arguments[0],arguments[1]);
+                        fn.call(currentRound,arguments[0],arguments[1]);
                     }
                 }
                 else
                 {
                     var fn = currentRound._events[event];
-                    fn.call(this.getCurrentRound(),arguments[0],arguments[1]);
+                    fn.call(currentRound,arguments[0],arguments[1]);
                 }
             });
         }
