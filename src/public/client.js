@@ -128,7 +128,10 @@ function doContro(value){
 function playCard(card,callback)
 {
     if(!yourTurn)
+    {
         writeMessage('Is not your turn');
+        return;
+    }
     socket.emit('new-roll',card,function(err){
         if(err)
         {
