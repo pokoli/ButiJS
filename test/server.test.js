@@ -215,6 +215,7 @@ module.exports = {
 	    toMakeThriumph.should.not.eql(undefined);
 	    function end()
 	    {
+    	    console.log(thriumphs+","+playCard+","+updated+","+contros)
 	        if(thriumphs==0 && playCard==0 && updated==0 && contros==0) {
         	    socket.removeAllListeners('play-card');
         	    socketB.removeAllListeners('play-card');
@@ -224,6 +225,10 @@ module.exports = {
                 socketB.removeAllListeners('updated-game');
                 socketC.removeAllListeners('updated-game');
                 socketD.removeAllListeners('updated-game');
+        	    socket.removeAllListeners('make-thriumph');
+        	    socketB.removeAllListeners('make-thriumph');
+        	    socketC.removeAllListeners('make-thriumph');
+        	    socketD.removeAllListeners('make-thriumph');
 	            done();
 	        }
 	    }
@@ -262,6 +267,11 @@ module.exports = {
 	        contros--;
 	        if(contros==0) end();
 	    }
+	    
+	    function makeTrhiumphCallBack(err)
+	    {
+	        should.ifError(err);
+	    }
 
 	    //Remove the listener from the previous test
 	    socket.removeAllListeners('make-thriumph');
@@ -270,10 +280,10 @@ module.exports = {
 	    socketD.removeAllListeners('make-thriumph');
 
 	    //Make thriumph after the other player has delegated
-	    socket.on('make-thriumph',function(){ socket.emit('made-thriumph','Copes');});
-	    socketB.on('make-thriumph',function(){ socketB.emit('made-thriumph','Copes');});
-	    socketC.on('make-thriumph',function(){ socketC.emit('made-thriumph','Copes');});
-	    socketD.on('make-thriumph',function(){ socketD.emit('made-thriumph','Copes');});
+	    socket.on('make-thriumph',function(){ socket.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    socketB.on('make-thriumph',function(){ socketB.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    socketC.on('make-thriumph',function(){ socketC.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    socketD.on('make-thriumph',function(){ socketD.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
 
 	    socket.on('updated-game',updatedGame);
 	    socketB.on('updated-game',updatedGame);

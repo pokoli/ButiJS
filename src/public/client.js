@@ -116,7 +116,9 @@ function createGame(gameData){
 }
 
 function makeThriumph(choise){
-    socket.emit('made-thriumph',choise);
+    socket.emit('made-thriumph',choise,function(err){
+        if(err) writeMessage(err);
+    });
 }
 
 function doContro(value){

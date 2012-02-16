@@ -183,8 +183,11 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     }
     this.on('do-contro',this.doContro);
     
-    this.makeThriumph = function(choise){
-        if(this.thriumph) throw new Error('Make thriumph is allowed once per round');
+    this.makeThriumph = function(choise,callback){
+        if(this.thriumph) {
+            callback && callback('Make thriumph is allowed once per round');
+            return;
+        }
         if(choise=='Delegar')
         {
             this.delegated=true;
@@ -209,6 +212,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             this.emit('update-thriumph',this.thriumph,this.thriumpher);
             this.emit('contro');
         }
+        callback && callback();
 
     }
     //Add the makeThriumph function to the made-triumph events

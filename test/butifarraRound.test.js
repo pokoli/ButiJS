@@ -51,31 +51,49 @@ module.exports = {
             player.cards.length.should.eql(12);
         })
     },
-    "A player should be able to make thriumph only once in a round " : function(){
+    "A player should be able to make thriumph only once in a round " : function(done){
+        var ends=2;
+        function end()
+        {
+            ends--;
+            if(ends==0) done();
+        }
+        
         round.should.respondTo('makeThriumph');
-        should.doesNotThrow(function(){
-            round.makeThriumph('Copes');
-        },Error,"Make thriumph is allowed once per round");
+        round.makeThriumph('Copes',function(err){
+            should.ifError(err);
+            end();
+        });
         round.delegated.should.eql(false);
         round.thriumph.should.eql('Copes');
-        should.throws(function(){
-            round.makeThriumph('Copes');
-        },Error,"Make thriumph is allowed once per round");
+        round.makeThriumph('Copes',function(err){
+            err.should.eql("Make thriumph is allowed once per round");
+            end();
+        });
     },
-    "If the thriumphs is delegated, the other player is allowed to make thriumph. " : function(){
+    "If the thriumphs is delegated, the other player is allowed to make thriumph. " : function(done){
+        var ends=3;
+        function end()
+        {
+            ends--;
+            if(ends==0) done();
+        }
         round = setUp();
         round.should.respondTo('makeThriumph');
-        should.doesNotThrow(function(){
-            round.makeThriumph('Delegar');
-        },Error,"Make thriumph is allowed once per round");
-        should.doesNotThrow(function(){
-            round.makeThriumph('Botifarra');
-        },Error,"Make thriumph is allowed once per round");
+        round.makeThriumph('Delegar',function(err){
+            should.ifError(err);
+            end();
+        });
+        round.makeThriumph('Botifarra',function(err){
+            should.ifError(err);
+            end();
+        });
         round.delegated.should.eql(true);
         round.thriumph.should.eql('Botifarra');
-        should.throws(function(){
-            round.makeThriumph('Copes');
-        },Error,"Make thriumph is allowed once per round");
+        round.makeThriumph('Copes',function(err){
+            err.should.eql("Make thriumph is allowed once per round");
+            end();
+        });
     }, 
     "When a player makes thriumph an made-thriumph event is fired" : function(done){
         round = setUp();
