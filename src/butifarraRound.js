@@ -29,7 +29,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     //Internally hold the order of the players
     var _players = teams[1].concat(teams[2]);
     //Internally hold the players cards
-    var _playersCards = [];
+    var _playersCards = {};
     //Function to call at the end of the round.
     var _callback;
     //Hols the first player to take action
