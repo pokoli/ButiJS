@@ -7,6 +7,7 @@ var ButifarraGame = require('./butifarraGame'),
     Stack = require('./spanishCardStack');
 
 
+
 /*
     Holds all the related stuff with a butifarra Round. 
 */
@@ -27,6 +28,8 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
 
     //Internally hold the order of the players
     var _players = teams[1].concat(teams[2]);
+    //Internally hold the players cards
+    var _playersCards = [];
     //Function to call at the end of the round.
     var _callback;
     //Hols the first player to take action
@@ -56,13 +59,14 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         }
         for(i in _players)
         {
-            var player = _players[i];
-            if(player.name == this.thriumpher.name)
+            if(_players[i].name == this.thriumpher.name)
             {
-                player.notify('make-thriumph',
+                _players[i].notify('make-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra','Delegar']);
             }
-            player.notify('cards',player.cards);
+            var skey = _players[i].id || _players[i].name;
+            _playersCards[skey]=_players[i].cards;
+            _players[i].notify('cards',_players[i].cards);
         }
         this.emit('round-started');
     }
@@ -110,9 +114,12 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     */
     this.newRoll = function(card,callback){
         var player= _players[_lastPlayed+1];
+        var skey = player.id || player.name;
+        player.cards=_playersCards[skey];
         try{
             _move.addRoll(player,card);
             _lastPlayed++;
+            player.cards = []; //To avoid sending it to all the clients
             var data = {
                 "player" : player,
                 "card" : card,
