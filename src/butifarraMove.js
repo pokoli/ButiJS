@@ -12,7 +12,7 @@ var ButifarraRoll = function(player,card) {
 */
 function calculatePoints(cards){
     var points = 0;
-    for(i in cards)
+    for(var i=0;i<cards.length;i++)
     {
         var card = cards[i];
         if(card.number==10) points++;
@@ -57,7 +57,7 @@ var ButifarraMove = function(thriumph) {
         var higherCard; //Hols the other team higer's card in the Move.
         //A player can not roll twice in the same move.
         //A card can not be rolled twice in the same move.
-        for(i in rolls){
+        for(var i=0;i<rolls.length;i++){
             var move = rolls[i];
             if(move.player==roll.player)
             { 
@@ -82,7 +82,7 @@ var ButifarraMove = function(thriumph) {
         {
             var hasTriumph=false;
             //Loop players cards to know if they have valid rolls or not.
-            for(i in roll.player.cards)
+            for(var i=0;i<roll.player.cards.length;i++)
             {
                 var card = roll.player.cards[i];
                 //If the players has cards from the init suit, must roll it.
@@ -106,7 +106,7 @@ var ButifarraMove = function(thriumph) {
             if(!roll.card.isHigher(higherCard))
             {
                 //Search if the player has an higher card.
-                for(i in roll.player.cards)
+                for(var i=0;i<roll.player.cards.length;i++)
                 {
                     var card = roll.player.cards[i];
                     if(card.isHigher(higherCard))
@@ -126,7 +126,7 @@ var ButifarraMove = function(thriumph) {
     this.addRoll = function(player,card){
         //Validate that the player has the card in the stack.
         var doesntHaveCard=true;
-        for(i in player.cards)
+        for(var i=0;i<player.cards.length;i++)
         {
             if(player.cards[i].number ==card.number && 
                 player.cards[i].suit ==card.suit)
@@ -155,7 +155,7 @@ var ButifarraMove = function(thriumph) {
     this.getValue = function(){
         if(this.rolls.length!=4) return 0;
         var cards = [];
-        for(i in this.rolls)
+        for(var i=0;i<this.rolls.length;i++)
         {
             var card = this.rolls[i].card;
             cards.push(card);
@@ -169,7 +169,7 @@ var ButifarraMove = function(thriumph) {
     this.getWinner = function(){
 
         var higherCard,winner;
-        for(i in this.rolls)
+        for(var i=0;i<this.rolls.length;i++)
         {
             var player = this.rolls[i].player;
             var card = this.rolls[i].card;

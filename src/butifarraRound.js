@@ -57,7 +57,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             _players[i].cards = _players[i].cards.concat(stack.next(4));            
 
         }
-        for(i in _players)
+        for(var i=0;i<_players.length;i++)
         {
             if(_players[i].name == this.thriumpher.name)
             {
@@ -94,7 +94,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         if(this.moves.length<12)
         {
             var winner = move.getWinner();
-            for(i in move.rolls)
+            for(var i=0;i<move.rolls.length;i++)
             {
                 var card=move.rolls[i].card;
                 this.winnedCards[winner.team].push(card);
@@ -155,7 +155,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             team=this.thriumpher.team;
         else
             team=(this.thriumpher.team+1)%2;
-        for(var i in _players)
+        for(var i=0;i<_players.length;i++)
         {
             var player = _players[i];
             if(player.team==team)
@@ -199,7 +199,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         {
             this.delegated=true;
             var team = this.teams[this.thriumpher.team];
-            for(i in team)
+            for(var i=0;i<team.length;i++)
             {
                 if(team[i].name!=this.thriumpher.name)
                 {
@@ -233,7 +233,9 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         var temp = []
         for(team in [1,2])
         {
-            for(i in this.winnedCards[team])
+            if(!this.winnedCards[team])
+                continue;
+            for(var i=0;i<this.winnedCards[team].length;i++)
             {
                 var card = this.winnedCards[team][i];
                 temp.push(card);

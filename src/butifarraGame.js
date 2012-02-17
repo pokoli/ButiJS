@@ -102,7 +102,7 @@ var ButifarraGame = function(name) {
         var roundScores=roundData.getScores();
         var winnerTeam,result;
         var tie=false;
-        for(i in roundScores)
+        for(var i=0;i<roundScores.length;i++)
         {
             if(roundScores[i]>36) //We only compute the points above 36 (half of the stack)
             {
@@ -191,8 +191,9 @@ var ButifarraGame = function(name) {
                 //Call the functions with the current round an the first argument
                 if(Array.isArray(currentRound._events[event].length))
                 {
-                    for(i in currentRound._events[event])
+                    for(var i=0;i<currentRound._events[event];i++)
                     {
+                        var fn = currentRound._events[event][i];
                         fn.call(currentRound,arguments[0],arguments[1]);
                     }
                 }

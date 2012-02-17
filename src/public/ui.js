@@ -110,14 +110,14 @@ function showGameDetails(gameData)
     $('#game-details').append('<tr><th>Name</th><td>'+gameData.name+'</td><tr>');
     $('#game-details').append('<tr><th>State</th><td>'+gameData.state+'</td><tr>');
     $('#game-details').append('<tr><th colspan="2">Players</th>');
-    for(var i in gameData.players)
+    for(var i=0;i<gameData.players.length;i++)
     {
         $('#game-details').append('<tr><td colspan="2">'+gameData.players[i].name+'</td><tr>');
     }
     if(gameData.watchers.length > 0)
     {
         $('#game-details').append('<tr><th colspan="2">Wathcers</th>');
-        for(var i in gameData.watchers)
+        for(var i=0;i<gameData.watchers.length;i++)
         {
             $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i]+'</td><tr>');
         }
@@ -137,7 +137,7 @@ function drawGameData(data){
 			return;
 		}
 		games=data;
-		for(var i in games)
+		for(var i=0;i<data.length;i++)
 		{
 			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
 		}
@@ -166,7 +166,7 @@ function drawPlayersList(data){
 			$('#player-list').append('<li>No players on the server</li>');
 			return;
 		}
-		for(var i in data)
+		for(var i=0;i<data.length;i++)
 		{
 			$('#player-list').append('<li>'+data[i].name+'</li>');
 		}
@@ -317,7 +317,7 @@ function initCanvas(canvasElement,gameData)
     cardHolderYOffset=height-(height*0.3);
     
     var playerName;
-    for(var i in gameData.players)
+    for(var i=0;i<gameData.players.length;i++)
     {
         if(gameData.players[i].id == playerid)
             playerName=gameData.players[i].id;
@@ -337,7 +337,7 @@ function initCanvas(canvasElement,gameData)
     holders.push(createCardHolder('cards4',cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
     holders.push(createCardHolder('played1',width*0.43,height*0.47,width*0.14,height*0.20));
     
-    for(i in holders)
+    for(var i=0;i<holders.length;i++)
     {
         holdersLayer.add(holders[i]);
     }
@@ -359,10 +359,10 @@ function preloadImages()
 {
     var _suits = ['Oros','Copes','Espases','Bastos'];
     var _numbers = [1,2,3,4,5,6,7,8,9,10,11,12];
-    for(i in _suits)
+    for(var i=0;i<_suits.length;i++)
     {
         var suit = _suits[i];
-        for(j in _numbers)
+        for(var j=0;j<_numbers.length;j++)
         {
             var num = _numbers[j];
 		    var image = new Image();

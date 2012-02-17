@@ -82,7 +82,7 @@ io.sockets.on('connection', function (socket) {
     {
         if(!_currentGameId)
             return;
-        for(i in _games)
+        for(var i=0;i<_games.length;i++)
         {
             if(_games[i].id ==  _currentGameId)
                 return _games[i];
@@ -117,13 +117,13 @@ io.sockets.on('connection', function (socket) {
   	*/
   	socket.on('list-games', function(data, fn){
   	    var returnData=[];
-  	    for(i in _games)
+  	    for(var i=0;i<_games.length;i++)
   	    {
   	        var game = Game.clone(_games[i]);
   	        if(game.players && game.players.length > 0 && game.players[0].cards 
   	            && game.players[0].cards.length > 0 )
   	        {
-      	        for(j in game.players)
+      	        for(var j=0;j<game.players.length;j++)
       	        {
       	            game.players[j].cards =[]
       	        }
@@ -135,10 +135,10 @@ io.sockets.on('connection', function (socket) {
   	
   	socket.on('list-players', function(data, fn){
         var ret=[];
-        for (var i in _players){
+        for (var id in _players){
             ret.push({
-                    'name' : _players[i].name,
-                    'id' : _players[i].id,
+                    'name' : _players[id].name,
+                    'id' : _players[id].id,
                     });
         }
   		if(fn) fn(ret);
@@ -162,11 +162,12 @@ io.sockets.on('connection', function (socket) {
   	socket.on('join-game', function(data, fn){
   	    //1. Find the game.
   	    var game;
-  	    for(var i in _games)
+  	    console.log(_games);
+  	    for(var i=0;i<_games.length;i++)
   	    {
   	        if(_games[i].id == data)
   	        {
-  	            game=i;
+  	            game=_games[i];
   	            break;
   	        }
   	    }

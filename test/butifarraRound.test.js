@@ -129,7 +129,7 @@ module.exports = {
         function myDone(moveData){
             events.should.eql(0);
             moveData.rolls.length.should.eql(4);
-            for(i in moveData.rolls)
+            for(var i=0;i<moveData.length;i++)
             {   
                 var roll = moveData.rolls[i];
                 roll.card.suit.should.eql('Espases');
@@ -158,7 +158,7 @@ module.exports = {
             move.getValue().should.eql(1);
             var winner = move.getWinner();
             var winnedCards = []
-            for(i in move.rolls)
+            for(var i=0;i<move.rolls.length;i++)
             {
                 var card=move.rolls[i].card;
                 winnedCards.push(card);
