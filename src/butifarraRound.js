@@ -4,6 +4,7 @@ var util = require('util'),
 
 var ButifarraGame = require('./butifarraGame'),
     ButifarraMove = require('./butifarraMove'),
+    Card = require('./card'),
     Stack = require('./spanishCardStack');
 
 
@@ -117,7 +118,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         var skey = player.id || player.name;
         player.cards=_playersCards[skey];
         try{
-            _move.addRoll(player,card);
+            _move.addRoll(player,Card.create(card.number,card.suit));
             _lastPlayed++;
             player.cards = []; //To avoid sending it to all the clients
             var data = {
