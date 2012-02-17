@@ -86,7 +86,6 @@ module.exports = {
 	},
 	"When we query for the connected players we get a list of players " : function(done){
 		socket.emit('list-players',null,function(data){
-		    console.log(data);
 			data.should.be.an.instanceof(Array);
 			data.length.should.eql(4);
 			var names = ['Peach','Yoshi','Mario','Luiggi'].sort();

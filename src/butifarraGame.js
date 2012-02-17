@@ -159,7 +159,6 @@ var ButifarraGame = function(name) {
         currentRound.on('update-contro',function(data){
             if(game.round)
             {
-                console.log('update-contro'+data);
                 game.playedRounds[game.round-1].multiplier=data.val;
                 game.notifyAll('updated-game',game);
             }

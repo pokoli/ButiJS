@@ -36,7 +36,7 @@ app.get('/game', function(req,res){
 });
 
 app.listen(8000);
-var io = socketio.listen(app);
+var io = socketio.listen(app, {log:false});
 
 
 //Variable for hosting the current games and players on the server
@@ -162,7 +162,6 @@ io.sockets.on('connection', function (socket) {
   	socket.on('join-game', function(data, fn){
   	    //1. Find the game.
   	    var game;
-  	    console.log(_games);
   	    for(var i=0;i<_games.length;i++)
   	    {
   	        if(_games[i].id == data)
