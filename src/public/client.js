@@ -30,6 +30,8 @@ var currentRound;
 var yourTurn=false;
 //Holds the current thriumph
 var currentThriumph;
+//Hold if is waiting for a server response. 
+var currentAction;
 
 /*
     Fired when a game we are playing is started
@@ -132,7 +134,12 @@ function playCard(card,callback)
         writeMessage('Is not your turn');
         return;
     }
+    console.log(currentAction);
+    if(currentAction)
+        return;
+    currentAction=true;
     socket.emit('new-roll',card,function(err){
+        currentAction=false;
         if(err)
         {
             writeMessage(err);
@@ -181,7 +188,7 @@ function cardWeight(card)
 }
 
 /*
-    Sorts the players based on the follwing order:
+    Sorts the cards based on the follwing order:
      - Per suit: Oros > Copes > Espases -> Bastos
      - Per Number: 9 > 1 > 12 > 11 > 10 > ... > 2
 */

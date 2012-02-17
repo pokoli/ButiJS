@@ -263,6 +263,8 @@ function createCardHolder(name,x,y,width,height)
         context.stroke();
         context.closePath();
     },name);
+    ret.offsetx=x;
+    ret.offsety=y;
     return ret;
 }
 
@@ -275,6 +277,11 @@ var canvasInit=false;
     Holds the Stage where all the layers are placed.
 */
 var mainStage;
+
+/*
+    Save the ids of the players possitioned in the screen. 
+*/
+var ids = [];
 
 /*
     Writes a message to a Layer.
@@ -316,26 +323,35 @@ function initCanvas(canvasElement,gameData)
     cardHolderXOffset=width*0.07;
     cardHolderYOffset=height-(height*0.3);
     
-    var playerName;
+    var playerTeam;
     for(var i=0;i<gameData.players.length;i++)
     {
-        if(gameData.players[i].id == playerid)
-            playerName=gameData.players[i].id;
+        if(gameData.players[i].id === playerid)
+        {
+            playerTeam=gameData.players[i].team;
+            ids[3]=playerid;
+            break;
+        }
     }
+    
+    ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
+    playerTeam = playerTeam === 1 ? 2 : 1;
+    ids[0] = gameData.teams[playerTeam][0].id;
+    ids[2] = gameData.teams[playerTeam][1].id;   
     
     var holders = []; 
     //Player 1 cards Holder
-    holders.push(createCardHolder('cards1',0,height*0.185,width*0.15,height*0.485));
-    holders.push(createCardHolder('played1',width*0.22,height*0.33,width*0.14,height*0.20));
+    holders.push(createCardHolder('cards'+ids[0],0,height*0.185,width*0.15,height*0.485));
+    holders.push(createCardHolder('played'+ids[0],width*0.22,height*0.33,width*0.14,height*0.20));
     //Player 2 cards Holder
-    holders.push(createCardHolder('cards2',width*0.2,0,width*0.6,height*0.185));
-    holders.push(createCardHolder('played2',width*0.43,height*0.23,width*0.14,height*0.20));
+    holders.push(createCardHolder('cards'+ids[1],width*0.2,0,width*0.6,height*0.185));
+    holders.push(createCardHolder('played'+ids[1],width*0.43,height*0.23,width*0.14,height*0.20));
     //Player 3 cards Holder
-    holders.push(createCardHolder('cards3',width-(width*0.15),height*0.185,width*0.15,height*0.485));
-    holders.push(createCardHolder('played3',width-(width*0.22+width*0.14),height*0.33,width*0.14,height*0.20));
+    holders.push(createCardHolder('cards'+ids[2],width-(width*0.15),height*0.185,width*0.15,height*0.485));
+    holders.push(createCardHolder('played'+ids[2],width-(width*0.22+width*0.14),height*0.33,width*0.14,height*0.20));
     //Player 4 cards Holder
-    holders.push(createCardHolder('cards4',cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
-    holders.push(createCardHolder('played1',width*0.43,height*0.47,width*0.14,height*0.20));
+    holders.push(createCardHolder('cards'+ids[3],cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
+    holders.push(createCardHolder('played'+ids[3],width*0.43,height*0.47,width*0.14,height*0.20));
     
     for(var i=0;i<holders.length;i++)
     {
@@ -430,7 +446,30 @@ function placePlayedCard(data)
 {
     var player = data.player;
     var card = data.card;
-    alert('Player='+player.name+' played card '+card.number+'-'+card.suit);
+    var holder = mainStage.getChild('holdersLayer').getChild('played'+player.id);
+    var key = card.number+'-'+card.suit.toString().toLowerCase()
+    //TODO: Remove fixed with and heigth from cardImage
+    var cardImage = new Kinetic.Image({
+                        image: cachedImages[key],
+                        x : holder.offsetx,
+                        y : holder.offsety,
+                        width : 45,
+                        heigth : 70
+                    });
+    var cardsLayer = mainStage.getChild('cardsPlayedLayer');
+    var baddLayer=false;
+    if(!cardsLayer)
+    {
+        cardsLayer= new Kinetic.Layer('cardsPlayedLayer');
+        baddLayer=true;
+    }
+    cardsLayer.add(cardImage);
+    if(baddLayer)
+    {
+        mainStage.add(cardsLayer);
+        mainStage.draw();
+    }
+    cardsLayer.draw();
 }
 
 function showControDialog(selections,callback)
@@ -462,6 +501,12 @@ function showControDialog(selections,callback)
 
 function showThriumphDialog(selections,callback)
 {
+    //Prevent from showing the dialog if no selections
+    if(selections.length==0)
+    {   
+        console && console.log('Empty selections');
+        return;
+    }
     //Create the div
     if($('#show-thriumph-dialog').length==0)
     {
