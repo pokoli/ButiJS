@@ -203,7 +203,7 @@ var ButifarraGame = function(name) {
                 }
             });
         }
-        this.emit('updated',this);
+        //this.emit('updated',this);
     }
     this.on('start-new-round',this.startNewRound);
     
@@ -219,11 +219,12 @@ var ButifarraGame = function(name) {
     4. Start the first round.
     */
     this.start = function(){
-        super_start.call(this);
+        super_start.call(this,false);
         this.assignTeams();
         this.players=orderPlayers(this.players,this.teams);
         assignFirstPlayerToChooseTriumph(this.players);
         this.startNewRound();
+        this.notifyAll('start',this);
     }
     
     var super_addPlayer = this.addPlayer;
