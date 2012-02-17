@@ -407,14 +407,16 @@ function placeCards(cards)
                         heigth : cardHolderHeight
                     });
         cardImage.card = cards[i];
-        cardImage.on('dblclick', function(){
-            playCard(this.card,function(){
-                var idx = cards.indexOf(this.card); // Find the index
-                if(idx!=-1) cards.splice(idx, 1);
-                placeCards(cards);
-            });
-            
-        }); 
+        cardImage.on("dblclick", (function(card, idx) {
+                    return function () {
+                    playCard(card, function (err) {
+                            if(err) return;
+                            cards.splice(idx, 1);
+                            placeCards(cards);
+                        });
+                    };
+        })(card, i));
+
         cardsLayer.add(cardImage);
     }
     mainStage.add(cardsLayer);

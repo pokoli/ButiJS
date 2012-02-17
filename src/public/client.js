@@ -136,6 +136,7 @@ function playCard(card,callback)
         if(err)
         {
             writeMessage(err);
+            callback && callback(err);
             return;
         }
         yourTurn=false;
