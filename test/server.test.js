@@ -21,6 +21,7 @@ function finish(done) {
 	connectedD.should.be.true;
 	done();
   	server.server.close();
+  	process.exit();
 }
 
 module.exports = {
@@ -215,7 +216,6 @@ module.exports = {
 	    toMakeThriumph.should.not.eql(undefined);
 	    function end()
 	    {
-    	    console.log(thriumphs+","+playCard+","+updated+","+contros)
 	        if(thriumphs==0 && playCard==0 && updated==0 && contros==0) {
         	    socket.removeAllListeners('play-card');
         	    socketB.removeAllListeners('play-card');
