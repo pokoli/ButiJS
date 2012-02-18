@@ -59,7 +59,7 @@ var ButifarraMove = function(thriumph) {
         //A card can not be rolled twice in the same move.
         for(var i=0;i<rolls.length;i++){
             var move = rolls[i];
-            if(move.player==roll.player)
+            if(move.player.isEqual(roll.player))
             { 
                 if(callback) callback(new Error('A player can roll only once'));
                 return;

@@ -60,7 +60,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         }
         for(var i=0;i<_players.length;i++)
         {
-            if(_players[i].name == this.thriumpher.name)
+            if(_players[i].isEqual(this.thriumpher))
             {
                 _players[i].notify('make-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra','Delegar']);
@@ -202,7 +202,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             var team = this.teams[this.thriumpher.team];
             for(var i=0;i<team.length;i++)
             {
-                if(team[i].name!=this.thriumpher.name)
+                if(team[i].isEqual(this.thriumpher))
                 {
                     this.thriumpher=team[i];
                     team[i].notify('make-thriumph',

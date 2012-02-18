@@ -75,21 +75,25 @@ Game.prototype.addWatcher = function(watcher){
 	this.emit('updated',this);
 }
 
-Game.prototype.hasPlayer = function(player){
-	var idx = this.players.indexOf(player);
-	if(idx != -1) 
-		return true;
+Game.prototype.hasPlayer = function(otherPlayer){
+    for(var i=0;i<this.players.length;i++)
+    {
+        if(this.players[i].isEqual(otherPlayer))
+            return true;
+    }
 	return false;
 }
 
-Game.prototype.removePlayer = function(player){
-	var idx = this.players.indexOf(player);
-	if(idx != -1) 
-	{
-		this.players.splice(idx,1);
-		this.emit('updated',this);
-		return true;
-	}
+Game.prototype.removePlayer = function(otherPlayer){
+    for(var i=0;i<this.players.length;i++)
+    {
+        if(this.players[i].isEqual(otherPlayer))
+        {
+            this.players.splice(i,1);
+		    this.emit('updated',this);
+		    return true;
+        }
+    }
 	return false;
 }
 

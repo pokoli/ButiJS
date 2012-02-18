@@ -24,6 +24,25 @@ var Player = function(name,email,socket) {
 	        
 	    }
 	}
+	this.isEqual = function(otherPlayer){
+	    var bret=false;
+	    if(this.id && otherPlayer.id)
+	        return this.id === otherPlayer.id
+	    else
+	    {
+	        if(this.id || otherPlayer.id)
+	            return false;
+	        if(this.name && otherPlayer.name)
+    	      bret = this.name === otherPlayer.name;
+    	    else if(this.name || otherPlayer.name)
+    	        return false;
+	        if(bret && this.email && otherPlayer.email)
+    	      bret = this.email === otherPlayer.email;
+            else if(this.email || otherPlayer.email)
+    	        return false;
+	    }
+	    return bret;
+	}
 };
 
 Player.prototype.join = function(game){

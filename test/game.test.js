@@ -18,14 +18,11 @@ module.exports = {
 		game.should.respondTo('addPlayer');
 	},
 	"We have to now if a player has joined the game " : function(done){
-	    function Ok(){
-	        game.removeAllListeners('updated');
-	        done();
-	    }
 	    function test(data){
             data.hasPlayer(newPlayer).should.be.true;
             data.hasPlayer(Player.create('no player')).should.be.false;
-            Ok();
+	        game.removeAllListeners('updated');
+	        done();
 	    }
 		game.should.respondTo('hasPlayer');
 		game.on('updated',test);
@@ -45,8 +42,8 @@ module.exports = {
 		game.addPlayer(playerB);
 		game.numberOfPlayers().should.eql(2);
 		var players = game.players;
-		players.shift().should.eql(playerA);
-		players.shift().should.eql(playerB);
+		players.shift().isEqual(playerA).should.be.true;
+		players.shift().isEqual(playerB).should.be.true;
 	},
 	"If we clone a game it should be the same" : function(){
 		var clonedGame = Game.clone(game);
