@@ -323,6 +323,7 @@ function initCanvas(canvasElement,gameData)
     cardHolderXOffset=width*0.07;
     cardHolderYOffset=height-(height*0.3);
     
+    var names = [];
     var playerTeam;
     for(var i=0;i<gameData.players.length;i++)
     {
@@ -330,14 +331,20 @@ function initCanvas(canvasElement,gameData)
         {
             playerTeam=gameData.players[i].team;
             ids[3]=playerid;
+            names[3]=gameData.players[i].name;
             break;
         }
     }
     
     ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
+    names[1]=gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
+
     playerTeam = playerTeam === 1 ? 2 : 1;
     ids[0] = gameData.teams[playerTeam][0].id;
-    ids[2] = gameData.teams[playerTeam][1].id;   
+    names[0] = gameData.teams[playerTeam][0].name;
+    ids[2] = gameData.teams[playerTeam][1].id;
+    names[2] = gameData.teams[playerTeam][1].name;
+
     
     var holders = []; 
     //Player 1 cards Holder
@@ -354,11 +361,26 @@ function initCanvas(canvasElement,gameData)
     holders.push(createCardHolder('played'+ids[3],width*0.43,height*0.47,width*0.14,height*0.20));
     
     for(var i=0;i<holders.length;i++)
-    {
         holdersLayer.add(holders[i]);
-    }
-    
     mainStage.add(holdersLayer);
+
+    var namesLayer= new Kinetic.Layer('namesLayer');
+    namesLayer.clear();
+
+    var nameShape = new Kinetic.Shape(function(){
+        //Write the name of the players.
+        var context = namesLayer.getContext();
+        context.font = "14pt Calibri";
+        context.fillStyle = "Black";
+        context.fillText(names[0], 0,height*0.15);
+        context.fillText(names[1],width*0.40,height*0.15);
+        context.fillText(names[2],width-(width*0.15),height*0.15);
+        context.fillText(names[3],width*0.40,height-(height*0.05));
+    });
+    namesLayer.add(nameShape);
+    mainStage.add(namesLayer);
+    namesLayer.moveToTop();
+
     //Layer for writing messages to the player.
     var messageLayer = new Kinetic.Layer('messageLayer');
     mainStage.add(messageLayer);
