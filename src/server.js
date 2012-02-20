@@ -84,7 +84,7 @@ io.sockets.on('connection', function (socket) {
             return;
         for(var i=0;i<_games.length;i++)
         {
-            if(_games[i].id ==  _currentGameId)
+            if(_games[i].id ===  _currentGameId)
                 return _games[i];
         }
         return;
@@ -96,7 +96,7 @@ io.sockets.on('connection', function (socket) {
     function processGameEvent(event,data,callback)
     {
         var game = getCurrentGame();
-        if(game && game.state=='running')
+        if(game && game.state==='running')
             game.emit(event,data,callback);
         else
           callback && callback('No current game running');
@@ -164,7 +164,7 @@ io.sockets.on('connection', function (socket) {
   	    var game;
   	    for(var i=0;i<_games.length;i++)
   	    {
-  	        if(_games[i].id == data)
+  	        if(_games[i].id === data)
   	        {
   	            game=_games[i];
   	            break;
@@ -184,7 +184,7 @@ io.sockets.on('connection', function (socket) {
   	        }
             _games[i].addPlayer(current);
       		_currentGameId=_games[i].id;
-            if(_games[i].numberOfPlayers()==4)
+            if(_games[i].numberOfPlayers()===4)
             {
                 _games[i].state='running';
                 _games[i].start();
@@ -215,7 +215,7 @@ io.sockets.on('connection', function (socket) {
       			if(game.hasPlayer(player))
       			{
       				game.removePlayer(player);
-      				if(game.numberOfPlayers()==0)
+      				if(game.numberOfPlayers()===0)
       					_games.splice(idx,1);
       			}
       		})

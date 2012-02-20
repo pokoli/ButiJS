@@ -15,11 +15,11 @@ function calculatePoints(cards){
     for(var i=0;i<cards.length;i++)
     {
         var card = cards[i];
-        if(card.number==10) points++;
-        if(card.number==11) points=points+2;
-        if(card.number==12) points=points+3;
-        if(card.number==1) points=points+4;
-        if(card.number==9) points=points+5;
+        if(card.number===10) points++;
+        if(card.number===11) points=points+2;
+        if(card.number===12) points=points+3;
+        if(card.number===1) points=points+4;
+        if(card.number===9) points=points+5;
     }
     //Four cards are valued 1 point.
     return ++points;
@@ -41,19 +41,19 @@ var ButifarraMove = function(thriumph) {
     */
     function validateRoll(roll,rolls,callback)
     {
-        if(rolls.length==0)
+        if(rolls.length===0)
         {
             if(callback) callback();
             return;
         }
         //Maximum 4 rolls per movement (1 forEach player)   
-        if(rolls.length==4)
+        if(rolls.length===4)
         {
             if(callback) callback(new Error('Only 4 rolls allowed'));
             return;
         }     
         //The card must be higher than the other team higher.
-        var otherTeam = roll.player.team== 1 ? 2 : 1;
+        var otherTeam = roll.player.team=== 1 ? 2 : 1;
         var higherCard; //Hols the other team higer's card in the Move.
         //A player can not roll twice in the same move.
         //A card can not be rolled twice in the same move.
@@ -64,12 +64,12 @@ var ButifarraMove = function(thriumph) {
                 if(callback) callback(new Error('A player can roll only once'));
                 return;
             }
-            if(move.card.suit==roll.card.suit && move.card.number==roll.card.number ) 
+            if(move.card.suit===roll.card.suit && move.card.number===roll.card.number ) 
             {
                 if(callback) callback(new Error('A card can be rolled only once'));
                 return;
             }
-            if(move.player.team==otherTeam)
+            if(move.player.team===otherTeam)
             {
                 if(!higherCard || move.card.isHigher(higherCard))
                     higherCard=move.card;
@@ -86,12 +86,12 @@ var ButifarraMove = function(thriumph) {
             {
                 var card = roll.player.cards[i];
                 //If the players has cards from the init suit, must roll it.
-                if(card.suit==initSuit)
+                if(card.suit===initSuit)
                 {
                     if(callback) callback(new Error('Card must be from initial suit'));
                     return;
                 }
-                if(card.suit==thriumph)
+                if(card.suit===thriumph)
                     hasTriumph=true;
             }
             if(hasTriumph && roll.card.suit!=thriumph)
@@ -128,8 +128,8 @@ var ButifarraMove = function(thriumph) {
         var doesntHaveCard=true;
         for(var i=0;i<player.cards.length;i++)
         {
-            if(player.cards[i].number ==card.number && 
-                player.cards[i].suit ==card.suit)
+            if(player.cards[i].number ===card.number && 
+                player.cards[i].suit ===card.suit)
             {
                 doesntHaveCard=false;
                 break;
@@ -179,12 +179,12 @@ var ButifarraMove = function(thriumph) {
                 higherCard=card;
                 winner=player;
             }
-            if(card.suit == thriumph && higherCard.suit!=thriumph)
+            if(card.suit === thriumph && higherCard.suit!=thriumph)
             {
                 higherCard=card;
                 winner=player;
             }
-            if(higherCard.suit==card.suit && card.isHigher(higherCard))
+            if(higherCard.suit===card.suit && card.isHigher(higherCard))
             {
                 higherCard=card;
                 winner=player;

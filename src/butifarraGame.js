@@ -14,7 +14,7 @@ function orderPlayers(players,teams,firstPlayer)
     firstPlayer = firstPlayer || players[0];
     var temp = new Array();
     var teamFirst = firstPlayer.team;
-    var otherTeam= teamFirst == 1 ? 2 : 1;
+    var otherTeam= teamFirst === 1 ? 2 : 1;
     var firstPos= teams[teamFirst].indexOf(firstPlayer);
     temp.push(firstPlayer); //First the thriumber
     temp.push(teams[otherTeam][firstPos]); //The other player in the other team. 
@@ -53,7 +53,7 @@ var ButifarraGame = function(name) {
         var teamA = [], teamB = [];
         this.players.forEach(function(player){
             var randomNumber = Math.floor(Math.random()*2000);
-            if(randomNumber%2==0 && teamA.length < 2) {
+            if(randomNumber%2===0 && teamA.length < 2) {
                 teamA.push(player);
                 player.team=1;
             }
@@ -89,7 +89,7 @@ var ButifarraGame = function(name) {
         var card = stack.next();
         players.forEach(function(player,idx){
             //If the player suit is equal to the card suit. The players is the next triumpher
-            if(player.suit==card.suit)
+            if(player.suit===card.suit)
             {
                 _thriumpher=idx;
             }
@@ -109,7 +109,7 @@ var ButifarraGame = function(name) {
                 winnerTeam=i;
                 result=roundScores[i]-36;
             }
-            else if (roundScores[i]==36) //Tie round
+            else if (roundScores[i]===36) //Tie round
             {
                 tie=true;
             }
@@ -232,7 +232,7 @@ var ButifarraGame = function(name) {
         Override addPlayer to validate the number of players.
     */
     this.addPlayer = function(player){
-        if(this.numberOfPlayers() == 4) throw new Error('The game is full');
+        if(this.numberOfPlayers() === 4) throw new Error('The game is full');
         super_addPlayer.call(this,player)
     }
 };

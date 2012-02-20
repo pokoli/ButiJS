@@ -7,7 +7,7 @@ socket.on('welcome', function (data) {
 
 socket.on('message', function(data){
 	var text;
-	if(typeof(data)=='string')
+	if(typeof(data)==='string')
 	{
 		addMessage(data);
 	}
@@ -175,13 +175,13 @@ function joinGame(){
 function cardWeight(card)
 {
     var score=0;
-    if(card.suit=='Oros')
+    if(card.suit==='Oros')
         score+=300;
-    else if(card.suit=='Copes')
+    else if(card.suit==='Copes')
         score+=200;
-    else if(card.suit=='Espases')
+    else if(card.suit==='Espases')
         score+=100;
-    if(card.number==9 || card.number==1)
+    if(card.number===9 || card.number===1)
         score+=13;
     score+=card.number;
     return score;

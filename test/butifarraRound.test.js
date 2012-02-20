@@ -56,7 +56,7 @@ module.exports = {
         function end()
         {
             ends--;
-            if(ends==0) done();
+            if(ends===0) done();
         }
         
         round.should.respondTo('makeThriumph');
@@ -76,7 +76,7 @@ module.exports = {
         function end()
         {
             ends--;
-            if(ends==0) done();
+            if(ends===0) done();
         }
         round = setUp();
         round.should.respondTo('makeThriumph');
@@ -112,7 +112,7 @@ module.exports = {
             data.value.should.eql(2*contros);
             round.multiplier.should.eql(2*contros);
             data.player.should.eql('Mark');
-            if(contros==2) done();
+            if(contros===2) done();
         });
         round.on('contro',function(){
             round.emit('do-contro',{'value': true, 'player': {'name': 'Mark'}});

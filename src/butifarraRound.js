@@ -127,7 +127,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             };
             //Notify all the players the played card 
             this.emit('notifyAll','card-played',data);
-            if(_lastPlayed==3)
+            if(_lastPlayed===3)
             {
                 //The move is ended
                 this.emit('end-move',_move);
@@ -152,14 +152,14 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.on('contro',function(){
         //We have to notify the players that they have the option of doing a contro
         var team;
-        if(this.multiplier == 2)
+        if(this.multiplier === 2)
             team=this.thriumpher.team;
         else
             team=(this.thriumpher.team+1)%2;
         for(var i=0;i<_players.length;i++)
         {
             var player = _players[i];
-            if(player.team==team)
+            if(player.team===team)
                 player.notify('contro');
         }
     });
@@ -177,7 +177,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             this.emit('contro-done',ret);
             this.emit('notifyAll','contro-done',ret);
             //There is the posibility of the other players to do a contro
-            if(this.multiplier==4)
+            if(this.multiplier===4)
                 this.emit('new-move',_players[1]);
             else
                 this.emit('contro');
@@ -196,7 +196,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             callback && callback('Make thriumph is allowed once per round');
             return;
         }
-        if(choise=='Delegar')
+        if(choise==='Delegar')
         {
             this.delegated=true;
             var team = this.teams[this.thriumpher.team];
@@ -240,7 +240,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             {
                 var card = this.winnedCards[team][i];
                 temp.push(card);
-                if(temp.length==4)
+                if(temp.length===4)
                 {
                     ret[team]= ret[team]+ButifarraMove.calculatePoints(temp);
                     temp=[];

@@ -131,7 +131,7 @@ function showGameDetails(gameData)
 function drawGameData(data){
 		$('#game-list').children().remove();
 		$('#game-list').append('<thead><tr><th>Name</th><th>State</th><th>Players</th><th>Watchers</th></thead>')
-		if(!data || data==[] || data.length ==0)
+		if(!data || data===[] || data.length ===0)
 		{
 		    games=[];
 			return;
@@ -142,7 +142,7 @@ function drawGameData(data){
 			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
 		}
 		//Refresh the game data if it has changed.
-		if(selected || selected == 0)
+		if(selected || selected === 0)
 	       showGameDetails(games[selected]);
 }
 
@@ -161,7 +161,7 @@ function selectGame(i)
 */
 function drawPlayersList(data){
 		$('#player-list').children().remove();
-		if(!data || data==[] || data.length ==0)
+		if(!data || data===[] || data.length ===0)
 		{
 			$('#player-list').append('<li>No players on the server</li>');
 			return;
@@ -196,7 +196,7 @@ function addNewGame(gameData)
 */
 function updateGameInfo(gameData)
 {
-    if($('#summary').length==0)
+    if($('#summary').length===0)
     {
         setTimeout(function(){updateGameInfo(gameData)},100);
         return;
@@ -327,7 +327,7 @@ function initCanvas(canvasElement,gameData)
     var playerTeam;
     for(var i=0;i<gameData.players.length;i++)
     {
-        if(gameData.players[i].id === playerid)
+        if(gameData.players[i].id ==== playerid)
         {
             playerTeam=gameData.players[i].team;
             ids[3]=playerid;
@@ -336,10 +336,10 @@ function initCanvas(canvasElement,gameData)
         }
     }
     
-    ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
-    names[1]=gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
+    ids[1] = gameData.teams[playerTeam][0].id ==== playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
+    names[1]=gameData.teams[playerTeam][0].id ==== playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
 
-    playerTeam = playerTeam === 1 ? 2 : 1;
+    playerTeam = playerTeam ==== 1 ? 2 : 1;
     ids[0] = gameData.teams[playerTeam][0].id;
     names[0] = gameData.teams[playerTeam][0].name;
     ids[2] = gameData.teams[playerTeam][1].id;
@@ -497,7 +497,7 @@ function placePlayedCard(data)
 function showControDialog(selections,callback)
 {
     //Create the div
-    if($('#show-contro-dialog').length==0)
+    if($('#show-contro-dialog').length===0)
     {
         var oDiv = '<div id="show-contro-dialog" title="Do you want to make a contro?"><form><fieldset>';
         oDiv += '<label for="contro">Do you want to make a contro?</label>';
@@ -524,13 +524,13 @@ function showControDialog(selections,callback)
 function showThriumphDialog(selections,callback)
 {
     //Prevent from showing the dialog if no selections
-    if(selections.length==0)
+    if(selections.length===0)
     {   
         console && console.log('Empty selections');
         return;
     }
     //Create the div
-    if($('#show-thriumph-dialog').length==0)
+    if($('#show-thriumph-dialog').length===0)
     {
         var oDiv = '<div id="show-thriumph-dialog" title="Select Thriumph"><form><fieldset>';
         oDiv += '<label for="thriumph">Select Thriumph</label>';

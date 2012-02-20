@@ -57,7 +57,7 @@ module.exports = {
 	    var logins=4;
 	    function doLogin(){
 	        logins--;
-	        if(logins==0) done();
+	        if(logins===0) done();
 	    }
 		socket.emit('login',{'name' : 'Luiggi'}, function(data){
 			data.name.should.eql('Luiggi');
@@ -119,7 +119,7 @@ module.exports = {
 			data.player.name.should.eql('Luiggi');
 			data.msg.should.eql(msg);
 			recived--;
-			if(recived==0) done();
+			if(recived===0) done();
 		}
 		
 		socket.on('message',message);
@@ -157,13 +157,13 @@ module.exports = {
 	    function end()
 	    {
             endCalled--;
-	        if(endCalled==0) done();
+	        if(endCalled===0) done();
 	    }
 	    
 	    function started(game)
 	    {
 	        startedEvents--;
-            if(startedEvents==0) end();
+            if(startedEvents===0) end();
 	    }
 
 	    function recivedThriumph(selections)
@@ -182,7 +182,7 @@ module.exports = {
 	            cards[i].should.have.property('suit');
             }
 	        cardEvents--;
-	        if(cardEvents==0) end();
+	        if(cardEvents===0) end();
 	    }
 	    
 	    socket.on('start',started);
@@ -216,7 +216,7 @@ module.exports = {
 	    toMakeThriumph.should.not.eql(undefined);
 	    function end()
 	    {
-	        if(thriumphs==0 && playCard==0 && updated==0 && contros==0) {
+	        if(thriumphs===0 && playCard===0 && updated===0 && contros===0) {
         	    socket.removeAllListeners('play-card');
         	    socketB.removeAllListeners('play-card');
 	            socketC.removeAllListeners('play-card');
@@ -242,14 +242,14 @@ module.exports = {
 	        {
 	            round.thriumph.should.eql('Copes');
 	            updated--;
-	            if(updated==0) end();
+	            if(updated===0) end();
 	        }
 	    }
 
 	    function recivedPlayCard()
 	    {
 	        playCard--;
-	        if(playCard ==0) end();
+	        if(playCard ===0) end();
 	        playCard.should.be.eql(0);
 	    }
 	    
@@ -257,15 +257,15 @@ module.exports = {
 	    {
             choise.should.eql('Copes');
             thriumphs--;
-            if(thriumphs==0) end();
+            if(thriumphs===0) end();
 	    }
 
 	    function controed()
 	    {
-	        if(contros==4 || contros==2)
+	        if(contros===4 || contros===2)
                 this.emit('do-contro',{'value': true, 'player': {'name': 'Mario'}});
 	        contros--;
-	        if(contros==0) end();
+	        if(contros===0) end();
 	    }
 	    
 	    function makeTrhiumphCallBack(err)
@@ -317,7 +317,7 @@ module.exports = {
 	    var cardToPlay = toPlay.cards[0];
 	    
 	    function end(){
-	        if(plays == 0 && callback ==0) done();
+	        if(plays === 0 && callback ===0) done();
 	    }
 	    
 	    function cardPlayed(data){
@@ -325,7 +325,7 @@ module.exports = {
 	        card.number.should.eql(cardToPlay.number);
 	        card.suit.should.eql(cardToPlay.suit);
 	        plays--;
-	        if(plays==0) end();
+	        if(plays===0) end();
 	    }
 	    
 	    socket.on('card-played',cardPlayed);
@@ -335,7 +335,7 @@ module.exports = {
 	    toPlay.emit('new-roll',cardToPlay, function(err){
             should.ifError(err);
             callback--;
-            if(callback==0) end();
+            if(callback===0) end();
 	    });
     
     },
@@ -346,7 +346,7 @@ module.exports = {
 
 //		function disconnected(){
 //		    disconnects--;
-//		    if(disconnects==0) test();
+//		    if(disconnects===0) test();
 //		}
 
 		//function test()

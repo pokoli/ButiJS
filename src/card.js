@@ -12,9 +12,9 @@ Card.prototype.isHigher = function(otherCard)
     var value = this.number;
     var otherValue = otherCard.number;    
     //1 and 9 ar higher than the other numbers, so make its
-    if(this.number == 1 || this.number == 9)    
+    if(this.number === 1 || this.number === 9)    
         value = value*100;
-    if(otherCard.number == 1 || otherCard.number == 9)    
+    if(otherCard.number === 1 || otherCard.number === 9)    
         otherValue = otherValue*100; 
         
     return value > otherValue;   
