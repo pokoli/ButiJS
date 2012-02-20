@@ -327,7 +327,7 @@ function initCanvas(canvasElement,gameData)
     var playerTeam;
     for(var i=0;i<gameData.players.length;i++)
     {
-        if(gameData.players[i].id ==== playerid)
+        if(gameData.players[i].id === playerid)
         {
             playerTeam=gameData.players[i].team;
             ids[3]=playerid;
@@ -336,10 +336,10 @@ function initCanvas(canvasElement,gameData)
         }
     }
     
-    ids[1] = gameData.teams[playerTeam][0].id ==== playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
-    names[1]=gameData.teams[playerTeam][0].id ==== playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
+    ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
+    names[1]=gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
 
-    playerTeam = playerTeam ==== 1 ? 2 : 1;
+    playerTeam = playerTeam === 1 ? 2 : 1;
     ids[0] = gameData.teams[playerTeam][0].id;
     names[0] = gameData.teams[playerTeam][0].name;
     ids[2] = gameData.teams[playerTeam][1].id;
