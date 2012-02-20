@@ -235,9 +235,8 @@ io.sockets.on('connection', function (socket) {
   	socket.on('new-roll',function(data,callback){ processGameEvent('new-roll',data,callback)});
   	socket.on('made-thriumph',function(data,callback){ processGameEvent('made-thriumph',data,callback)});
     socket.on('do-contro',function(data,callback){ 
-            var player = getCurrentPlayer();
-            data.player = player.name;
-            processGameEvent('do-contro',data,callback)
+            data.player = getCurrentPlayer();
+            processGameEvent('do-contro',data,callback);
     });
 
 });

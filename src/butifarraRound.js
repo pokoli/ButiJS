@@ -21,7 +21,8 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.teams = teams;
     this.winnedCards = {1: [], 2: []};
     this.multiplier=1;
-    
+    //Holds the number of do-contro events pending.
+    this.pendingContros=[];
     //Holds the information about the current move. 
     var _move;
     //Holds the indexOf the last played player.
@@ -35,6 +36,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     var _callback;
     //Hols the first player to take action
     var _firstPlayer = firstPlayer;
+
     /*
         Starts a new round. Has the following responsabilities: 
         1. Increment round number.
@@ -150,6 +152,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     
     //Notify the correct players with the contro event.
     this.on('contro',function(){
+        this.pendingContros=[];
         //We have to notify the players that they have the option of doing a contro
         var team;
         if(this.multiplier === 2)
@@ -160,13 +163,35 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         {
             var player = _players[i];
             if(player.team===team)
+            {
                 player.notify('contro');
+                this.pendingContros.push(player);
+            }
         }
     });
     
     this.doContro = function(data){
         var val  = data.value || false;
-        var player = data.player;
+        //If test simply remove the player
+        if(this.test)
+        {
+            this.pendingContros.pop();
+        }
+        else
+        {
+            var idx=0;
+            //Find if the player is on the pendingCOntros list. If not do nothing.
+            for(idx=0;idx<this.pendingContros.length;idx++)
+            {
+                if(this.pendingContros[idx].isEqual(data.player))
+                    break;
+            }
+            //If the player is not on the list return
+            if(idx>=this.pendingContros.length)
+                return;
+            //Remove the player from the pending list
+            this.pendingContros.splice(idx,1);
+        }
         if(val && this.multiplier<4)
         {
             this.multiplier=this.multiplier*2;
@@ -178,13 +203,16 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             this.emit('notifyAll','contro-done',ret);
             //There is the posibility of the other players to do a contro
             if(this.multiplier===4)
+            {
+                this.pendingContros=[];
                 this.emit('new-move',_players[1]);
+            }
             else
                 this.emit('contro');
             //Notify the game that the round contro has been updated
             this.emit('update-contro',ret);
         }
-        else
+        else if (this.pendingContros.length===0)
         {
             this.emit('new-move',_players[1]);
         }

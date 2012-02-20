@@ -24,6 +24,11 @@ function finish(done) {
   	process.exit();
 }
 
+function makeTrhiumphCallBack(err)
+{
+    should.ifError(err);
+}
+
 module.exports = {
 	"We will be able to connect the server" : function(done){	
 		socket.on('connect', function (err) {
@@ -208,7 +213,7 @@ module.exports = {
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);
 	},
-	"The thriumpher should be able to makeThriumph and the other players must recive it. The first player to play must recibe a play-card event also. The game info must be updated with the round info and the thriumpher. " : function(done){
+	"The thriumpher should be able to makeThriumph and the other players must recive it. The others teams playres must recibe a contro event. After the contro stage the first player to play must recibe a play-card event also. The game info must be updated with the round info and the thriumpher. " : function(done){
 	    var thriumphs=4;
 	    var updated=8; //Four for thriumph and Four for contros
 	    var playCard=1;
@@ -264,13 +269,10 @@ module.exports = {
 	    {
 	        if(contros===4 || contros===2)
                 this.emit('do-contro',{'value': true, 'player': {'name': 'Mario'}});
+            else
+                this.emit('do-contro',{'value': false, 'player': {'name': 'Mario'}});
 	        contros--;
 	        if(contros===0) end();
-	    }
-	    
-	    function makeTrhiumphCallBack(err)
-	    {
-	        should.ifError(err);
 	    }
 
 	    //Remove the listener from the previous test
@@ -315,11 +317,11 @@ module.exports = {
 	    var plays = 4;
 	    var callback=1;
 	    var cardToPlay = toPlay.cards[0];
-	    
+
 	    function end(){
 	        if(plays === 0 && callback ===0) done();
 	    }
-	    
+
 	    function cardPlayed(data){
 	        var card=data.card;
 	        card.number.should.eql(cardToPlay.number);
@@ -327,7 +329,7 @@ module.exports = {
 	        plays--;
 	        if(plays===0) end();
 	    }
-	    
+
 	    socket.on('card-played',cardPlayed);
 	    socketB.on('card-played',cardPlayed);
 	    socketC.on('card-played',cardPlayed);
@@ -337,6 +339,49 @@ module.exports = {
             callback--;
             if(callback===0) end();
 	    });
+    },
+    "The play-card event must occur after the two players don't want to contro " : function(done){
+	    var controsRec=2;
+	    function joinGame(game){
+	        socketB.emit('join-game',game.id);
+	        socketC.emit('join-game',game.id);
+            socketD.emit('join-game',game.id);
+	    }
+	    function controed()
+	    {
+            controsRec--;
+	        //We set timeout to be able to process the play-card event if it gets in the wrong place
+	        setTimeout(50,function(){
+                this.emit('do-contro',{'value': false});
+	        });
+	    }
+	    
+	    function recivedPlayCard()
+	    {
+            controsRec.should.eql(0);
+            done();
+	    }
+	    
+	    socket.on('contro',controed);
+	    socketB.on('contro',controed);
+	    socketC.on('contro',controed);
+	    socketD.on('contro',controed);
+	    
+	    socket.on('play-card',recivedPlayCard);
+	    socketB.on('play-card',recivedPlayCard);
+	    socketC.on('play-card',recivedPlayCard);
+	    socketD.on('play-card',recivedPlayCard);
+	    
+	    socket.on('make-thriumph',function(){ socket.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    socketB.on('make-thriumph',function(){ socketB.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    socketC.on('make-thriumph',function(){ socketC.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    socketD.on('make-thriumph',function(){ socketD.emit('made-thriumph','Copes',makeTrhiumphCallBack);});
+	    
+    	game = Game.create('New Game');
+		socket.emit('create-game',game,joinGame);
+	    //Make thriumph after the other player has delegated
+
+    
     
     },
 	"When a player disconnects the server removes it's reference " : function(done){

@@ -23,21 +23,24 @@ var round = setUp();
 
 
 module.exports = {
-    "Butifarra Round consits of and of array moves, and a thriumpher " : function() {
+    "Butifarra Round consits of and of array moves, and a thriumpher " : function(done) {
         round.should.have.property('moves');
         round.moves.should.be.instanceof(Array);
         round.should.have.property('thriumpher');
+        done();
     },
-    "We should know if the thriumpher has delegated the thriump" : function(){
+    "We should know if the thriumpher has delegated the thriump" : function(done){
         round.should.have.property('delegated');
         round.delegated.should.eql(false);
+        done();
     },
-    "We should know the winned cards of each team" : function(){
+    "We should know the winned cards of each team" : function(done){
         round.should.have.property('winnedCards');
         round.winnedCards[1].should.be.instanceof(Array);
         round.winnedCards[1].should.eql([]);
         round.winnedCards[2].should.be.instanceof(Array);
         round.winnedCards[2].should.eql([]);
+        done();
     },
     "When the round is started each player has 12 cards " : function(){
         round.teams[1].forEach(function(player){
@@ -123,8 +126,13 @@ module.exports = {
         round = setUp();
         round.on('contro',function(){
             round.emit('do-contro',{'value': false});
+            round.emit('do-contro',{'value': false});
+            round.emit('new-roll',Card.create(2,'Espases'), function(err){ if(err) console.log(err);});
+            round.emit('new-roll',Card.create(3,'Espases'), function(err){ if(err) console.log(err);});
+            round.emit('new-roll',Card.create(4,'Espases'), function(err){ if(err) console.log(err);});
+            round.emit('new-roll',Card.create(5,'Espases'), function(err){ if(err) console.log(err);});
         });
-        round.emit('made-thriumph','Bastos');
+
         var events=2;
         function myDone(moveData){
             events.should.eql(0);
@@ -140,18 +148,20 @@ module.exports = {
             events--;
             myDone(roundData);
         });
+        bnewMove=false;
         round.on('new-move',function(){
-            events--;
+            if(!bnewMove)
+            {
+                events--;
+                bnewMove=true;
+            }
         });
-
-        round.emit('new-roll',Card.create(2,'Espases'));
-        round.emit('new-roll',Card.create(3,'Espases'));
-        round.emit('new-roll',Card.create(4,'Espases'));
-        round.emit('new-roll',Card.create(5,'Espases'));
+        round.emit('made-thriumph','Bastos');
     },
     "When the round is ended the played cards should be in the winning team's winned cards " : function(done){
         round = setUp();
         round.on('contro',function(){
+            round.emit('do-contro',{'value': false});
             round.emit('do-contro',{'value': false});
         });
         round.on('end-move',function(move){
@@ -173,25 +183,27 @@ module.exports = {
         round.emit('new-roll',Card.create(4,'Espases'));
         round.emit('new-roll',Card.create(5,'Espases'));
     },
-    "We should know the score of the round " : function(){
+    "We should know the score of the round " : function(done){
         round.should.respondTo('getScores');
         var scores = round.getScores();
         scores[1].should.within(0,36);
         scores[2].should.within(0,36);
+        done();
     },
     "Each round constits of 12 moves, when it's finished it fires an round-ended event'" : function(done){
         var round2 = setUp();
         round2.on('contro',function(){
             round2.emit('do-contro',{'value': false});
+            round2.emit('do-contro',{'value': false});
         });
-        var i=0;
+        var numberOfRounds=0;
         function testErr(err)
         {
             should.ifError(err);
         }
 
         function doMove(){
-            i++;
+            numberOfRounds++;
             round2.emit('new-roll',Card.create(2,'Espases'),testErr);
             round2.emit('new-roll',Card.create(3,'Espases'),testErr);
             round2.emit('new-roll',Card.create(4,'Espases'),testErr);
@@ -201,7 +213,7 @@ module.exports = {
         round2.on('round-ended',function(data){
             data.moves.should.be.instanceof(Array);
             data.moves.length.should.eql(12);
-            i.should.eql(12);
+            numberOfRounds.should.eql(12);
             done();
         });
         round2.on('new-move',function(){
