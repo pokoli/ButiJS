@@ -118,9 +118,14 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.newRoll = function(card,callback){
         var player= _players[_lastPlayed+1];
         var skey = player.id || player.name;
+        var that=this;
         player.cards=_playersCards[skey];
-        try{
-            _move.addRoll(player,Card.create(card.number,card.suit));
+        _move.addRoll(player,Card.create(card.number,card.suit),function(err){
+            if(err)
+            {
+                callback && callback(Error.message);
+                return;
+            }
             _lastPlayed++;
             player.cards = []; //To avoid sending it to all the clients
             var data = {
@@ -128,24 +133,19 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
                 "card" : card,
             };
             //Notify all the players the played card 
-            this.emit('notifyAll','card-played',data);
+            that.emit('notifyAll','card-played',data);
             if(_lastPlayed===3)
             {
                 //The move is ended
-                this.emit('end-move',_move);
+                that.emit('end-move',_move);
             }
             else
             {
                 //Notify the next player to play a card: 
                 _players[_lastPlayed+1].notify('play-card');
             }
-            
-        }catch(Error){
-            callback && callback(Error.message);
-            return;
-        }
-        callback && callback();
-        
+            callback && callback();
+        });
     }
     //Add the newRoll function to the new-roll events
     this.on('new-roll',this.newRoll);

@@ -123,7 +123,12 @@ var ButifarraMove = function(thriumph) {
     /*
         Adds the roll for one player to the current move.
     */
-    this.addRoll = function(player,card){
+    this.addRoll = function(player,card,callback){
+        if(!card || !card.number || !card.suit)
+        {
+            callback && callback(Error('Card must be defined'));
+            return
+        }
         //Validate that the player has the card in the stack.
         var doesntHaveCard=true;
         for(var i=0;i<player.cards.length;i++)
@@ -136,13 +141,21 @@ var ButifarraMove = function(thriumph) {
             }
         }
         if(doesntHaveCard && !this.test) //If this.test is defined we are in a test case that needs this to be deactivated
-            throw new Error("You can not play a card you don't have in the stack");
+        {
+            callback(Error("You can not play a card you don't have in the stack"));
+            return;
+        }
         var roll = new ButifarraRoll(player,card);
         validateRoll(roll,this.rolls,function(err){
-            if(err) throw err;
+            if(err) 
+            {
+                callback && callback(err);
+                return;
+            }
             _rolls.push(roll);
             var idx = player.cards.indexOf(card); // Find the index
             if(idx!=-1) player.cards.splice(idx, 1);
+            callback && callback();
         });
 
     }

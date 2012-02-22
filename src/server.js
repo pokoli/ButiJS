@@ -175,7 +175,7 @@ io.sockets.on('connection', function (socket) {
   	        if(fn) fn(new Error('Game '+data+' does not exist'));
   	        return;
   	    }
-  	    try{
+
   	        var current = getCurrentPlayer();
   	        if(_games[i].hasPlayer(current))
   	        {
@@ -190,11 +190,6 @@ io.sockets.on('connection', function (socket) {
                 _games[i].start();
             }
             if(fn) fn(false,_games[i]);
-        }
-        catch(err)
-        {
-            if(fn) fn(err.message);
-        }
 
   	});
   	
