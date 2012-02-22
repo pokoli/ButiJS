@@ -116,6 +116,9 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         Called every time that a player Rolls a card
     */
     this.newRoll = function(card,callback){
+        //If the move is endend do nothing. 
+        if(this.moves.length==12)
+            return;
         var player= _players[_lastPlayed+1];
         var skey = player.id || player.name;
         var that=this;
