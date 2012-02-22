@@ -67,7 +67,10 @@ socket.on('play-card',function(){
 });
 
 socket.on('make-thriumph', function(data){
-    showThriumphDialog(data,makeThriumph);
+    if(data)
+    {
+        showThriumphDialog(data,makeThriumph);
+    }
 });
 
 socket.on('new-round',function(){
@@ -77,6 +80,8 @@ socket.on('new-round',function(){
 socket.on('contro', function(){
     showControDialog(currentThriumph,doContro);
 });
+
+
 
 socket.on('thriumph', function (data){
     currentThriumph=data;
