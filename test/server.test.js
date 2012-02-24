@@ -253,9 +253,9 @@ module.exports = {
 
 	    function recivedPlayCard()
 	    {
+	        playCard.should.be.eql(1);
 	        playCard--;
 	        if(playCard ===0) end();
-	        playCard.should.be.eql(0);
 	    }
 	    
 	    function thriumphed(choise)
