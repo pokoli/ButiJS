@@ -228,9 +228,11 @@ io.sockets.on('connection', function (socket) {
   	 Game specific functions
   	*/
   	socket.on('new-roll',function(data,callback){ processGameEvent('new-roll',data,callback)});
-  	socket.on('made-thriumph',function(data,callback){ processGameEvent('made-thriumph',data,callback)});
+  	socket.on('chosen-thriumph',function(data,callback){ processGameEvent('chosen-thriumph',data,callback)});
     socket.on('do-contro',function(data,callback){ 
             data.player = getCurrentPlayer();
+            if(!data.player)
+                console.log('Player is undefined');
             processGameEvent('do-contro',data,callback);
     });
 

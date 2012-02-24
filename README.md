@@ -49,9 +49,9 @@ Expects a string message.
 
 The following events are specific to the Butifirra game. 
 
-#### made-thriumph
+#### chosen-thriumph
 
-Make thriumph on the active game. 
+Notify the chosen thriumph to the server.
 
 #### new-roll
 
@@ -87,11 +87,11 @@ A game (which the player plays) is started. All the game data is on the first pa
 
 The following events are specific to the Butifirra game. 
 
-#### make-thriumph
+#### select-thriumph
 
 Fired when the player has to make thriumph on the current round.
 
-#### thriumph
+#### notify-thriumph
 
 Returns the choiced thriumph of the current round. 
 

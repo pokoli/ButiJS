@@ -64,7 +64,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         {
             if(_players[i].isEqual(this.thriumpher))
             {
-                _players[i].notify('make-thriumph',
+                _players[i].notify('select-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra','Delegar']);
             }
             var skey = _players[i].id || _players[i].name;
@@ -236,7 +236,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
                 if(team[i].isEqual(this.thriumpher))
                 {
                     this.thriumpher=team[i];
-                    team[i].notify('make-thriumph',
+                    team[i].notify('select-thriumph',
                     ['Oros','Copes','Espases','Bastos','Botifarra']);
                     break;
                 }
@@ -245,7 +245,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         else
         {
             //Notify all the players with the selected option
-            this.emit('notifyAll','thriumph',choise);
+            this.emit('notifyAll','notify-thriumph',choise);
             //Notify the player who has to roll the first card
             this.thriumph=choise;
             this.emit('update-thriumph',this.thriumph,this.thriumpher);
@@ -255,7 +255,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
 
     }
     //Add the makeThriumph function to the made-triumph events
-    this.on('made-thriumph',this.makeThriumph);
+    this.on('chosen-thriumph',this.makeThriumph);
 
     /*
         Returns the score for each team.

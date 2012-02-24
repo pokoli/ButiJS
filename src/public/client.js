@@ -66,7 +66,7 @@ socket.on('play-card',function(){
     writeMessage('Is your turn');
 });
 
-socket.on('make-thriumph', function(data){
+socket.on('select-thriumph', function(data){
     if(data)
     {
         showThriumphDialog(data,makeThriumph);
@@ -123,7 +123,7 @@ function createGame(gameData){
 }
 
 function makeThriumph(choise){
-    socket.emit('made-thriumph',choise,function(err){
+    socket.emit('chosen-thriumph',choise,function(err){
         if(err) writeMessage(err);
     });
 }

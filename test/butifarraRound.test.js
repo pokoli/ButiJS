@@ -98,13 +98,13 @@ module.exports = {
             end();
         });
     }, 
-    "When a player makes thriumph an made-thriumph event is fired" : function(done){
+    "When a player makes thriumph an chosen-thriumph event is fired" : function(done){
         round = setUp();
-        round.on('made-thriumph',function(data){
+        round.on('chosen-thriumph',function(data){
             data.should.be.eql('Copes');
             done();
         });
-        round.emit('made-thriumph','Copes');
+        round.emit('chosen-thriumph','Copes');
     },
     "After making thriumph a contro event event is fired, if anybody does contro the multiplier must be set to 2" : function(done){
         var contros=0;
@@ -120,7 +120,7 @@ module.exports = {
         round.on('contro',function(){
             round.emit('do-contro',{'value': true, 'player': {'name': 'Mark'}});
         });
-        round.emit('made-thriumph','Bastos');
+        round.emit('chosen-thriumph','Bastos');
     },
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
         round = setUp();
@@ -156,7 +156,7 @@ module.exports = {
                 bnewMove=true;
             }
         });
-        round.emit('made-thriumph','Bastos');
+        round.emit('chosen-thriumph','Bastos');
     },
     "When the round is ended the played cards should be in the winning team's winned cards " : function(done){
         round = setUp();
@@ -177,7 +177,7 @@ module.exports = {
             done();
         });
         
-        round.emit('made-thriumph','Bastos');
+        round.emit('chosen-thriumph','Bastos');
         round.emit('new-roll',Card.create(2,'Espases'));
         round.emit('new-roll',Card.create(3,'Espases'));
         round.emit('new-roll',Card.create(4,'Espases'));
@@ -220,7 +220,7 @@ module.exports = {
             doMove();
         });
         //Start the round 
-        round2.emit('made-thriumph','Bastos');
+        round2.emit('chosen-thriumph','Bastos');
     }
 
 }   
