@@ -233,7 +233,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
             var team = this.teams[this.thriumpher.team];
             for(var i=0;i<team.length;i++)
             {
-                if(team[i].isEqual(this.thriumpher))
+                if(team[i].isEqual(this.thriumpher)===false)
                 {
                     this.thriumpher=team[i];
                     team[i].notify('select-thriumph',
