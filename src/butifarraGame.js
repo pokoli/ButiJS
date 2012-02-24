@@ -40,10 +40,6 @@ var ButifarraGame = function(name) {
     //Holds the last player to choose Thriumph
     var _thriumpher;
 
-    this.getCurrentRound = function()
-    {
-        return this.playedRounds[this.round-1];
-    }
     /*
         Asigns a player to a team.
         Also assigns an empty tuple to each player for holding their cards
@@ -180,13 +176,6 @@ var ButifarraGame = function(name) {
             this.on(event,function(){
                 //Properly get the event from the arguments.
                 var event = arguments.callee.caller.arguments[0];
-                /*
-                    I don't know why it happens but randomly when testing the app
-                    i get an error: Object.#socket has no method getCurrentRound
-                    That's the reason why I put the if here.
-                */
-                //if(!this.getCurrentRound)
-                //    return;
                 //Call the functions with the current round an the first argument
                 if(Array.isArray(currentRound._events[event].length))
                 {

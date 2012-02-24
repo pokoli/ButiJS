@@ -22,17 +22,6 @@ var SpanishCardStack = function(){
 		
 	this.size = cards.length;
 	
-	/*This method shuffles the card array*/
-	function _shuffle(){
-		var temp = new Array();
-		for(i=0;i<cards.length;i++)
-		{
-			var randomNumber = Math.floor(Math.random()*cards.length);
-			temp.push(cards.splice(randomNumber,1));
-		}
-		cards = temp;
-	}
-	
 	/* This method shuffles the card array implementing the Knuth Fisher Yates algorithm
 		Author: Jonas Raoni Soares Silva
 		From: http://jsfromhell.com/array/shuffle [rev. #1]
