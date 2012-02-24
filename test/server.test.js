@@ -6,22 +6,18 @@ var should = require('should'),
 
 var connected = false,connectedB = false,connectedC = false,connectedD = false;
 	
-var socket = client.connect('http://localhost', {port : 8000});
-var socketB = client.connect('http://localhost', {port : 8000,'force new connection': true});
-var socketC = client.connect('http://localhost', {port : 8000,'force new connection': true});
-var socketD = client.connect('http://localhost', {port : 8000,'force new connection': true});
+var socket,socketB,socketC,socketD;
 
 var toMakeThriumph;
 
 function finish(done) {
-	console.log('Finish');
 	connected.should.be.true;
 	connectedB.should.be.true;
 	connectedC.should.be.true;
 	connectedD.should.be.true;
 	done();
   	server.server.close();
-  	process.exit();
+  	//process.exit();
 }
 
 function makeTrhiumphCallBack(err)
@@ -30,32 +26,37 @@ function makeTrhiumphCallBack(err)
 }
 
 module.exports = {
-	"We will be able to connect the server" : function(done){	
+	"We will be able to connect the server and we recive a welcome event" : function(done){
+	    var events=2;
+    	socket = client.connect('http://localhost', {port : 8000});
 		socket.on('connect', function (err) {
 			connected=true;
-			should.isUndefined(err);
-			done();
+			should.ifError(err);
+			events--;
+			if(events===0) done();
 		});
-	},	 
-	"Two (or more) connections could be established on the same time ": function(){
-		socketB.on('connect', function (err) {
-    		connectedB=true;
-			should.isUndefined(err);
-		});
-		socketC.on('connect', function (err) {
-    		connectedC=true;
-			should.isUndefined(err);
-		});
-		socketD.on('connect', function (err) {
-    		connectedD=true;
-			should.isUndefined(err);
-		});
-	},
-	"We are recibing a welcome event after connecting" : function(done){
 		socket.on('welcome', function (data){
 			connected.should.be.true;
 			data.msg.should.eql('Welcome, who you are?');
-			done();
+			events--;
+			if(events===0) done();
+		});
+	},
+	"Two (or more) connections could be established on the same time ": function(){
+		socketB = client.connect('http://localhost', {port : 8000,'force new connection': true});
+        socketC = client.connect('http://localhost', {port : 8000,'force new connection': true});
+        socketD = client.connect('http://localhost', {port : 8000,'force new connection': true});
+		socketB.on('connect', function (err) {
+    		connectedB=true;
+			should.ifError(err);
+		});
+		socketC.on('connect', function (err) {
+    		connectedC=true;
+			should.ifError(err);
+		});
+		socketD.on('connect', function (err) {
+    		connectedD=true;
+			should.ifError(err);
 		});
 	},
 	"When we send a name event the server stores our name and acknowledgets it" : function (done){
