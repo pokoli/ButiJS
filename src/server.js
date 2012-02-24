@@ -75,7 +75,6 @@ io.sockets.on('connection', function (socket) {
     function getCurrentPlayer()
     {
         if(_playerid) return _players[_playerid];
-        return;
     }
 
     function getCurrentGame()
@@ -231,8 +230,6 @@ io.sockets.on('connection', function (socket) {
   	socket.on('chosen-thriumph',function(data,callback){ processGameEvent('chosen-thriumph',data,callback)});
     socket.on('do-contro',function(data,callback){ 
             data.player = getCurrentPlayer();
-            if(!data.player)
-                console.log('Player is undefined');
             processGameEvent('do-contro',data,callback);
     });
 
