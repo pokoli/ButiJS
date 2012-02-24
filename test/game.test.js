@@ -35,6 +35,15 @@ module.exports = {
 		game.numberOfPlayers().should.eql(0);
 		game.hasPlayer(newPlayer).should.be.false;
 	},
+	"We can remove players that not exists in the game." : function(){
+	    var game = Game.create('New game');
+		game.numberOfPlayers().should.eql(0);
+		game.should.respondTo('removePlayer');
+		game.hasPlayer(newPlayer).should.be.false;
+		game.removePlayer(newPlayer).should.be.false;
+		game.numberOfPlayers().should.eql(0);
+		game.hasPlayer(newPlayer).should.be.false;
+	},
 	"A game should remeber each player that joins it" : function (){
 		var playerA = Player.create('Player A');
 		var playerB = Player.create('Player B');
@@ -78,5 +87,4 @@ module.exports = {
         game.numberOfWatchers().should.eql(1);
         game.numberOfPlayers().should.eql(0);
 	}
-	
 };

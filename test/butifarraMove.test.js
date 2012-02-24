@@ -176,9 +176,20 @@ module.exports = {
         move2.addRoll(player4,player4.cards[0],testNotError);
         move2.getWinner().should.eql(player2);
         move2.getValue().should.eql(3);
+        var move3 = Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        player2.cards=[Card.create(11,'Copes')];
+        player3.cards=[Card.create(8,'Espases')];
+        player4.cards=[Card.create(5,'Espases')];
+        move3.addRoll(player1,player1.cards[0],testNotError);
+        move3.addRoll(player2,player2.cards[0],testNotError);
+        move3.addRoll(player3,player3.cards[0],testNotError);
+        move3.addRoll(player4,player4.cards[0],testNotError);
+        move3.getWinner().should.eql(player2);
+        move3.getValue().should.eql(3);
     },
     "A player can only play a card that he/she has in the stack" : function(done){
-        move0=Move.create('Copes');
+        var move0=Move.create('Copes');
         move0.addRoll(player1,Card.create(2,'Espases'),function(err){
             should.exist(err);
             err.should.eql(Error("You can not play a card you don't have in the stack"));
@@ -186,12 +197,68 @@ module.exports = {
         });
     },
     "After the player has played a card it gets removed for him/her stack" : function(done){
-        move0=Move.create('Copes');
+        var move0=Move.create('Copes');
         player1.cards=[Card.create(2,'Espases')];
         move0.addRoll(player1,player1.cards[0],function(err){
             should.ifError(err);
             player1.cards.length.should.eql(0);
             done();
+        });
+    },
+    "If player has thriumph and not the current suit cards, a thriumph card must be played" : function(done){
+        var move0=Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+        });
+        player3.cards=[Card.create(2,'Bastos'),Card.create(2,'Copes')];
+        move0.addRoll(player3,player3.cards[0],function(err){
+            err.should.eql(new Error('Card must be from thriumph suit 22'));
+        });
+        move0.addRoll(player3,player3.cards[1],function(err){
+            should.ifError(err);
+            done();
+        });
+    },
+    "A move is composed of a maximum of 4 rolls" : function(done){
+        var dones=5;
+        var move0=Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+            dones--;
+            if(dones===0) done();
+        });
+        player3.cards=[Card.create(3,'Espases')];
+        move0.addRoll(player3,player3.cards[0],function(err){
+            should.ifError(err);
+            player3.cards.length.should.eql(0);
+            dones--;
+            if(dones===0) done();
+        });
+        player2.cards=[Card.create(4,'Espases')];
+        move0.addRoll(player2,player2.cards[0],function(err){
+            should.ifError(err);
+            player2.cards.length.should.eql(0);
+            dones--;
+            if(dones===0) done();
+        });
+        player4.cards=[Card.create(5,'Espases')];
+        move0.addRoll(player4,player4.cards[0],function(err){
+            should.ifError(err);
+            player4.cards.length.should.eql(0);
+            dones--;
+            if(dones===0) done();
+        });
+        var player5 = Player.create('Jimmy Jump');
+        player5.cards=[Card.create(6,'Espases')];
+        move0.addRoll(player5,player5.cards[0],function(err){
+            err.should.eql(Error('Only 4 rolls allowed'));
+            player4.cards.length.should.eql(0);
+            dones--;
+            if(dones===0) done();
         });
     }
     
