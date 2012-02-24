@@ -154,14 +154,14 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.on('new-roll',this.newRoll);
     
     //Notify the correct players with the contro event.
-    this.on('contro',function(){
+    this.on('notify-contro',function(){
         this.pendingContros=[];
         //We have to notify the players that they have the option of doing a contro
         var team;
         if(this.multiplier === 2)
             team=this.thriumpher.team;
         else
-            team=(this.thriumpher.team+1)%2;
+            team= this.thriumpher.team===1 ? 2 : 1;
         for(var i=0;i<_players.length;i++)
         {
             var player = _players[i];
@@ -211,7 +211,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
                 this.emit('new-move',_players[1]);
             }
             else
-                this.emit('contro');
+                this.emit('notify-contro');
             //Notify the game that the round contro has been updated
             this.emit('update-contro',ret);
         }
@@ -246,10 +246,11 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         {
             //Notify all the players with the selected option
             this.emit('notifyAll','notify-thriumph',choise);
-            //Notify the player who has to roll the first card
+            //Notify the player who has the option to contro
+            this.emit('notify-contro');
             this.thriumph=choise;
             this.emit('update-thriumph',this.thriumph,this.thriumpher);
-            this.emit('contro');
+
         }
         callback && callback();
 

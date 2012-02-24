@@ -117,14 +117,14 @@ module.exports = {
             data.player.should.eql('Mark');
             if(contros===2) done();
         });
-        round.on('contro',function(){
+        round.on('notify-contro',function(){
             round.emit('do-contro',{'value': true, 'player': {'name': 'Mark'}});
         });
         round.emit('chosen-thriumph','Bastos');
     },
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
         round = setUp();
-        round.on('contro',function(){
+        round.on('notify-contro',function(){
             round.emit('do-contro',{'value': false});
             round.emit('do-contro',{'value': false});
             round.emit('new-roll',Card.create(2,'Espases'), function(err){ if(err) console.log(err);});
@@ -160,7 +160,7 @@ module.exports = {
     },
     "When the round is ended the played cards should be in the winning team's winned cards " : function(done){
         round = setUp();
-        round.on('contro',function(){
+        round.on('notify-contro',function(){
             round.emit('do-contro',{'value': false});
             round.emit('do-contro',{'value': false});
         });
@@ -192,7 +192,7 @@ module.exports = {
     },
     "Each round constits of 12 moves, when it's finished it fires an round-ended event'" : function(done){
         var round2 = setUp();
-        round2.on('contro',function(){
+        round2.on('notify-contro',function(){
             round2.emit('do-contro',{'value': false});
             round2.emit('do-contro',{'value': false});
         });
