@@ -67,7 +67,7 @@ socket.on('play-card',function(){
 });
 
 socket.on('select-thriumph', function(data){
-    if(data)
+    if(data && data.length>0)
     {
         showThriumphDialog(data,makeThriumph);
     }
@@ -83,7 +83,7 @@ socket.on('contro', function(){
 
 
 
-socket.on('thriumph', function (data){
+socket.on('selected-thriumph', function (data){
     currentThriumph=data;
     writeMessage('Thriumph: '+data);
 });
@@ -129,7 +129,7 @@ function makeThriumph(choise){
 }
 
 function doContro(value){
-    socket.emit('do-contro',value);
+    socket.emit('do-contro',{ 'value' : value});
 }
 
 function playCard(card,callback)
