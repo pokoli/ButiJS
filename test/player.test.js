@@ -1,5 +1,5 @@
-var Player = require('../src/player'),
-	Game = require('../src/game'),
+var Player = process.env.COVERAGE ? require('../src-cov/player') : require('../src/player'),
+	Game = process.env.COVERAGE ? require('../src-cov/game') : require('../src/game') ,
 	should = require ('should');
 
 module.exports = {

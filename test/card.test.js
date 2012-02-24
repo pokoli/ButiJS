@@ -1,4 +1,4 @@
-var Card = require('../src/card'),
+var Card = process.env.COVERAGE ? require('../src-cov/card') : require('../src/card'),
 	should = require ('should');
 
 var card = Card.create(8,'Espases');

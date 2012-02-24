@@ -1,5 +1,13 @@
+MOCHA = ../node_modules/mocha/bin/mocha
+REPORTER = list
+OPTS = -u exports -R $(REPORTER) --ignore-leaks ../test/*.test.js 
 test:
-	../node_modules/mocha/bin/mocha -u exports -R list --ignore-leaks ../test/*.test.js 
+	$(MOCHA) $(OPTS)
 debug:
 	../node_modules/node-inspector/bin/inspector.js &
-	../node_modules/mocha/bin/mocha -u exports --debug -R list --ignore-leaks ../test/*.test.js 
+	$(MOCHA) --debug $(OPTS)
+test-cov: lib-cov
+	@COVERAGE=1 $(MAKE) test REPORTER=html-cov > coverage.html
+lib-cov:
+	rm -Rf ../src-cov
+	@jscoverage ./ ../src-cov	

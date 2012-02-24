@@ -1,7 +1,7 @@
-var Game = require('../src/butifarraGame'), 
-    Card = require('../src/card'),     
-    Round = require('../src/butifarraRound'),
-    Player = require('../src/player'),	
+var Game = process.env.COVERAGE ? require('../src-cov/butifarraGame') : require('../src/butifarraGame'),
+    Card = process.env.COVERAGE ? require('../src-cov/card') : require('../src/card'),
+    Round = process.env.COVERAGE ? require('../src-cov/butifarraRound') : require('../src/butifarraRound'),
+    Player = process.env.COVERAGE ? require('../src-cov/player') : require('../src/player'),
     should = require ('should');
 
 function setUp(){
