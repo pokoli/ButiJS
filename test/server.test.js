@@ -25,6 +25,20 @@ function makeTrhiumphCallBack(err)
     should.ifError(err);
 }
 
+function addListeners(event,funct)
+{
+    [socket,socketB,socketC,socketD].forEach(function(sock){
+        sock.on(event,funct);
+    });
+}
+
+function removeListeners(name)
+{
+    [socket,socketB,socketC,socketD].forEach(function(sock){
+        sock.removeAllListeners(name);
+    });
+}
+
 module.exports = {
 	"We will be able to connect the server and we recive a welcome event" : function(done){
 	    var events=2;
@@ -128,10 +142,7 @@ module.exports = {
 			if(recived===0) done();
 		}
 		
-		socket.on('message',message);
-		socketB.on('message',message);
-		socketC.on('message',message);
-		socketD.on('message',message);
+		addListeners('message',message);
 		socket.emit('send',msg);
 	},
 	"A player should be able to join a game" : function(done){
@@ -163,14 +174,8 @@ module.exports = {
             endCalled--;
 	        if(endCalled===0){
         	    //Remove the listeners from this test
-	            socket.removeAllListeners('select-thriumph');
-	            socketB.removeAllListeners('select-thriumph');
-	            socketC.removeAllListeners('select-thriumph');
-	            socketD.removeAllListeners('select-thriumph');
-	            socket.removeAllListeners('start');
-                socketB.removeAllListeners('start');
-	            socketC.removeAllListeners('start');
-	            socketD.removeAllListeners('start');
+    	        removeListeners('select-thriumph');
+    	        removeListeners('start');
 	            done();
 	        } 
 	    }
@@ -200,10 +205,7 @@ module.exports = {
 	        if(cardEvents===0) end();
 	    }
 
-	    socket.on('start',started);
-	    socketB.on('start',started);
-	    socketC.on('start',started);
-	    socketD.on('start',started);
+        addListeners('start',started);
 
 	    socket.on('cards',function(data){socket.cards=data;recivedCards(data);});
 	    socketB.on('cards',function(data){socketB.cards=data;recivedCards(data);});
@@ -237,46 +239,27 @@ module.exports = {
 	    {
 	        if(thriumphs===0)
 	        {
-           	    socket.removeAllListeners('notify-thriumph');
-        	    socketB.removeAllListeners('notify-thriumph');
-	            socketC.removeAllListeners('notify-thriumph');
-        	    socketD.removeAllListeners('notify-thriumph');
+    	        removeListeners('notify-thriumph');
 	        }
 	        if(playedCard===0)
 	        {
-           	    socket.removeAllListeners('play-card');
-        	    socketB.removeAllListeners('play-card');
-	            socketC.removeAllListeners('play-card');
-        	    socketD.removeAllListeners('play-card');
+    	        removeListeners('play-card');
 	        }
 	        if(updated===0)
 	        {
-                socket.removeAllListeners('updated-game');
-                socketB.removeAllListeners('updated-game');
-                socketC.removeAllListeners('updated-game');
-                socketD.removeAllListeners('updated-game');
+	            removeListeners('updated-game');
 	        }
 	        if(contros===0)
 	        {
-                socket.removeAllListeners('contro');
-                socketB.removeAllListeners('contro');
-                socketC.removeAllListeners('contro');
-                socketD.removeAllListeners('contro');
+	            removeListeners('contro')
 	        }
 	        if(plays===0)
 	        {
-                socket.removeAllListeners('card-played');
-                socketB.removeAllListeners('card-played');
-                socketC.removeAllListeners('card-played');
-                socketD.removeAllListeners('card-played');
+	            removeListeners('card-played');
 	        }
 	        
-	        
 	        if(thriumphs===0 && playedCard===0 && updated===0 && contros===0 && plays ===0) {
-                socket.removeAllListeners('select-thriumph');
-                socketB.removeAllListeners('select-thriumph');
-                socketC.removeAllListeners('select-thriumph');
-                socketD.removeAllListeners('select-thriumph');
+    	        removeListeners('select-thriumph');
 	            done();
 	        }
 	    }
@@ -350,34 +333,21 @@ module.exports = {
 	    socketC.on('select-thriumph',function(){ selectThriumph(socketC);});
 	    socketD.on('select-thriumph',function(){ selectThriumph(socketD);});
 
-	    socket.on('updated-game',updatedGame);
-	    socketB.on('updated-game',updatedGame);
-	    socketC.on('updated-game',updatedGame);
-	    socketD.on('updated-game',updatedGame);
-
-	    socket.on('contro',controed);
-	    socketB.on('contro',controed);
-	    socketC.on('contro',controed);
-	    socketD.on('contro',controed);
-
-	    socket.on('notify-thriumph',thriumphed);
-	    socketB.on('notify-thriumph',thriumphed);
-	    socketC.on('notify-thriumph',thriumphed);
-	    socketD.on('notify-thriumph',thriumphed);
+        addListeners('updated-game',updatedGame);
+        addListeners('contro',controed);
+        addListeners('notify-thriumph',thriumphed);
+        addListeners('card-played',cardPlayed);
 
 	    socket.on('play-card',function(){ recivedPlayCard();playCard(socket);});
 	    socketB.on('play-card',function(){ recivedPlayCard();playCard(socketB);});
 	    socketC.on('play-card',function(){ recivedPlayCard();playCard(socketC);});
 	    socketD.on('play-card',function(){ recivedPlayCard();playCard(socketD);});
 
-        socket.on('card-played',cardPlayed);
-	    socketB.on('card-played',cardPlayed);
-	    socketC.on('card-played',cardPlayed);
-	    socketD.on('card-played',cardPlayed);
-
-	    toMakeThriumph.emit('chosen-thriumph','Delegar', function(err){
-            should.ifError(err);
-	    });
+	    process.nextTick(function(){
+	        toMakeThriumph.emit('chosen-thriumph','Delegar', function(err){
+                should.ifError(err);
+	        });
+        });
     },
     "The play-card event must occur after the two players don't want to contro " : function(done){
 	    var controsRec=2;
@@ -410,10 +380,7 @@ module.exports = {
 	    socketC.on('contro',function(){controed(socketC)});
 	    socketD.on('contro',function(){controed(socketD)});
 	    
-	    socket.on('play-card',recivedPlayCard);
-	    socketB.on('play-card',recivedPlayCard);
-	    socketC.on('play-card',recivedPlayCard);
-	    socketD.on('play-card',recivedPlayCard);
+	    addListeners('play-card',recivedPlayCard);
 	    
 	    socket.on('select-thriumph',function(){ socket.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);});
 	    socketB.on('select-thriumph',function(){ socketB.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);});
