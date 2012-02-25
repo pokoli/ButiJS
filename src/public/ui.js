@@ -512,7 +512,8 @@ function showControDialog(selections,callback)
 	    modal: false,
 	    buttons: {
 		    "Accept": function() {
-                        if(callback) callback($('#contro-selector').val());
+		                var value = $('#contro-selector:checked').val()==='true';
+                        if(callback) callback(value);
                         $(this).dialog( "close" );
 				    }
 			    },	
