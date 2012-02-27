@@ -127,7 +127,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         _move.addRoll(player,Card.create(card.number,card.suit),function(err){
             if(err)
             {
-                callback && callback(Error.message);
+                callback && callback(err.message);
                 return;
             }
             _lastPlayed++;
