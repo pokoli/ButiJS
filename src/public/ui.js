@@ -249,6 +249,8 @@ var cardHolderHeight;
 var cardHolderWidth;
 var cardHolderXOffset;
 var cardHolderYOffset;
+var cardWidth;
+var cardHeight;
 
 /*
     Function for creating a CardHolder
@@ -345,20 +347,21 @@ function initCanvas(canvasElement,gameData)
     ids[2] = gameData.teams[playerTeam][1].id;
     names[2] = gameData.teams[playerTeam][1].name;
 
-    
+    cardWidth=width*0.08;
+    cardHeight=height*0.20;
     var holders = []; 
     //Player 1 cards Holder
     holders.push(createCardHolder('cards'+ids[0],0,height*0.185,width*0.15,height*0.485));
-    holders.push(createCardHolder('played'+ids[0],width*0.22,height*0.33,width*0.14,height*0.20));
+    holders.push(createCardHolder('played'+ids[0],width*0.22,height*0.33,cardWidth,cardHeight));
     //Player 2 cards Holder
     holders.push(createCardHolder('cards'+ids[1],width*0.2,0,width*0.6,height*0.185));
-    holders.push(createCardHolder('played'+ids[1],width*0.43,height*0.23,width*0.14,height*0.20));
+    holders.push(createCardHolder('played'+ids[1],width*0.43,height*0.23,cardWidth,cardHeight));
     //Player 3 cards Holder
     holders.push(createCardHolder('cards'+ids[2],width-(width*0.15),height*0.185,width*0.15,height*0.485));
-    holders.push(createCardHolder('played'+ids[2],width-(width*0.22+width*0.14),height*0.33,width*0.14,height*0.20));
+    holders.push(createCardHolder('played'+ids[2],width-(width*0.22+width*0.14),height*0.33,cardWidth,cardHeight));
     //Player 4 cards Holder
     holders.push(createCardHolder('cards'+ids[3],cardHolderXOffset,cardHolderYOffset,cardHolderWidth,cardHolderHeight));
-    holders.push(createCardHolder('played'+ids[3],width*0.43,height*0.47,width*0.14,height*0.20));
+    holders.push(createCardHolder('played'+ids[3],width*0.43,height*0.47,cardWidth,cardHeight));
     
     for(var i=0;i<holders.length;i++)
         holdersLayer.add(holders[i]);
@@ -470,28 +473,25 @@ function placePlayedCard(data)
     var card = data.card;
     var holder = mainStage.getChild('holdersLayer').getChild('played'+player.id);
     var key = card.number+'-'+card.suit.toString().toLowerCase()
-    //TODO: Remove fixed with and heigth from cardImage
     var cardImage = new Kinetic.Image({
                         image: cachedImages[key],
                         x : holder.offsetx,
                         y : holder.offsety,
-                        width : 45,
-                        heigth : 70
+                        width : cardWidth,
+                        heigth : cardHeight
                     });
     var cardsLayer = mainStage.getChild('cardsPlayedLayer');
-    var baddLayer=false;
     if(!cardsLayer)
-    {
         cardsLayer= new Kinetic.Layer('cardsPlayedLayer');
-        baddLayer=true;
+    else
+    {
+        var children = cardsLayer.children;
+        mainStage.remove(cardsLayer);
+        cardsLayer= new Kinetic.Layer('cardsPlayedLayer');
+        cardsLayer.children = children
     }
     cardsLayer.add(cardImage);
-    if(baddLayer)
-    {
-        mainStage.add(cardsLayer);
-        mainStage.draw();
-    }
-    cardsLayer.draw();
+    mainStage.add(cardsLayer);
 }
 
 function showControDialog(selections,callback)
