@@ -221,6 +221,50 @@ module.exports = {
             done();
         });
     },
+    "If player hasn't thriumph nor current suit cards, any card can be played" : function(done){
+        var move0=Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+        });
+        player3.cards=[Card.create(2,'Bastos'),Card.create(2,'Oros')];
+        move0.addRoll(player3,player3.cards[1],function(err){
+            should.ifError(err);
+        });
+        var move1=Move.create('Copes');
+        player1.cards=[Card.create(2,'Copes')];
+        move1.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+        });
+        player3.cards=[Card.create(2,'Bastos'),Card.create(2,'Oros')];
+        move1.addRoll(player3,player3.cards[1],function(err){
+            should.ifError(err);
+            done();
+        });
+    },
+    "If our team mate is the Winner our card must not be higher than her." : function(done){
+        player1.cards=[Card.create(8,'Espases')];
+        player2.cards=[Card.create(12,'Espases'),Card.create(6,'Espases')];
+        player3.cards=[Card.create(5,'Espases'),Card.create(7,'Espases')];
+        player4.cards=[Card.create(2,'Espases'),Card.create(3,'Espases')];
+        var move0=Move.create('Copes');
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+        });
+        move0.addRoll(player3,player3.cards[1],function(err){
+            should.ifError(err);
+        });
+        move0.addRoll(player2,player2.cards[1],function(err){
+            console.log(err);
+            should.ifError(err);
+        });
+        move0.addRoll(player4,player4.cards[1],function(err){
+            should.ifError(err);
+            done();
+        });
+    },
     "A move is composed of a maximum of 4 rolls" : function(done){
         var dones=5;
         var move0=Move.create('Copes');

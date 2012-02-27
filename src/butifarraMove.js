@@ -36,6 +36,39 @@ var ButifarraMove = function(thriumph) {
     this.rolls = _rolls; //Expose it to the public;
     
     /*
+        Returns the team that wins the hand.
+    */
+    function getWinner(rolls){
+        var higherCard,winner;
+        for(var i=0;i<rolls.length;i++)
+        {
+            var player = rolls[i].player;
+            var card = rolls[i].card;
+
+            if(!higherCard)
+            {
+                higherCard=card;
+                winner=player;
+            }
+            if(card.suit === thriumph && higherCard.suit!=thriumph)
+            {
+                higherCard=card;
+                winner=player;
+            }
+            if(higherCard.suit===card.suit && card.isHigher(higherCard))
+            {
+                higherCard=card;
+                winner=player;
+            }
+        }
+        return winner;
+    }
+
+    this.getWinner = function(){
+        return getWinner(this.rolls);
+    }
+
+    /*
         Validate the roll.
         The callback gets the error. 
     */
@@ -101,7 +134,7 @@ var ButifarraMove = function(thriumph) {
             }
         }
         //If there is an openent's higher card. 
-        if(higherCard)
+        if(higherCard && getWinner(rolls).team!==roll.player.team)
         {   
             if(!roll.card.isHigher(higherCard))
             {
@@ -159,9 +192,7 @@ var ButifarraMove = function(thriumph) {
         });
 
     }
-    
 
-    
     /*
         Returns the value of the current hand. 
     */
@@ -175,37 +206,6 @@ var ButifarraMove = function(thriumph) {
         }
         return calculatePoints(cards);
     }
-    
-    /*
-        Returns the team that wins the hand.
-    */
-    this.getWinner = function(){
-
-        var higherCard,winner;
-        for(var i=0;i<this.rolls.length;i++)
-        {
-            var player = this.rolls[i].player;
-            var card = this.rolls[i].card;
-
-            if(!higherCard)
-            {
-                higherCard=card;
-                winner=player;
-            }
-            if(card.suit === thriumph && higherCard.suit!=thriumph)
-            {
-                higherCard=card;
-                winner=player;
-            }
-            if(higherCard.suit===card.suit && card.isHigher(higherCard))
-            {
-                higherCard=card;
-                winner=player;
-            }
-        }
-        return winner;
-    }
-    
 };
 
 module.exports.create = function(thriumph) {
