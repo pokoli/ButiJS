@@ -93,6 +93,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         Called every time that a move is Ended
     */
     this.moveEnded = function(move){
+        this.emit('notifyAll','end-move');
         this.moves.push(move);
         if(this.moves.length<12)
         {

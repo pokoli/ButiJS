@@ -494,6 +494,15 @@ function placePlayedCard(data)
     mainStage.add(cardsLayer);
 }
 
+/*
+    Clears all the played cards.
+*/
+function clearPlayedCards()
+{
+    mainStage.getChild('cardsPlayedLayer').children=[];
+    mainStage.getChild('cardsPlayedLayer').draw();
+}
+
 function showControDialog(selections,callback)
 {
     //Create the div

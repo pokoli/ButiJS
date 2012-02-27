@@ -81,7 +81,9 @@ socket.on('contro', function(){
     showControDialog(currentThriumph,doContro);
 });
 
-
+socket.on('end-move',function(){
+    clearPlayedCards();
+});
 
 socket.on('selected-thriumph', function (data){
     currentThriumph=data;
@@ -139,7 +141,6 @@ function playCard(card,callback)
         writeMessage('Is not your turn');
         return;
     }
-    console.log(currentAction);
     if(currentAction)
         return;
     currentAction=true;
