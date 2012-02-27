@@ -26,8 +26,8 @@ var playerid;
 var currentGame;
 //Holds the info of the current round.
 var currentRound;
-//True if is the player current turn. False if not. 
-var yourTurn=false;
+//0 if is not the player turn. Any number avobe if it is.
+var yourTurn=0;
 //Holds the current thriumph
 var currentThriumph;
 //Hold if is waiting for a server response. 
@@ -61,10 +61,11 @@ socket.on('cards', function(data){
 
 socket.on('card-played',placePlayedCard);
 
-socket.on('play-card',function(){
-    yourTurn=true;
+function onPlayCard(){
+    yourTurn++;
     writeMessage('Is your turn');
-});
+}
+socket.on('play-card',onPlayCard);
 
 socket.on('select-thriumph', function(data){
     if(data && data.length>0)
@@ -136,7 +137,7 @@ function doContro(value){
 
 function playCard(card,callback)
 {
-    if(!yourTurn)
+    if(yourTurn===0)
     {
         writeMessage('Is not your turn');
         return;
@@ -152,7 +153,7 @@ function playCard(card,callback)
             callback && callback(err);
             return;
         }
-        yourTurn=false;
+        yourTurn--;
         callback && callback();
    });
 }

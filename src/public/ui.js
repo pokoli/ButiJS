@@ -296,9 +296,10 @@ function writeMessage(message, x,y){
         var messageLayer = mainStage.getChild('messageLayer');
         var x = 0; var y=0;
         x = x || messageLayer.getCanvas().width*0.33;
-        y = y || messageLayer.getCanvas().height*0.45;
+        y = y || messageLayer.getCanvas().height*0.10;
         var context = messageLayer.getContext();
         messageLayer.clear();
+        messageLayer.moveToTop();
         context.font = "18pt Calibri";
         context.fillStyle = "Red";
         context.fillText(message, x, y);
