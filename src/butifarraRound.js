@@ -124,13 +124,23 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         var skey = player.id || player.name;
         var that=this;
         player.cards=_playersCards[skey];
-        _move.addRoll(player,Card.create(card.number,card.suit),function(err){
+        var card = Card.create(card.number,card.suit);
+        _move.addRoll(player,card,function(err){
             if(err)
             {
                 callback && callback(err.message);
                 return;
             }
             _lastPlayed++;
+            //Remove the played card
+            var i;
+            for(i=0;i<_playersCards[skey].length;i++)
+            {
+                if(_playersCards[skey][i].number===card.number &&
+                    _playersCards[skey][i].suit===card.suit)
+                    break;
+            }
+            _playersCards[skey].splice(i,1);
             player.cards = []; //To avoid sending it to all the clients
             var data = {
                 "player" : player,
