@@ -104,7 +104,16 @@ var ButifarraMove = function(thriumph) {
             }
             if(move.player.team===otherTeam)
             {
-                if(!higherCard || move.card.isHigher(higherCard))
+                /*
+                    Searching for the ohters Team higherCard. There scenarios are possible:
+                        1. No higherCard is defined, so any otherTeam's card is the higherCard
+                        2. The card is from the same suit, we must check if the card's number is higher.
+                        3. The card if from diferent suit and its a trhiumph card. So it's the highest card  
+                */
+                if(!higherCard || //1.
+                     move.card.suit === higherCard.suit && move.card.isHigher(higherCard) || //2.
+                    ( move.card.suit !== higherCard.suit && move.card.suit===thriumph && higherCard.suit) //3. 
+                  )
                     higherCard=move.card;
             }
         }
