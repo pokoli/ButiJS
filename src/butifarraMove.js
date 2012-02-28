@@ -123,6 +123,7 @@ var ButifarraMove = function(thriumph) {
         if(roll.card.suit!=initSuit)
         {
             var hasTriumph=false;
+            var higherThriumph;
             //Loop players cards to know if they have valid rolls or not.
             for(var i=0;i<roll.player.cards.length;i++)
             {
@@ -134,9 +135,16 @@ var ButifarraMove = function(thriumph) {
                     return;
                 }
                 if(card.suit===thriumph)
+                {
                     hasTriumph=true;
+                    if(!higherThriumph)
+                        higherThriumph=card;
+                    else if(card.isHigher(higherThriumph))
+                        higherThriumph=card;
+                }
             }
-            if(hasTriumph && roll.card.suit!=thriumph)
+            if(hasTriumph && roll.card.suit!=thriumph &&
+                (higherCard.suit!== thriumph || higherCard.isHigher(higherThriumph)===false))
             {
                 if(callback) callback(new Error('Card must be from thriumph suit'));
                 return;

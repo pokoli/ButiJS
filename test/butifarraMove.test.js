@@ -135,7 +135,7 @@ module.exports = {
         setUp().addRoll(player3,player3.cards[6],testNotError);
     },
     "We must be able to know the value of the move and the team that wons" : function(done){
-        var dones=24;
+        var dones=28;
         function testNotError(err){
             should.ifError(err);
             dones--;
@@ -209,6 +209,17 @@ module.exports = {
         move5.addRoll(player3,player3.cards[1],testNotError);
         move5.getWinner().should.eql(player1);
         move5.getValue().should.eql(1);
+        var move6 = Move.create('Oros');
+        player1.cards=[Card.create(8,'Oros'),Card.create(7,'Oros'),Card.create(6,'Oros'),Card.create(5,'Copes'),Card.create(4,'Copes')];
+        player2.cards=[Card.create(10,'Oros')];
+        player3.cards=[Card.create(12,'Oros')];
+        player4.cards=[Card.create(11,'Bastos')];
+        move6.addRoll(player4,player4.cards[0],testNotError);
+        move6.addRoll(player2,player2.cards[0],testNotError);
+        move6.addRoll(player3,player3.cards[0],testNotError);
+        move6.addRoll(player1,player1.cards[3],testNotError);
+        move6.getWinner().should.eql(player3);
+        move6.getValue().should.eql(7);
     },
     "A player can only play a card that he/she has in the stack" : function(done){
         var move0=Move.create('Copes');
@@ -236,7 +247,7 @@ module.exports = {
         });
         player3.cards=[Card.create(2,'Bastos'),Card.create(2,'Copes')];
         move0.addRoll(player3,player3.cards[0],function(err){
-            err.should.eql(new Error('Card must be from thriumph suit 22'));
+            err.should.eql(new Error('Card must be from thriumph suit'));
         });
         move0.addRoll(player3,player3.cards[1],function(err){
             should.ifError(err);
