@@ -90,6 +90,11 @@ socket.on('selected-thriumph', function (data){
     currentThriumph=data;
     writeMessage('Thriumph: '+data);
 });
+
+socket.on('round-ended',function(data){
+    writeMessage('Round Ended. Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
+});
+
 /*Called onLoad of the html. Loads all the data needed:
 	1. Refresh games-list (every 5 seconds)
 	2. Refresh player-list (every 5 seconds)

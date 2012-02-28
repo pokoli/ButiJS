@@ -119,7 +119,13 @@ var ButifarraGame = function(name) {
                 gameEnded=true;
             }
         }
-        //TODO: Notify the players with the round result
+        var data = {
+            'round-score' : roundScores,
+            'total-score' : this.score,
+        };
+
+        this.notifyAll('round-ended',data);
+
         if(gameEnded)
         {
             this.emit('game-ended',this);
