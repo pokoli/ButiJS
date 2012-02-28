@@ -220,9 +220,9 @@ var ButifarraGame = function(name) {
     /*
         Override addPlayer to validate the number of players.
     */
-    this.addPlayer = function(player){
-        if(this.numberOfPlayers() === 4) throw new Error('The game is full');
-        super_addPlayer.call(this,player)
+    this.addPlayer = function(player,fn){
+        if(this.numberOfPlayers() === 4) return fn('The game is full');
+        super_addPlayer.call(this,player,fn)
     }
 };
 //Inherits from game

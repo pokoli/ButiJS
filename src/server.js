@@ -151,11 +151,17 @@ io.sockets.on('connection', function (socket) {
         game.on('newListener',function(event,listener){
             socket.on(event,listener);
         });
-  		game.addPlayer(getCurrentPlayer());
-  		game.id=generateGameID();
-  		_currentGameId=game.id;
-  		_games.push(game);
-  		if(fn) fn(game);
+  		game.addPlayer(getCurrentPlayer(),function(err){
+  		    if(err)
+  		    {
+  		        fn && fn(err);
+  		        return;
+  		    }
+      		game.id=generateGameID();
+      		_currentGameId=game.id;
+      		_games.push(game);
+      		if(fn) fn(false,game);
+  		});
   	});
   	
   	socket.on('join-game', function(data, fn){
@@ -171,17 +177,21 @@ io.sockets.on('connection', function (socket) {
   	    }
   	    if(!game)
   	    {
-  	        if(fn) fn(new Error('Game '+data+' does not exist'));
+  	        if(fn) fn('Game '+data+' does not exist');
   	        return;
   	    }
 
-  	        var current = getCurrentPlayer();
-  	        if(_games[i].hasPlayer(current))
-  	        {
-      	        if(fn) fn('You are already in the game');
-      	        return;
-  	        }
-            _games[i].addPlayer(current);
+        var current = getCurrentPlayer();
+        if(_games[i].hasPlayer(current))
+        {
+  	        if(fn) fn('You are already in the game');
+  	        return;
+        }
+        _games[i].addPlayer(current,function(err){
+            if(err){
+                fn && fn(err);
+                return;
+            }
       		_currentGameId=_games[i].id;
             if(_games[i].numberOfPlayers()===4)
             {
@@ -189,6 +199,7 @@ io.sockets.on('connection', function (socket) {
                 _games[i].start();
             }
             if(fn) fn(false,_games[i]);
+        });
 
   	});
   	

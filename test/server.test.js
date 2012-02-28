@@ -20,7 +20,7 @@ function finish(done) {
   	//process.exit();
 }
 
-function makeTrhiumphCallBack(err)
+function ifErrorCallback(err)
 {
     should.ifError(err);
 }
@@ -119,7 +119,8 @@ module.exports = {
 	},
 	"When we create a game, the server stores it" : function(done){
 		game = Game.create('New Game');
-		socket.emit('create-game',game,function(data){
+		socket.emit('create-game',game,function(err,data){
+		    should.ifError(err);
 			recivedGame = Game.clone(data);
 			var tempData = data;
 			recivedGame.numberOfPlayers().should.eql(1); //The player automatically joins the game
@@ -155,6 +156,12 @@ module.exports = {
 	"A player should be able a game only one time. " : function(done){
 	    socket.emit('join-game',1,function(err,data){
 	        err.should.eql('You are already in the game');
+	        done();
+	    });
+	},
+	"A player can not joing a game that not exists " : function(done){
+	    socket.emit('join-game',-1,function(err,data){
+	        err.should.eql('Game -1 does not exist');
 	        done();
 	    });
 	},
@@ -217,10 +224,11 @@ module.exports = {
 	    socketC.on('select-thriumph',function(){ toMakeThriumph=socketC;recivedThriumph(arguments[0]);});
 	    socketD.on('select-thriumph',function(){ toMakeThriumph=socketD;recivedThriumph(arguments[0]);});
 
-	    function joinGame(game){
-	        socketB.emit('join-game',game.id);
-	        socketC.emit('join-game',game.id);
-            socketD.emit('join-game',game.id);
+	    function joinGame(err,game){
+	        should.ifError(err);
+	        socketB.emit('join-game',game.id,ifErrorCallback);
+	        socketC.emit('join-game',game.id,ifErrorCallback);
+            socketD.emit('join-game',game.id,ifErrorCallback);
 	    }
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);
@@ -323,7 +331,7 @@ module.exports = {
 	    var selectedTrhiumph=0;
 	    function selectThriumph(sock){
 	        selectedTrhiumph++;
-	        sock.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);
+	        sock.emit('chosen-thriumph','Copes',ifErrorCallback);
 	        sock.removeAllListeners('select-thriumph');
 	    }
 
@@ -351,7 +359,8 @@ module.exports = {
     },
     "The play-card event must occur after the two players don't want to contro " : function(done){
 	    var controsRec=2;
-	    function joinGame(game){
+	    function joinGame(err,game){
+	        should.ifError(err);
 	        socketB.emit('join-game',game.id);
 	        socketC.emit('join-game',game.id);
             socketD.emit('join-game',game.id);
@@ -382,10 +391,10 @@ module.exports = {
 	    
 	    addListeners('play-card',recivedPlayCard);
 	    
-	    socket.on('select-thriumph',function(){ socket.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);});
-	    socketB.on('select-thriumph',function(){ socketB.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);});
-	    socketC.on('select-thriumph',function(){ socketC.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);});
-	    socketD.on('select-thriumph',function(){ socketD.emit('chosen-thriumph','Copes',makeTrhiumphCallBack);});
+	    socket.on('select-thriumph',function(){ socket.emit('chosen-thriumph','Copes',ifErrorCallback);});
+	    socketB.on('select-thriumph',function(){ socketB.emit('chosen-thriumph','Copes',ifErrorCallback);});
+	    socketC.on('select-thriumph',function(){ socketC.emit('chosen-thriumph','Copes',ifErrorCallback);});
+	    socketD.on('select-thriumph',function(){ socketD.emit('chosen-thriumph','Copes',ifErrorCallback);});
 	    
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);

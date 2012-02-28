@@ -65,9 +65,10 @@ module.exports.Game = Game;
 
 Game.prototype.notifyAll = notifyAll;
 
-Game.prototype.addPlayer = function(player){
+Game.prototype.addPlayer = function(player,fn){
 	this.players.push(player);
 	this.emit('updated',this);
+	fn && fn();
 }
 
 Game.prototype.addWatcher = function(watcher){
