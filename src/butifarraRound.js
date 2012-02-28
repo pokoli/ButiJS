@@ -80,7 +80,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.newMove = function(firstPlayer){
         //Put the players in the correct order
         _players=ButifarraGame.orderPlayers(_players,this.teams,firstPlayer);
-        _move = ButifarraMove.create();
+        _move = ButifarraMove.create(this.thriumph);
         if(this.test)
             _move.test=true;
         _players[0].notify('play-card');
