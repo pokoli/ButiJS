@@ -94,6 +94,8 @@ var ButifarraGame = function(name) {
     }
     
     this.roundEnded = function(roundData){
+        //Move the thriumpher pointer to the next player.
+        _thriumpher = (_thriumpher+1)%4;
         this.playedRounds[this.round]=roundData; //Refresh the round data.
         var roundScores=roundData.getScores();
         var winnerTeam,result;
