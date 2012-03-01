@@ -88,6 +88,7 @@ var ButifarraMove = function(thriumph) {
         //The card must be higher than the other team higher.
         var otherTeam = roll.player.team=== 1 ? 2 : 1;
         var higherCard; //Hols the other team higer's card in the Move.
+        var higherCardTeam;
         //A player can not roll twice in the same move.
         //A card can not be rolled twice in the same move.
         for(var i=0;i<rolls.length;i++){
@@ -102,19 +103,19 @@ var ButifarraMove = function(thriumph) {
                 if(callback) callback(new Error('A card can be rolled only once'));
                 return;
             }
-            if(move.player.team===otherTeam)
+            /*
+                Searching for the ohters Team higherCard. There scenarios are possible:
+                    1. No higherCard is defined, so any otherTeam's card is the higherCard
+                    2. The card is from the same suit, we must check if the card's number is higher.
+                    3. The card if from diferent suit and its a trhiumph card. So it's the highest card  
+            */
+            if(!higherCard || //1.
+                 move.card.suit === higherCard.suit && move.card.isHigher(higherCard) || //2.
+                ( move.card.suit !== higherCard.suit && move.card.suit===thriumph && higherCard.suit) //3. 
+              )
             {
-                /*
-                    Searching for the ohters Team higherCard. There scenarios are possible:
-                        1. No higherCard is defined, so any otherTeam's card is the higherCard
-                        2. The card is from the same suit, we must check if the card's number is higher.
-                        3. The card if from diferent suit and its a trhiumph card. So it's the highest card  
-                */
-                if(!higherCard || //1.
-                     move.card.suit === higherCard.suit && move.card.isHigher(higherCard) || //2.
-                    ( move.card.suit !== higherCard.suit && move.card.suit===thriumph && higherCard.suit) //3. 
-                  )
-                    higherCard=move.card;
+                higherCard=move.card;
+                higherCardTeam=move.player.team;
             }
         }
 
@@ -143,7 +144,7 @@ var ButifarraMove = function(thriumph) {
                         higherThriumph=card;
                 }
             }
-            if(hasTriumph && roll.card.suit!=thriumph &&
+            if(hasTriumph && higherCardTeam!==roll.player.team && roll.card.suit!=thriumph &&
                 (higherCard.suit!== thriumph || higherCard.isHigher(higherThriumph)===false))
             {
                 if(callback) callback(new Error('Card must be from thriumph suit'));
