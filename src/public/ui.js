@@ -450,13 +450,15 @@ function placeCards(cards)
     {
         var card = cards[i];
         var key = card.number+'-'+card.suit.toString().toLowerCase()
-        var imgx= cardHolderXOffset+((cardHolderWidth/cards.length)*i);
+        var imgx= cardHolderXOffset+((cardHolderWidth/12)*i);
+        //Add to x more offset to put the cards centered when are less than 12.
+        imgx += (12-cards.length)*(cardWidth*0.4);
         var imgy = cardHolderYOffset;
         var cardImage = new Kinetic.Image({
                         image: cachedImages[key],
                         x : imgx,
                         y : imgy,
-                        width : cardHolderWidth/cards.length,
+                        width : cardWidth,
                         heigth : cardHolderHeight
                     });
         cardImage.card = cards[i];
