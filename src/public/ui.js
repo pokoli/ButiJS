@@ -338,15 +338,16 @@ function initCanvas(canvasElement,gameData)
             break;
         }
     }
-    
     ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
     names[1]=gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
 
-    playerTeam = playerTeam === 1 ? 2 : 1;
-    ids[0] = gameData.teams[playerTeam][0].id;
-    names[0] = gameData.teams[playerTeam][0].name;
-    ids[2] = gameData.teams[playerTeam][1].id;
-    names[2] = gameData.teams[playerTeam][1].name;
+    var right=(i+1)%4;
+    var left=(i+3)%4;
+
+    ids[0] = gameData.players[left].id;
+    names[0] = gameData.players[left].name;
+    ids[2] = gameData.players[right].id;
+    names[2] = gameData.players[right].name;
 
     cardWidth=width*0.08;
     cardHeight=height*0.20;

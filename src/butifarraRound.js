@@ -79,7 +79,21 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     */
     this.newMove = function(firstPlayer){
         //Put the players in the correct order
-        _players=ButifarraGame.orderPlayers(_players,this.teams,firstPlayer);
+        var i=0;
+        for(i=0;i<_players.length;i++)
+        {
+            if(_players[i].isEqual(firstPlayer))
+                break;
+        }
+        var temp=[];
+        for(var j=0;j<_players.length;j++)
+        {
+            temp.push(_players[i]);
+            i++;
+            i=i%4;
+        }
+        _players=temp;
+//        _players=ButifarraGame.orderPlayers(_players,this.teams,firstPlayer);
         _move = ButifarraMove.create(this.thriumph);
         if(this.test)
             _move.test=true;

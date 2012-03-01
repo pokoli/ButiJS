@@ -54,5 +54,30 @@ module.exports = {
             player.team.should.not.eql(lastTeam);
             lastTeam=player.team;
         });
+    },
+    "The orderPlayer function must order the players the game flow order" : function() {
+        player1.team=1;
+        player2.team=1;
+        player3.team=2;
+        player4.team=2;
+        var teams = {
+            1 : [player1,player2],
+            2 : [player3,player4],
+        }
+        var players = [player1,player2,player3,player4];
+        var ordered = Game.orderPlayers(players,teams,player3);
+        ordered.shift().should.eql(player3);
+        ordered.shift().should.eql(player1);
+        ordered.shift().should.eql(player4);
+        ordered.shift().should.eql(player2);
+        var ordered = Game.orderPlayers(players,teams,player3);
+        var ordered2 = Game.orderPlayers(players,teams,player3);
+        ordered.should.eql(ordered2);
+        var ordered = Game.orderPlayers(players,teams,player2);
+        ordered.shift().should.eql(player2);
+        ordered.shift().should.eql(player4);
+        ordered.shift().should.eql(player1);
+        ordered.shift().should.eql(player3);
     }
+    
 }   

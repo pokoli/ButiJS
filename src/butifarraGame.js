@@ -91,6 +91,7 @@ var ButifarraGame = function(name) {
             }
             delete player.suit; 
         });
+        return players[_thriumpher];
     }
     
     this.roundEnded = function(roundData){
@@ -218,8 +219,11 @@ var ButifarraGame = function(name) {
     this.start = function(){
         super_start.call(this,false);
         this.assignTeams();
-        this.players=orderPlayers(this.players,this.teams);
-        assignFirstPlayerToChooseTriumph(this.players);
+        var players = this.teams[1].concat(this.teams[2]);
+        var thriumpher = assignFirstPlayerToChooseTriumph(players);
+        this.players=orderPlayers(players,this.teams,thriumpher);
+        //After ordering the players the thriumpher is the first!!!
+        _thriumpher=0;
         this.startNewRound();
         this.notifyAll('start',this);
     }
