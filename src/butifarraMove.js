@@ -153,7 +153,7 @@ var ButifarraMove = function(thriumph) {
         //If there is an openent's higher card. 
         if(higherCard && getWinner(rolls).team!==roll.player.team)
         {   
-            if(!roll.card.isHigher(higherCard))
+            if(roll.card.suit===higherCard.suit && !roll.card.isHigher(higherCard))
             {
                 //Search if the player has an higher card.
                 for(var i=0;i<roll.player.cards.length;i++)

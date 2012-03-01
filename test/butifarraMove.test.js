@@ -135,7 +135,7 @@ module.exports = {
         setUp().addRoll(player3,player3.cards[6],testNotError);
     },
     "We must be able to know the value of the move and the team that wons" : function(done){
-        var dones=28;
+        var dones=32;
         function testNotError(err){
             should.ifError(err);
             dones--;
@@ -220,6 +220,17 @@ module.exports = {
         move6.addRoll(player1,player1.cards[3],testNotError);
         move6.getWinner().should.eql(player3);
         move6.getValue().should.eql(7);
+        var move7 = Move.create('Copes');
+        player1.cards=[Card.create(10,'Oros'),Card.create(4,'Oros'),Card.create(3,'Oros'),Card.create(12,'Copes')];
+        player2.cards=[Card.create(1,'Oros')];
+        player3.cards=[Card.create(3,'Copes')];
+        player4.cards=[Card.create(2,'Oros')];
+        move7.addRoll(player4,player4.cards[0],testNotError);
+        move7.addRoll(player2,player2.cards[0],testNotError);
+        move7.addRoll(player3,player3.cards[0],testNotError);
+        move7.addRoll(player1,player1.cards[2],testNotError);
+        move7.getWinner().should.eql(player3);
+        move7.getValue().should.eql(5);
     },
     "A player can only play a card that he/she has in the stack" : function(done){
         var move0=Move.create('Copes');
