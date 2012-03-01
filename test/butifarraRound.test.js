@@ -114,13 +114,33 @@ module.exports = {
             contros++;
             data.value.should.eql(2*contros);
             round.multiplier.should.eql(2*contros);
-            data.player.should.eql('Mark');
+            data.player.name.should.eql('Mark');
             if(contros===2) done();
         });
         round.on('notify-contro',function(){
             round.emit('do-contro',{'value': true, 'player': {'name': 'Mark'}});
         });
         round.emit('chosen-thriumph','Bastos');
+    },
+    "We should kwow who have contred on the round" : function(done){
+        var round0 = setUp();
+        var contros=0;
+        round0.on('contro-done',function(data)
+        {
+            contros++;
+            data.value.should.eql(2*contros);
+            round0.multiplier.should.eql(2*contros);
+            round0.controPlayers.should.be.instanceof(Array);
+            round0.controPlayers.length.should.eql(contros);
+            for(var i=0;i<round0.controPlayers.length;i++)
+                round0.controPlayers[i].name.should.eql('Mark');
+            data.player.name.should.eql('Mark');
+            if(contros===2) done();
+        });
+        round0.on('notify-contro',function(){
+            round0.emit('do-contro',{'value': true, 'player': {'name': 'Mark'}});
+        });
+        round0.emit('chosen-thriumph','Bastos');
     },
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
         round = setUp();

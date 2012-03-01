@@ -23,6 +23,8 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.multiplier=1;
     //Holds the number of do-contro events pending.
     this.pendingContros=[];
+    //Holds the player that have done a contro.
+    this.controPlayers=[];
     //Holds the information about the current move. 
     var _move;
     //Holds the indexOf the last played player.
@@ -223,9 +225,10 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         if(val && this.multiplier<4)
         {
             this.multiplier=this.multiplier*2;
+            this.controPlayers.push(data.player);
             var ret = {
                 'value' : this.multiplier,
-                'player' : data.player.name
+                'player' : data.player
             }
             this.emit('contro-done',ret);
             this.emit('notifyAll','contro-done',ret);

@@ -232,11 +232,21 @@ function updateGameInfo(gameData)
         sHTML += '<table>';
         sHTML += '<tr><th>Round Info</th></tr>';
         if(round.thriumph)
-            sHTML += '<tr><td>Thriumph:</td><td>'+round.thriumph+'</td></tr>';
+        {
+            sHTML += '<tr><td>Thriumph:</td><td>'+round.thriumph;
+            if(round.delegated) sHTML += ' (Delegated)';
+            sHTML += '</td></tr>';
+        }
         if(round.thriumpher)
             sHTML += '<tr><td>Thriumpher:</td><td>'+round.thriumpher.name+'</td></tr>';
         if(round.multiplier>1)
             sHTML += '<tr><td>Contro:</td><td> x'+round.multiplier+'</td></tr>';
+        if(round.controPlayers.length>0)
+        {
+            sHTML += '<tr><td>Contro players</td></tr>';
+            for(var i=0;i<round.controPlayers.length;i++)
+                sHTML += '<tr><td>'+round.controPlayers[i].name+' (x'+(i+1)*2+')</td></tr>';
+        }
         sHTML += '</table>';
     }
 
