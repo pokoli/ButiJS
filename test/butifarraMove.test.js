@@ -30,7 +30,6 @@ module.exports = {
         done();
     },
     "The first Roll of a move could be any card" : function(done){
-
         player1.cards=[CavallEspases];
         move.addRoll(player1,CavallEspases,function(err){
             should.ifError(err);
@@ -312,7 +311,6 @@ module.exports = {
             should.ifError(err);
         });
         move0.addRoll(player2,player2.cards[1],function(err){
-            console.log(err);
             should.ifError(err);
         });
         move0.addRoll(player4,player4.cards[1],function(err){
