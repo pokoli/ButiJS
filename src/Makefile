@@ -5,7 +5,7 @@ test:
 	$(MOCHA) $(OPTS)
 debug:
 	../node_modules/node-inspector/bin/inspector.js &
-	$(MOCHA) --debug $(OPTS)
+	$(MOCHA) --debug-brk $(OPTS)
 test-cov: lib-cov
 	@COVERAGE=1 $(MAKE) test REPORTER=html-cov > coverage.html
 lib-cov:
