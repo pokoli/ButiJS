@@ -183,6 +183,7 @@ module.exports = {
         	    //Remove the listeners from this test
     	        removeListeners('select-thriumph');
     	        removeListeners('start');
+    	        removeListeners('cards');
 	            done();
 	        } 
 	    }

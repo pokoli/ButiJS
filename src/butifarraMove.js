@@ -32,8 +32,7 @@ function calculatePoints(cards){
 */
 
 var ButifarraMove = function(thriumph) {
-    _rolls=[]; //Private variable
-    this.rolls = _rolls; //Expose it to the public;
+    this.rolls = []; //Expose it to the public;
     
     /*
         Returns the team that wins the hand.
@@ -197,13 +196,14 @@ var ButifarraMove = function(thriumph) {
             return;
         }
         var roll = new ButifarraRoll(player,card);
+        var that = this;
         validateRoll(roll,this.rolls,function(err){
             if(err) 
             {
                 callback && callback(err);
                 return;
             }
-            _rolls.push(roll);
+            that.rolls.push(roll);
             var idx = player.cards.indexOf(card); // Find the index
             if(idx!=-1) player.cards.splice(idx, 1);
             callback && callback();

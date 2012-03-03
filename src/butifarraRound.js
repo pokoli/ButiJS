@@ -59,7 +59,11 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         for(var i=1;stack.left() > 0;i++)
         {   
             i=i%4;
-            _players[i].cards = _players[i].cards.concat(stack.next(4));            
+            var newCards = stack.next(4);
+            if(!this.test || _players[i].cards.length<12)
+            {    //To be able to define the players cards on the test.
+                _players[i].cards = _players[i].cards.concat(newCards);
+            }
 
         }
         for(var i=0;i<_players.length;i++)
@@ -111,14 +115,13 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.moveEnded = function(move){
         this.emit('notifyAll','end-move');
         this.moves.push(move);
+        var winner = move.getWinner();
+        for(var i=0;i<move.rolls.length;i++)
+        {
+            this.winnedCards[winner.team].push(move.rolls[i].card);
+        }
         if(this.moves.length<12)
         {
-            var winner = move.getWinner();
-            for(var i=0;i<move.rolls.length;i++)
-            {
-                var card=move.rolls[i].card;
-                this.winnedCards[winner.team].push(card);
-            }
             this.emit('new-move',winner);
         }
         else
@@ -292,14 +295,13 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     this.getScores = function(){
         var ret = {1:0, 2:0};
         var temp = []
-        for(team in [1,2])
+        for(var team=1;team<=2;team++)
         {
             if(!this.winnedCards[team])
                 continue;
             for(var i=0;i<this.winnedCards[team].length;i++)
             {
-                var card = this.winnedCards[team][i];
-                temp.push(card);
+                temp.push(this.winnedCards[team][i]);
                 if(temp.length===4)
                 {
                     ret[team]= ret[team]+ButifarraMove.calculatePoints(temp);

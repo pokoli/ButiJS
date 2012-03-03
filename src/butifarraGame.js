@@ -48,21 +48,35 @@ var ButifarraGame = function(name) {
      this.assignTeams = function(){
         var teamA = [], teamB = [];
         this.players.forEach(function(player){
-            var randomNumber = Math.floor(Math.random()*2000);
-            if(randomNumber%2===0 && teamA.length < 2) {
-                teamA.push(player);
-                player.team=1;
-            }
-            else if (teamB.length < 2) {
-                teamB.push(player);
-                player.team=2;
-            } 
-            else 
+            //If the player has a team, we respect it.
+            if(player.team && (player.team===1 || player.team===2) )
             {
-                teamA.push(player);
-                player.team=1;
+                if(player.team===1)
+                    teamA.push(player)
+                else
+                    teamB.push(player);
             }
-            player.cards=[];
+            else
+            {
+                var randomNumber = Math.floor(Math.random()*2000);
+                if(randomNumber%2===0 && teamA.length < 2) {
+                    teamA.push(player);
+                    player.team=1;
+                }
+                else if (teamB.length < 2) {
+                    teamB.push(player);
+                    player.team=2;
+                }
+                else
+                {
+                    teamA.push(player);
+                    player.team=1;
+                }
+            }
+            if(!player.cards || !Array.isArray(player.cards) )
+            {
+                player.cards=[];
+            }
         });
         this.teams[1] = teamA;
         this.teams[2] = teamB;
@@ -94,25 +108,38 @@ var ButifarraGame = function(name) {
         return players[_thriumpher];
     }
     
+    function assignFirstPlayerToChooseTriumphTest(players,firstToTriumph){
+        for(var i=0;i<players.length;i++)
+        {
+            if(firstToTriumph.isEqual(players[i]))
+                _thriumpher=i;
+        }
+        return players[_thriumpher];
+    }
+
     this.roundEnded = function(roundData){
         //Move the thriumpher pointer to the next player.
         _thriumpher = (_thriumpher+1)%4;
-        this.playedRounds[this.round]=roundData; //Refresh the round data.
+        this.playedRounds[this.round-1]=roundData; //Refresh the round data.
         var roundScores=roundData.getScores();
         var winnerTeam,result;
         var tie=false;
-        for(var i=0;i<roundScores.length;i++)
+        for(var team=1;team<=2;team++)
         {
-            if(roundScores[i]>36) //We only compute the points above 36 (half of the stack)
+            if(roundScores[team]>36) //We only compute the points above 36 (half of the stack)
             {
-                winnerTeam=i;
-                result=roundScores[i]-36;
+                winnerTeam=team;
+                result=roundScores[team]-36;
             }
-            else if (roundScores[i]===36) //Tie round
+            else if (roundScores[team]===36) //Tie round
             {
                 tie=true;
             }
         }
+        //Remove the cards from the current players.
+        for(var i=0;i<this.players.length;i++)
+            this.players[i].cards=[];
+
         var gameEnded=false;
         if(winnerTeam)
         {
@@ -122,6 +149,7 @@ var ButifarraGame = function(name) {
                 gameEnded=true;
             }
         }
+
         var data = {
             'round-score' : roundScores,
             'total-score' : this.score,
@@ -155,6 +183,10 @@ var ButifarraGame = function(name) {
 
         var game=this; //Save the object to call it latter.
         currentRound.on('round-ended',function(roundData){
+            for(event in currentRound._events)
+            {
+                this.removeAllListeners(event);
+            }
             game.roundEnded(roundData);
         });
         currentRound.on('notifyAll',function(event,data,callback){
@@ -186,7 +218,7 @@ var ButifarraGame = function(name) {
                 //Properly get the event from the arguments.
                 var event = arguments.callee.caller.arguments[0];
                 //Call the functions with the current round an the first argument
-                if(Array.isArray(currentRound._events[event].length))
+                if(Array.isArray(currentRound._events[event]))
                 {
                     for(var i=0;i<currentRound._events[event];i++)
                     {
@@ -197,7 +229,7 @@ var ButifarraGame = function(name) {
                 else
                 {
                     var fn = currentRound._events[event];
-                    fn.call(currentRound,arguments[0],arguments[1]);
+                    if(fn) fn.call(currentRound,arguments[0],arguments[1]);
                 }
             });
         }
@@ -220,7 +252,12 @@ var ButifarraGame = function(name) {
         super_start.call(this,false);
         this.assignTeams();
         var players = this.teams[1].concat(this.teams[2]);
-        var thriumpher = assignFirstPlayerToChooseTriumph(players);
+        var thriumpher;
+        //If for testing pruposes.
+        if(this.test && this.firstToTriumph)
+            thriumpher = assignFirstPlayerToChooseTriumphTest(players,this.firstToTriumph);
+        else
+            thriumpher = assignFirstPlayerToChooseTriumph(players);
         this.players=orderPlayers(players,this.teams,thriumpher);
         //After ordering the players the thriumpher is the first!!!
         _thriumpher=0;
