@@ -3,6 +3,7 @@ var express = require('express')
   , fs = require('fs')
   , url = require('url')
   , sanitize = require('validator').sanitize
+  , i18n = require('i18n')
   , Game = require('./butifarraGame')
   , Player = require('./player');
 var app = express.createServer();
@@ -11,8 +12,22 @@ var app = express.createServer();
 var pub = __dirname + '/public/'; 
 
 
+i18n.configure({
+    locales:['ca', 'es', 'en'],
+    register: global
+});
+
 app.configure(function(){
     app.use(express.bodyParser());
+    //Load i18n machinery.
+    app.use(i18n.init);
+    // register helpers for use in templates
+    app.helpers({
+      __i: i18n.__,
+      __n: i18n.__n
+    });
+
+
     //The static content is exposed in the /public/ directory
     app.use('/public/',express.static(pub));
     app.use(express.methodOverride());
@@ -98,10 +113,10 @@ io.sockets.on('connection', function (socket) {
         if(game && game.state==='running')
             game.emit(event,data,callback);
         else
-          callback && callback('No current game running');
+          callback && callback(i18n.__('No current game running'));
     }
 
-	socket.emit('welcome', { msg : 'Welcome, who you are?'});
+	socket.emit('welcome', { msg : i18n.__('Welcome, who you are?')});
   
 	socket.on('login', function(data, fn){
 		var player = Player.create(data.name,'',socket);
@@ -177,14 +192,14 @@ io.sockets.on('connection', function (socket) {
   	    }
   	    if(!game)
   	    {
-  	        if(fn) fn('Game '+data+' does not exist');
+  	        if(fn) fn(__('Game %s does not exist',data));
   	        return;
   	    }
 
         var current = getCurrentPlayer();
         if(_games[i].hasPlayer(current))
         {
-  	        if(fn) fn('You are already in the game');
+  	        if(fn) fn(__('You are already in the game'));
   	        return;
         }
         _games[i].addPlayer(current,function(err){
@@ -224,7 +239,7 @@ io.sockets.on('connection', function (socket) {
       					_games.splice(idx,1);
       			}
       		})
-      		socket.broadcast.emit('message',player.name + ' left the server');
+      		socket.broadcast.emit('message',__(' %s left the server',player.name));
       	}
       	
   		if(_playerid)
