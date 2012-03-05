@@ -1,25 +1,35 @@
 {
-  "author": "Sergi Almacellas <pokoli@gmail.com>",
   "name": "ButiJS",
   "description": "Butifarra's game server on the top of node.js",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "license" : "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/pokoli/ButiJS.git"
   },
+  "bugs" :
+      { 
+        "url" : "http://github.com/pokoli/ButiJS/issues"
+        , "email" : "pokoli@gmail.com"
+      },
+  "author":
+        { "name" : "Sergi Almacellas Abellana"
+               , "email" : "pokoli@gmail.com"
+               , "url" : "http://www.koolpi.com/"
+        },
   "engines": {
-    "node": "~0.6.0"
+    "node": ">=0.6.0"
   },
   "dependencies": {
   	 "socket.io": ">= 0.8.6",
   	 "validator" : ">= 0.3.5",
   	 "express" : ">= 2.5.4",
-  	 "jade" : ">= 0.20.0" 
+  	 "jade" : ">= 0.20.0"
   },
   "devDependencies": {
  	 "mocha": ">= 0.13.0",
   	 "socket.io-client": ">= 0.8.6",
-   	 "should": "== 0.3.2"
-	 "node-inspector" : ">= 0.1.10",
+   	 "should": "== 0.3.2",
+	 "node-inspector" : ">= 0.1.10"
   }
 }
