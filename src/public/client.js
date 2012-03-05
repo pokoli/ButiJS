@@ -32,6 +32,8 @@ var yourTurn=0;
 var currentThriumph;
 //Hold if is waiting for a server response. 
 var currentAction;
+//Hold the history of contros done.
+var controInfo=[];
 
 /*
     Fired when a game we are playing is started
@@ -76,17 +78,30 @@ socket.on('select-thriumph', function(data){
 
 socket.on('new-round',function(){
     currentThriumph=undefined;
+    controInfo=[];
 });
 
 socket.on('contro', function(){
-    showControDialog(currentThriumph,doContro);
+    var additionalText= 'Thriumph: '+currentThriumph;
+    if(controInfo.length>0)
+    {
+        var i = controInfo.length-1;
+        additionalText += '<br> Player '+controInfo[i].player.name+' has ';
+        additionalText += (controInfo[i].value===2) ? 'Contred' : 'Recontred';
+    }
+    showControDialog(currentThriumph,additionalText,doContro);
+});
+
+socket.on('contro-done',function(data){
+    controInfo.push(data);
+    showControDone(data);
 });
 
 socket.on('end-move',function(){
     clearPlayedCards();
 });
 
-socket.on('selected-thriumph', function (data){
+socket.on('notify-thriumph', function (data){
     currentThriumph=data;
     writeMessage('Thriumph: '+data);
 });

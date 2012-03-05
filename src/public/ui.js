@@ -517,20 +517,22 @@ function clearPlayedCards()
     mainStage.getChild('cardsPlayedLayer').draw();
 }
 
-function showControDialog(selections,callback)
+function showControDialog(selections,additionalText,callback)
 {
+    var text = additionalText || '';
     //Create the div
     if($('#show-contro-dialog').length===0)
     {
         var oDiv = '<div id="show-contro-dialog" title="Do you want to make a contro?"><form><fieldset>';
-        oDiv += '<label for="contro">Do you want to make a contro?</label>';
+        oDiv += '<p id="show-contro-text">'+text+'</p>';
+        oDiv += '<label  for="contro"> Do you want to make a contro? </label></br>';
         oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="true">Yes';
         oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="false">No';
         oDiv += '</fieldset></form></div>';
         $(oDiv).appendTo($('#container'));
         $('#show-contro-dialog').dialog({
 	    autoOpen: false ,
-	    height: 200,
+	    height: 240,
 	    width: 350,
 	    modal: false,
 	    buttons: {
@@ -542,7 +544,16 @@ function showControDialog(selections,callback)
 			    },	
         });
     }
+    $('#show-contro-text').html(text);
     $('#show-contro-dialog').dialog('open');
+}
+
+function showControDone(controInfo){
+    //Close the controDialog
+    $('#show-contro-dialog').dialog('close');
+    var text= 'Player '+controInfo.player.name+' has ';
+    text += (controInfo.value===2) ? 'Contred' : 'Recontred';
+    writeMessage(text);
 }
 
 function showThriumphDialog(selections,callback)
