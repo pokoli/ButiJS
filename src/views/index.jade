@@ -13,36 +13,36 @@ html
         link(rel='stylesheet',type='text/css',href='/public/jquery-ui.css')
     body(onLoad='doLoad();')
     #container
-        div#login-dialog(title='Login')
+        div#login-dialog(title="#{__i('Login')}")
             form
             fieldset
-                label(for='login-name') Enter your name
+                label(for='login-name') #{__i('Enter your name')}
                 input#login-name(type='text',name='login-name',class='text ui-widget-content ui-corner-all')
-        div#create-game-dialog(title='New Game')
+        div#create-game-dialog(title="#{__i('New Game')}")
             form
             fieldset
-                label(for='game-name') Name
+                label(for='game-name') #{__i('Name')}
                 input#game-name(type='text',name='game-name',class='text ui-widget-content ui-corner-all')
         div#tabs
             ul
                 li 
-                    a(href='#chat') Chat
+                    a(href='#chat') #{__i('Chat')}
                 li 
-                    a(href='#games') Games 
+                    a(href='#games') #{__i('Games')}
             div#chat.row
                 div#chat-messages.cell.bordered
                     ul#messages.scrolled
-                        li Welcome to the Chat!
+                        li #{__i('Welcome to the Chat!')}
                 div#chat-players.cell.bordered
-                    p Players
+                    p #{__i('Players')}
                     ul#player-list
                 form#chat-form(action='javascript:send();')
                    input#msg(type='text',value='')
             div#games.row
                 table#game-list.cell.bordered
                 div#game-details.cell.bordered
-                    p Game Details
+                    p #{__i('Game Details')}
                 form#game-form
-                    input#join(type='button',value='Join game')
-                    input#watch(type='button',value='Watch game')
-                    input#create(type='button',value='Create game')
+                    input#join(type='button',value="#{__i('Join game')}")
+                    input#watch(type='button',value="#{__i('Watch game')}")
+                    input#create(type='button',value="#{__i('Create game')}")
