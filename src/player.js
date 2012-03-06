@@ -1,4 +1,5 @@
-var Game = require(__dirname+'/game');
+var Game = require(__dirname+'/game')
+  , i18n = require('i18n');
 
 var Player = function(name,email,socket) {
 
@@ -46,7 +47,7 @@ var Player = function(name,email,socket) {
 };
 
 Player.prototype.join = function(game){
-	if(typeof(game) !== 'object') { throw new Error('Game must be an object');}
+	if(typeof(game) !== 'object') { throw new Error(i18n.__('Game must be an object'));}
 	game.addPlayer(this);
 };
 

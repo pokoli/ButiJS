@@ -1,3 +1,5 @@
+var i18n = require('i18n');
+
 /*
     Holds the information of each roll.
     A roll consits of a card and a player.   
@@ -81,7 +83,7 @@ var ButifarraMove = function(thriumph) {
         //Maximum 4 rolls per movement (1 forEach player)   
         if(rolls.length===4)
         {
-            if(callback) callback(new Error('Only 4 rolls allowed'));
+            if(callback) callback(new Error(i18n.__('Only 4 rolls allowed')));
             return;
         }     
         //The card must be higher than the other team higher.
@@ -94,12 +96,12 @@ var ButifarraMove = function(thriumph) {
             var move = rolls[i];
             if(move.player.isEqual(roll.player))
             { 
-                if(callback) callback(new Error('A player can roll only once'));
+                if(callback) callback(new Error(i18n.__('A player can roll only once')));
                 return;
             }
             if(move.card.suit===roll.card.suit && move.card.number===roll.card.number ) 
             {
-                if(callback) callback(new Error('A card can be rolled only once'));
+                if(callback) callback(new Error(i18n.__('A card can be rolled only once')));
                 return;
             }
             /*
@@ -131,7 +133,7 @@ var ButifarraMove = function(thriumph) {
                 //If the players has cards from the init suit, must roll it.
                 if(card.suit===initSuit)
                 {
-                    if(callback) callback(new Error('Card must be from initial suit'));
+                    if(callback) callback(new Error(i18n.__('Card must be from initial suit')));
                     return;
                 }
                 if(card.suit===thriumph)
@@ -146,7 +148,7 @@ var ButifarraMove = function(thriumph) {
             if(hasTriumph && higherCardTeam!==roll.player.team && roll.card.suit!=thriumph &&
                 (higherCard.suit!== thriumph || higherCard.isHigher(higherThriumph)===false))
             {
-                if(callback) callback(new Error('Card must be from thriumph suit'));
+                if(callback) callback(new Error(i18n.__('Card must be from thriumph suit')));
                 return;
             }
         }
@@ -161,7 +163,7 @@ var ButifarraMove = function(thriumph) {
                     var card = roll.player.cards[i];
                     if(card.isHigher(higherCard))
                     {
-                        if(callback) callback(new Error('Card must be higher than others team'));
+                        if(callback) callback(new Error(i18n.__('Card must be higher than others team')));
                         return;
                     }
                 }    
@@ -176,7 +178,7 @@ var ButifarraMove = function(thriumph) {
     this.addRoll = function(player,card,callback){
         if(!card || !card.number || !card.suit)
         {
-            callback && callback(Error('Card must be defined'));
+            callback && callback(Error(i18n.__('Card must be defined')));
             return
         }
         //Validate that the player has the card in the stack.
@@ -192,7 +194,7 @@ var ButifarraMove = function(thriumph) {
         }
         if(doesntHaveCard && !this.test) //If this.test is defined we are in a test case that needs this to be deactivated
         {
-            callback(Error("You can not play a card you don't have in the stack"));
+            callback(Error(i18n.__("You can not play a card you don't have in the stack")));
             return;
         }
         var roll = new ButifarraRoll(player,card);

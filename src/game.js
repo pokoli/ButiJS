@@ -1,4 +1,5 @@
 var util = require('util'),
+    i18n = require('i18n'),
     event = require('events');
 
 function notifyAll(type,data,fn) {
@@ -107,7 +108,7 @@ Game.prototype.numberOfWatchers = function(){
 }
 
 Game.prototype.start = function(bnotify){
-    if(this.numberOfPlayers() < this.min_players) throw new Error('Not enough players');
+    if(this.numberOfPlayers() < this.min_players) throw new Error(i18n.__('Not enough players'));
     this.state='running';
     if(bnotify)
         this.notifyAll('start',this);

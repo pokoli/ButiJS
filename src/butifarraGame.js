@@ -1,4 +1,5 @@
-var util = require('util');
+var util = require('util')
+  , i18n = require('i18n');
 
 var Game = require('./game'),
     Round = require('./butifarraRound'),
@@ -270,7 +271,7 @@ var ButifarraGame = function(name) {
         Override addPlayer to validate the number of players.
     */
     this.addPlayer = function(player,fn){
-        if(this.numberOfPlayers() === 4) return fn('The game is full');
+        if(this.numberOfPlayers() === 4) return fn(i18n.__('The game is full'));
         super_addPlayer.call(this,player,fn)
     }
 };

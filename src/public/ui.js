@@ -74,7 +74,7 @@ $(function() {
     });
     //Game manipulation functions
     $('#join').click(joinGame);
-    $('#watch').click(function(){ alert("Not yet implemented");return;});
+    $('#watch').click(function(){ alert(__i("Not yet implemented"));return;});
     $('#create').click(function(){$("#create-game-dialog").dialog('open')});
 });
 

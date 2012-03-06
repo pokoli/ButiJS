@@ -124,7 +124,7 @@ io.sockets.on('connection', function (socket) {
 		_players[_playerid]=player;
 		player.id=_playerid;
 		if(fn) fn(player);
-  		socket.broadcast.emit('message',player.name + ' joined the server');
+  		socket.broadcast.emit('message',i18n.__('%s joined the server',player.name));
   	});
   	/*
   	    data: Holds the filter to apply
