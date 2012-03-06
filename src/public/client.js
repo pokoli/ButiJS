@@ -1,4 +1,40 @@
 var socket = io.connect('http://localhost:8000');
+
+
+//Stores all the translations
+var translated={};
+/*
+    Load Translation from server side
+*/
+function trans(text){
+    socket.emit('translate',text,function(translatedText){
+        translated[text] = translatedText;
+    });
+}
+/*
+    Load All the localized Strings.
+*/
+(function loadLocalization(strings){
+    for(var i=0;i<strings.length;i++)
+        translated[strings[i]] = trans(strings[i]);
+})(['Hello','Thriumph: ','Is not your turn',"You should select a game.","Login","Cancel","Create",
+"Not yet implemented",'Name','State','Players','Watchers','No players on the server','Round','Team','Score',
+'Round Info','(Delegated)','Thriumpher','Contro','Contro players','Do you want to make a contro?','Accept',
+'Select Thriumph','Select']);
+
+function getValue(text,translate){
+    if(translated[text])
+        return translated[text];
+    else if(translate){
+        trans(text);
+        return;
+    }
+    else return;
+}
+
+function __(text){
+    return getValue(text);
+}
   
 socket.on('welcome', function (data) {
   	$('#login-dialog').dialog('open');
@@ -82,7 +118,7 @@ socket.on('new-round',function(){
 });
 
 socket.on('contro', function(){
-    var additionalText= 'Thriumph: '+currentThriumph;
+    var additionalText= __('Thriumph: ')+currentThriumph;
     if(controInfo.length>0)
     {
         var i = controInfo.length-1;
@@ -103,7 +139,7 @@ socket.on('end-move',function(){
 
 socket.on('notify-thriumph', function (data){
     currentThriumph=data;
-    writeMessage('Thriumph: '+data);
+    writeMessage(__('Thriumph: ')+data);
 });
 
 socket.on('round-ended',function(data){
@@ -159,7 +195,7 @@ function playCard(card,callback)
 {
     if(yourTurn===0)
     {
-        writeMessage('Is not your turn');
+        writeMessage(__('Is not your turn'));
         return;
     }
     if(currentAction)
@@ -181,7 +217,7 @@ function playCard(card,callback)
 function joinGame(){
     if(!selected && selected != 0)
     {
-        alert("You should select a game.");
+        alert(__("You should select a game."));
         return;
     }
 	socket.emit('join-game', games[selected].id,function(err,data){

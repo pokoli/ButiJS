@@ -27,7 +27,6 @@ app.configure(function(){
       __n: i18n.__n
     });
 
-
     //The static content is exposed in the /public/ directory
     app.use('/public/',express.static(pub));
     app.use(express.methodOverride());
@@ -52,7 +51,6 @@ app.get('/game', function(req,res){
 
 app.listen(8000);
 var io = socketio.listen(app, {log:false});
-
 
 //Variable for hosting the current games and players on the server
 var _games = [];
@@ -259,6 +257,10 @@ io.sockets.on('connection', function (socket) {
             processGameEvent('do-contro',data,callback);
     });
 
+    //Translation specific function
+    socket.on('translate',function(text,callback){
+        callback(__(text));
+    });
 });
 
 

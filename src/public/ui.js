@@ -74,7 +74,7 @@ $(function() {
     });
     //Game manipulation functions
     $('#join').click(joinGame);
-    $('#watch').click(function(){ alert(__i("Not yet implemented"));return;});
+    $('#watch').click(function(){ alert(__("Not yet implemented"));return;});
     $('#create').click(function(){$("#create-game-dialog").dialog('open')});
 });
 
@@ -107,16 +107,16 @@ function showGameDetails(gameData)
 {
     $('#game-details').children().remove();
     $('#game-details').append('<table>');
-    $('#game-details').append('<tr><th>Name</th><td>'+gameData.name+'</td><tr>');
-    $('#game-details').append('<tr><th>State</th><td>'+gameData.state+'</td><tr>');
-    $('#game-details').append('<tr><th colspan="2">Players</th>');
+    $('#game-details').append('<tr><th>'+__('Name')+'</th><td>'+gameData.name+'</td><tr>');
+    $('#game-details').append('<tr><th>'+__('State')+'</th><td>'+gameData.state+'</td><tr>');
+    $('#game-details').append('<tr><th colspan="2">'+__('Players')+'</th>');
     for(var i=0;i<gameData.players.length;i++)
     {
         $('#game-details').append('<tr><td colspan="2">'+gameData.players[i].name+'</td><tr>');
     }
     if(gameData.watchers.length > 0)
     {
-        $('#game-details').append('<tr><th colspan="2">Wathcers</th>');
+        $('#game-details').append('<tr><th colspan="2">'+__('Watchers')+'</th>');
         for(var i=0;i<gameData.watchers.length;i++)
         {
             $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i]+'</td><tr>');
@@ -130,7 +130,7 @@ function showGameDetails(gameData)
 */
 function drawGameData(data){
 		$('#game-list').children().remove();
-		$('#game-list').append('<thead><tr><th>Name</th><th>State</th><th>Players</th><th>Watchers</th></thead>')
+		$('#game-list').append('<thead><tr><th>'+__('Name')+'</th><th>'+__('State')+'</th><th>'+__('Players')+'</th><th>'+__('Watchers')+'</th></thead>')
 		if(!data || data===[] || data.length ===0)
 		{
 		    games=[];
@@ -163,7 +163,7 @@ function drawPlayersList(data){
 		$('#player-list').children().remove();
 		if(!data || data===[] || data.length ===0)
 		{
-			$('#player-list').append('<li>No players on the server</li>');
+			$('#player-list').append('<li>'+__('No players on the server')+'</li>');
 			return;
 		}
 		for(var i=0;i<data.length;i++)
@@ -205,13 +205,13 @@ function updateGameInfo(gameData)
     var sHTML = '';
 
     sHTML += '<table>';
-    sHTML += '<tr><th>Name</th><td>'+gameData.name+'</td></tr>';
-    sHTML += '<tr><th>Round</th><td>'+gameData.round+'</td></tr>';
+    sHTML += '<tr><th>'+__('Name')+'</th><td>'+gameData.name+'</td></tr>';
+    sHTML += '<tr><th>'+__('Round')+'</th><td>'+gameData.round+'</td></tr>';
     sHTML += '</table>';
     if(gameData.teams && gameData.teams[1])
     {
         sHTML += '<table>';
-        sHTML += '<tr><th>Team 1</th><th>Team 2</th></tr>';
+        sHTML += '<tr><th>'+__('Team')+' 1</th><th>'+__('Team')+' 2</th></tr>';
         for(var i=0;i<gameData.teams[1].length;i++)
         {
             sHTML += '<tr><td>'+gameData.teams[1][i].name+'</td><td>'+gameData.teams[2][i].name+'</td></tr>';
@@ -221,29 +221,29 @@ function updateGameInfo(gameData)
     if(gameData.score && gameData.score[1])
     {
         sHTML += '<table>';
-        sHTML += '<tr><th>Score</th></tr>';
-        sHTML += '<tr><td>Team 1</td><td>'+gameData.score[1]+'</td></tr>';
-        sHTML += '<tr><td>Team 2</td><td>'+gameData.score[2]+'</td></tr>';
+        sHTML += '<tr><th>'+__('Score')+'</th></tr>';
+        sHTML += '<tr><td>'+__('Team')+' 1</td><td>'+gameData.score[1]+'</td></tr>';
+        sHTML += '<tr><td>'+__('Team')+' 2</td><td>'+gameData.score[2]+'</td></tr>';
         sHTML += '</table>';
     }
     if(gameData.playedRounds && gameData.playedRounds[gameData.round-1])
     {
         var round = gameData.playedRounds[gameData.round-1];
         sHTML += '<table>';
-        sHTML += '<tr><th>Round Info</th></tr>';
+        sHTML += '<tr><th>'+__('Round Info')+'</th></tr>';
         if(round.thriumph)
         {
-            sHTML += '<tr><td>Thriumph:</td><td>'+round.thriumph;
-            if(round.delegated) sHTML += ' (Delegated)';
+            sHTML += '<tr><td>'+__('Thriumph: ')+'</td><td>'+round.thriumph;
+            if(round.delegated) sHTML += ' '+__('(Delegated)');
             sHTML += '</td></tr>';
         }
         if(round.thriumpher)
-            sHTML += '<tr><td>Thriumpher:</td><td>'+round.thriumpher.name+'</td></tr>';
+            sHTML += '<tr><td>'+__('Thriumpher')+':</td><td>'+round.thriumpher.name+'</td></tr>';
         if(round.multiplier>1)
-            sHTML += '<tr><td>Contro:</td><td> x'+round.multiplier+'</td></tr>';
+            sHTML += '<tr><td>'+__('Contro')+':</td><td> x'+round.multiplier+'</td></tr>';
         if(round.controPlayers.length>0)
         {
-            sHTML += '<tr><td>Contro players</td></tr>';
+            sHTML += '<tr><td>'+__('Contro players')+'</td></tr>';
             for(var i=0;i<round.controPlayers.length;i++)
                 sHTML += '<tr><td>'+round.controPlayers[i].name+' (x'+(i+1)*2+')</td></tr>';
         }
@@ -523,9 +523,9 @@ function showControDialog(selections,additionalText,callback)
     //Create the div
     if($('#show-contro-dialog').length===0)
     {
-        var oDiv = '<div id="show-contro-dialog" title="Do you want to make a contro?"><form><fieldset>';
+        var oDiv = '<div id="show-contro-dialog" title="'+__('Do you want to make a contro?')+'"><form><fieldset>';
         oDiv += '<p id="show-contro-text">'+text+'</p>';
-        oDiv += '<label  for="contro"> Do you want to make a contro? </label></br>';
+        oDiv += '<label  for="contro"> '+__('Do you want to make a contro?')+' </label></br>';
         oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="true">Yes';
         oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="false">No';
         oDiv += '</fieldset></form></div>';
@@ -567,8 +567,8 @@ function showThriumphDialog(selections,callback)
     //Create the div
     if($('#show-thriumph-dialog').length===0)
     {
-        var oDiv = '<div id="show-thriumph-dialog" title="Select Thriumph"><form><fieldset>';
-        oDiv += '<label for="thriumph">Select Thriumph</label>';
+        var oDiv = '<div id="show-thriumph-dialog" title="'+__('Select Thriumph')+'"><form><fieldset>';
+        oDiv += '<label for="thriumph">'+__('Select Thriumph')+'</label>';
         oDiv += '<select id="thriumph-selector" name="thriumph-selector">';
         for(var i=0;i<selections.length;i++)
         {
