@@ -46,5 +46,6 @@
 	"Card must be from initial suit": "Has de jugar una carta del pal inicial",
 	"Player ": "El jugador ",
 	" has Contred": " contra",
-	" has Recontred": " recontra"
+	" has Recontred": " recontra",
+	"Make thriumph is allowed once per round": "Només es pot elegir trumfo una vegada per ronda"
 }
