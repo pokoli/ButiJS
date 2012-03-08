@@ -526,8 +526,8 @@ function showControDialog(selections,additionalText,callback)
         var oDiv = '<div id="show-contro-dialog" title="'+__('Do you want to make a contro?')+'"><form><fieldset>';
         oDiv += '<p id="show-contro-text">'+text+'</p>';
         oDiv += '<label  for="contro"> '+__('Do you want to make a contro?')+' </label></br>';
-        oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="true">Yes';
-        oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="false">No';
+        oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="true">'+__('Yes');
+        oDiv += '<input type="radio" id="contro-selector" name="thriumph-selector" value="false">'+__('No');
         oDiv += '</fieldset></form></div>';
         $(oDiv).appendTo($('#container'));
         $('#show-contro-dialog').dialog({
@@ -551,8 +551,8 @@ function showControDialog(selections,additionalText,callback)
 function showControDone(controInfo){
     //Close the controDialog
     $('#show-contro-dialog').dialog('close');
-    var text= 'Player '+controInfo.player.name+' has ';
-    text += (controInfo.value===2) ? 'Contred' : 'Recontred';
+    var text= __('Player ')+controInfo.player.name;
+    text += (controInfo.value===2) ? __(' has Contred') : __(' has Recontred');
     writeMessage(text);
 }
 

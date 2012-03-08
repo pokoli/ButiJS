@@ -36,5 +36,15 @@
 	"Do you want to make a contro?": "Vols contrar?",
 	"Accept": "Acceptar",
 	"Select Thriumph": "Selecciona trumfo",
-	"Select": "Seleccionar"
+	"Select": "Seleccionar",
+	"We": "Nosaltres",
+	"They": "Vosaltres",
+	"Is your turn": "És el teu torn",
+	"Yes": "Si",
+	"No": "No",
+	"You can not play a card you don't have in the stack": "No pots jugar una carta que no tens a la mà ",
+	"Card must be from initial suit": "Has de jugar una carta del pal inicial",
+	"Player ": "El jugador ",
+	" has Contred": " contra",
+	" has Recontred": " recontra"
 }

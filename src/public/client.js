@@ -20,7 +20,7 @@ function trans(text){
 })(['Hello','Thriumph: ','Is not your turn',"You should select a game.","Login","Cancel","Create",
 "Not yet implemented",'Name','State','Players','Watchers','No players on the server','Round','Team','Score',
 'Round Info','(Delegated)','Thriumpher','Contro','Contro players','Do you want to make a contro?','Accept',
-'Select Thriumph','Select']);
+'Select Thriumph','Select','Is your turn','Yes','No','Player ',' has Contred',' has Recontred']);
 
 function getValue(text,translate){
     if(translated[text])
@@ -101,7 +101,7 @@ socket.on('card-played',placePlayedCard);
 
 function onPlayCard(){
     yourTurn++;
-    writeMessage('Is your turn');
+    writeMessage(__('Is your turn'));
 }
 socket.on('play-card',onPlayCard);
 
@@ -122,8 +122,8 @@ socket.on('contro', function(){
     if(controInfo.length>0)
     {
         var i = controInfo.length-1;
-        additionalText += '<br> Player '+controInfo[i].player.name+' has ';
-        additionalText += (controInfo[i].value===2) ? 'Contred' : 'Recontred';
+        additionalText += '<br>'+__('Player ')+controInfo[i].player.name;
+        additionalText += (controInfo[i].value===2) ? __(' has Contred') : __(' has Recontred');
     }
     showControDialog(currentThriumph,additionalText,doContro);
 });
