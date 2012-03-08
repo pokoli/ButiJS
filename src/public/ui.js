@@ -507,12 +507,25 @@ function placePlayedCard(data)
     cardsLayer.add(cardImage);
     mainStage.add(cardsLayer);
 }
+/*
+    Add a listener to the game for clearing the playedCards on clicking the 
+    If the 
+
+*/
+
+function enableClearPlayedCards(){
+    $('#game').bind('click',clearPlayedCards);
+    setTimeout(clearPlayedCards,3000);
+}
 
 /*
     Clears all the played cards.
 */
 function clearPlayedCards()
 {
+    //Remove the listener
+    $('#game').unbind('click',clearPlayedCards);
+    //Clear the cards
     mainStage.getChild('cardsPlayedLayer').children=[];
     mainStage.getChild('cardsPlayedLayer').draw();
 }

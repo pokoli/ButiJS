@@ -139,7 +139,7 @@ socket.on('contro-done',function(data){
 });
 
 socket.on('end-move',function(){
-    clearPlayedCards();
+    enableClearPlayedCards();
 });
 
 socket.on('notify-thriumph', function (data){
