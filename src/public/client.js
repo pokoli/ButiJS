@@ -58,6 +58,8 @@ socket.on('message', function(data){
 
 //Holds the player id.
 var playerid;
+//Holds the player team.
+var playerTeam;
 //Holds info about the current game.
 var currentGame;
 //Holds the info of the current round.
@@ -75,6 +77,14 @@ var controInfo=[];
     Fired when a game we are playing is started
 */
 socket.on('start', function(gameData){
+    for(var i=0;i<gameData.players.length;i++)
+    {
+        if(gameData.players[i].id===playerid)
+        {
+            playerTeam=gameData.players[i].team 
+            break;
+        }
+    }
     currentGame=gameData;
     addNewGame(gameData);
     updateGameInfo(gameData);
@@ -112,11 +122,6 @@ socket.on('select-thriumph', function(data){
     }
 });
 
-socket.on('new-round',function(){
-    currentThriumph=undefined;
-    controInfo=[];
-});
-
 socket.on('contro', function(){
     var additionalText= __('Thriumph: ')+currentThriumph;
     if(controInfo.length>0)
@@ -143,6 +148,9 @@ socket.on('notify-thriumph', function (data){
 });
 
 socket.on('round-ended',function(data){
+    currentThriumph=undefined;
+    controInfo=[];
+    updateRoundScores(data['round-score']);
     writeMessage('Round Ended. Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
 });
 
