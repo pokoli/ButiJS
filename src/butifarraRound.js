@@ -1,5 +1,6 @@
 var util = require('util'),
-    event = require('events');
+    event = require('events'),
+    i18n = require('i18n');
 
 
 var ButifarraGame = require('./butifarraGame'),
@@ -255,7 +256,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     
     this.makeThriumph = function(choise,callback){
         if(this.thriumph) {
-            callback && callback('Make thriumph is allowed once per round');
+            callback && callback(i18n.__('Make thriumph is allowed once per round'));
             return;
         }
         if(choise==='Delegar')
@@ -275,8 +276,12 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         }
         else
         {
+            //If the round is delegated notify it to the clients
+            var notifyData = choise;
+            if(this.delegated)
+                notifyData += ' '+i18n.__('(Delegated)');
             //Notify all the players with the selected option
-            this.emit('notifyAll','notify-thriumph',choise);
+            this.emit('notifyAll','notify-thriumph',notifyData);
             //Notify the player who has the option to contro
             this.emit('notify-contro');
             this.thriumph=choise;
