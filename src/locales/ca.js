@@ -47,5 +47,6 @@
 	"Player ": "El jugador ",
 	" has Contred": " contra",
 	" has Recontred": " recontra",
-	"Make thriumph is allowed once per round": "Només es pot elegir trumfo una vegada per ronda"
+	"Make thriumph is allowed once per round": "Només es pot elegir trumfo una vegada per ronda",
+	"Card must be from thriumph suit": "Has de jugar una carta de trumfo"
 }
