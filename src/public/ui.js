@@ -478,11 +478,21 @@ function placeCards(cards)
     mainStage.draw();
 }
 
+//Boolean for marking if we have to wait to the last round cards are played.
+var waitingClear=false;
+
 /*
     Places the player cards in the correct place.
 */
 function placePlayedCard(data)
 {
+    console && console.log(waitingClear);
+    //If we are waiting to clear the playedCards call the function later and return
+    if(waitingClear)
+    {
+        setTimeout(function(){placePlayedCard(data);},300);
+        return;
+    }   
     var player = data.player;
     var card = data.card;
     var holder = mainStage.getChild('holdersLayer').getChild('played'+player.id);
@@ -508,12 +518,11 @@ function placePlayedCard(data)
     mainStage.add(cardsLayer);
 }
 /*
-    Add a listener to the game for clearing the playedCards on clicking the 
-    If the 
-
+    Add a listener to the game for clearing the playedCards on clicking the game zone
+    Autoclear the played cards after 3 secons
 */
-
 function enableClearPlayedCards(){
+    waitingClear=true;
     $('#game').bind('click',clearPlayedCards);
     setTimeout(clearPlayedCards,3000);
 }
@@ -523,6 +532,8 @@ function enableClearPlayedCards(){
 */
 function clearPlayedCards()
 {
+    if(!waitingClear) return;
+    waitingClear=false;
     //Remove the listener
     $('#game').unbind('click',clearPlayedCards);
     //Clear the cards
