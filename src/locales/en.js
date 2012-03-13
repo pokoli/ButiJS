@@ -15,5 +15,7 @@
 	"Game %s does not exist": "Game %s does not exist",
 	"No current game running": "No current game running",
 	" %s left the server": " %s left the server",
-	"%s joined the server": "%s joined the server"
+	"%s joined the server": "%s joined the server",
+	"(Delegated)": "(Delegated)",
+	"Make thriumph is allowed once per round": "Make thriumph is allowed once per round"
 }
