@@ -299,7 +299,7 @@ module.exports = {
 
 	    function thriumphed(choise)
 	    {
-            choise.should.eql('Copes');
+            choise.should.eql('Copes (Delegated)');
             thriumphs--;
             if(thriumphs===0) end();
 	    }
