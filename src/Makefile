@@ -10,4 +10,4 @@ test-cov: lib-cov
 	@COVERAGE=1 $(MAKE) test REPORTER=html-cov > coverage.html
 lib-cov:
 	rm -Rf ../src-cov
-	@jscoverage ./ ../src-cov	
+	@jscoverage ./ ../src-cov --exclude=./locales/
