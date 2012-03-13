@@ -486,7 +486,6 @@ var waitingClear=false;
 */
 function placePlayedCard(data)
 {
-    console && console.log(waitingClear);
     //If we are waiting to clear the playedCards call the function later and return
     if(waitingClear)
     {
@@ -582,7 +581,6 @@ function showControDone(controInfo){
 
 function updateRoundScores(roundPoints)
 {
-    debugger;
     var otherTeam = playerTeam === 1 ? 2 : 1;
     var sHTML = '<tr>'
     if(roundPoints[playerTeam]>36)
