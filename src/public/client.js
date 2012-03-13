@@ -104,7 +104,7 @@ socket.on('updated-game',function(gameData){
 });
 
 socket.on('cards', function(data){
-   placeCards(sortCards(data));
+    placeCards(sortCards(data));
 });
 
 socket.on('card-played',placePlayedCard);

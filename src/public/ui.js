@@ -440,10 +440,12 @@ function placeCards(cards)
         setTimeout(function(){placeCards(cards)},100);
         return;
     }
-    var cardsLayer = mainStage.getChild('cardsLayer');
-    if(cardsLayer)
-        mainStage.remove(cardsLayer);
+    var cardsLayer = mainStage.getChild('cardsLayer') || new Kinetic.Layer('cardsLayer');
+    if(cardsLayer.children.length === 12 && cards.length === 0)
+        return;
     
+    if(mainStage.getChild('cardsLayer'))
+        mainStage.remove(cardsLayer);
     cardsLayer= new Kinetic.Layer('cardsLayer');
     
     for(var i=0;i<cards.length;i++)
