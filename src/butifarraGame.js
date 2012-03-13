@@ -141,6 +141,10 @@ var ButifarraGame = function(name) {
         for(var i=0;i<this.players.length;i++)
             this.players[i].cards=[];
 
+        //If the round result must be multiplied by the round multiplier.
+        if(result)
+            result = result * roundData.multiplier
+
         var gameEnded=false;
         if(winnerTeam)
         {
