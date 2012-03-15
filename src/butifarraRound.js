@@ -35,10 +35,6 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     var _players = teams[1].concat(teams[2]);
     //Internally hold the players cards
     var _playersCards = {};
-    //Function to call at the end of the round.
-    var _callback;
-    //Hols the first player to take action
-    var _firstPlayer = firstPlayer;
 
     /*
         Starts a new round. Has the following responsabilities: 
