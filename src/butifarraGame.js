@@ -168,6 +168,7 @@ var ButifarraGame = function(name) {
         var data = {
             'round-score' : roundScores,
             'total-score' : this.score,
+            'multiplier' : roundData.multiplier
         };
 
         this.notifyAll('round-ended',data);

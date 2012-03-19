@@ -581,24 +581,24 @@ function showControDone(controInfo){
     writeMessage(text);
 }
 
-function updateRoundScores(roundPoints)
+function updateRoundScores(roundPoints,multiplier)
 {
     var otherTeam = playerTeam === 1 ? 2 : 1;
     var sHTML = '<tr>'
     if(roundPoints[playerTeam]>36)
     {
-        sHTML+= '<td>'+roundPoints[playerTeam]-36+'</td><td></td>';
+        sHTML+= '<td>'+((roundPoints[playerTeam]-36)*multiplier)+'</td><td></td>';
     }
     else if(roundPoints[otherTeam]>36)
     {
-        sHTML+= '<td></td><td>'+roundPoints[otherTeam]-36+'</td>';
+        sHTML+= '<td></td><td>'+((roundPoints[otherTeam]-36)*multiplier)+'</td>';
     }
     else
     {
         sHTML+= '<td>----------<td><td>----------</td>';
     }
     sHTML += '</tr>';
-    $('#scores > table').append(sHTML);
+    $('#score > table').append(sHTML);
 }
 
 function showThriumphDialog(selections,callback)

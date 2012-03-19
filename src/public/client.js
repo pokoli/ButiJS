@@ -150,7 +150,7 @@ socket.on('notify-thriumph', function (data){
 socket.on('round-ended',function(data){
     currentThriumph=undefined;
     controInfo=[];
-    updateRoundScores(data['round-score']);
+    updateRoundScores(data['round-score'],data['multiplier']);
     writeMessage('Round Ended. Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
 });
 
