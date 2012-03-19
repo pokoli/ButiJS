@@ -151,7 +151,7 @@ socket.on('round-ended',function(data){
     currentThriumph=undefined;
     controInfo=[];
     updateRoundScores(data['round-score'],data['multiplier']);
-    writeMessage('Round Ended. Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
+    writeMessageDialog('Round Ended.<br> Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
 });
 
 socket.on('game-ended',function(data){

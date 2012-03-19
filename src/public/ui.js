@@ -295,6 +295,28 @@ var mainStage;
 */
 var ids = [];
 
+
+/*
+    Writes a message to a Layer.
+    @params:
+        - message: The message to write.
+        - x: The X offset where we have to write the message
+        - y: The Y offset where we have to write the message
+*/
+function writeMessageDialog(message, x,y){
+    debugger;
+    if($('#message-dialog').length==0)
+    {
+        var odiv = '<div id="message-dialog" title="Info">';
+        odiv += '<p id="message-dialog-text"></p>';
+        odiv += '</div>';
+        $(odiv).appendTo($('#game'));
+        $('#message-dialog').dialog({ autoOpen: false,height: 240,width: 350});
+	}
+	$('#message-dialog-text').html(message);
+    $('#message-dialog').dialog('open');
+}
+
 /*
     Writes a message to a Layer.
     @params:
