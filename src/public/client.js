@@ -154,6 +154,11 @@ socket.on('round-ended',function(data){
     writeMessage('Round Ended. Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
 });
 
+socket.on('game-ended',function(data){
+    writeMessage('Game Ended. Team '+data['winnerTeam']+' has winned');
+    //TODO: On the GUI show all the game details and get an option to the player for clossing the game.
+});
+
 /*Called onLoad of the html. Loads all the data needed:
 	1. Refresh games-list (every 5 seconds)
 	2. Refresh player-list (every 5 seconds)
