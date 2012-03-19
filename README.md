@@ -120,6 +120,16 @@ Fired when the player has the posibilty of make a contro.
 
 Fired when the another player has countred the game.
 
+#### round-ended
+
+Fired when the round is ended. It contains all the round info.
+
+#### game-ended
+
+Fired when the game is ended. It contains all the game info.
+
+
+
 
 
 ##License
