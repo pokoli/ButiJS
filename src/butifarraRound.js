@@ -13,13 +13,16 @@ var ButifarraGame = require('./butifarraGame'),
 /*
     Holds all the related stuff with a butifarra Round. 
 */
-var ButifarraRound = function(teams,thriumpher,firstPlayer) {
+var ButifarraRound = function(players,thriumpher,firstPlayer,firstThriumpher) {
     this.moves = [];
     
     this.thriumph;
     this.thriumpher=thriumpher;
     this.delegated=false;
-    this.teams = teams;
+    this.teams = { 1: [] , 2 : []};
+    for(var i=0;i<players.length;i++){
+        this.teams[players[i].team].push(players[i]);
+    }
     this.winnedCards = {1: [], 2: []};
     this.multiplier=1;
     //Holds the number of do-contro events pending.
@@ -32,7 +35,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
     var _lastPlayed=-1;
 
     //Internally hold the order of the players
-    var _players = teams[1].concat(teams[2]);
+    var _players = players;
     //Internally hold the players cards
     var _playersCards = {};
 
@@ -44,10 +47,10 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
         4. Deliver cards to players
         5. Notify the player to make thriumph
     */
-    this.start = function(){
+    this.start = function(roundNumber){
         var stack = Stack.create();
         this.multiplier=1;
-        _players=ButifarraGame.orderPlayers(_players,this.teams, this.thriumpher);
+        _players=ButifarraGame.orderPlayers(players,this.teams, this.thriumpher,roundNumber);
         /*
             Deliver cards to the players.
             We start for index 1 because is the player in the right of the thriumber
@@ -318,7 +321,7 @@ var ButifarraRound = function(teams,thriumpher,firstPlayer) {
 util.inherits(ButifarraRound, event.EventEmitter);
 
 
-module.exports.create = function(teams,triumpher,firstPlayer) {
-    return new ButifarraRound(teams,triumpher,firstPlayer);
+module.exports.create = function(teams,triumpher,firstPlayer,firstThriumpher) {
+    return new ButifarraRound(teams,triumpher,firstPlayer,firstThriumpher);
 };
 

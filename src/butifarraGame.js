@@ -9,21 +9,32 @@ var Game = require('./game'),
     Put the players in the correct other to the game flow. 
     @returns and array of players.
 */
-function orderPlayers(players,teams,firstPlayer)
+function orderPlayers(players,teams,firstPlayer,round)
 {
-    //If firstplayer not especified would be the first on the array;
-    firstPlayer = firstPlayer || players[0];
     var temp = new Array();
-    var teamFirst = firstPlayer.team;
-    var otherTeam= teamFirst === 1 ? 2 : 1;
-    var firstPos= teams[teamFirst].indexOf(firstPlayer);
-    temp.push(firstPlayer); //First the thriumber
-    temp.push(teams[otherTeam][firstPos]); //The other player in the other team. 
-    firstPos++; //Increment the position to get the other two players. 
-    firstPos=firstPos %2;
-    temp.push(teams[teamFirst][firstPos]);
-    temp.push(teams[otherTeam][firstPos]);
-    
+    if( !round || (round && round === 1) )
+    {
+        //If firstplayer not especified would be the first on the array;
+        firstPlayer = firstPlayer || players[0];
+        var teamFirst = firstPlayer.team;
+        var otherTeam= teamFirst === 1 ? 2 : 1;
+        var firstPos= teams[teamFirst].indexOf(firstPlayer);
+        temp.push(firstPlayer); //First the thriumber
+        temp.push(teams[otherTeam][firstPos]); //The other player in the other team. 
+        firstPos++; //Increment the position to get the other two players.
+        firstPos=firstPos %2;
+        temp.push(teams[teamFirst][firstPos]);
+        temp.push(teams[otherTeam][firstPos]);
+    }
+    else
+    {
+        temp=players;
+        //We have to slice the players for each round we have played.
+        for(var i=1;i<round;i++)
+        {
+            temp.push(temp.splice(0,1)[0]);
+        }
+    }
     return temp;
 }    
     
@@ -38,8 +49,9 @@ var ButifarraGame = function(name) {
     //Holds the rounds played in the past;
     this.playedRounds=[];
 
-    //Holds the last player to choose Thriumph
+    //Holds the last and the first player to choose Thriumph
     var _thriumpher;
+    var _firstThriumpher;
 
     /*
         Asigns a player to a team.
@@ -78,6 +90,7 @@ var ButifarraGame = function(name) {
             {
                 player.cards=[];
             }
+
         });
         this.teams[1] = teamA;
         this.teams[2] = teamB;
@@ -119,6 +132,7 @@ var ButifarraGame = function(name) {
     }
 
     this.roundEnded = function(roundData){
+        console.log('Game round ended');
         //Move the thriumpher pointer to the next player.
         _thriumpher = (_thriumpher+1)%4;
         this.playedRounds[this.round-1]=roundData; //Refresh the round data.
@@ -178,13 +192,14 @@ var ButifarraGame = function(name) {
         2. Start a new round
     */
     this.startNewRound = function(){
+        console.log('Starting new round');
         this.round++;
         var idFristplayer = _thriumpher+1;
         idFristplayer = idFristplayer % 4;
-        var currentRound = Round.create(this.teams,this.players[_thriumpher],this.players[idFristplayer]);
+        var currentRound = Round.create(this.players,this.players[_thriumpher],this.players[idFristplayer],_firstThriumpher);
         if(this.test)
             currentRound.test=true;
-        currentRound.start();
+        currentRound.start(this.round);
 
         var game=this; //Save the object to call it latter.
         currentRound.on('round-ended',function(roundData){
@@ -266,6 +281,7 @@ var ButifarraGame = function(name) {
         this.players=orderPlayers(players,this.teams,thriumpher);
         //After ordering the players the thriumpher is the first!!!
         _thriumpher=0;
+        _firstThriumpher=this.players[0];
         this.startNewRound();
         this.notifyAll('start',this);
     }
