@@ -17,5 +17,6 @@
 	" %s left the server": " %s left the server",
 	"%s joined the server": "%s joined the server",
 	"(Delegated)": "(Delegated)",
-	"Make thriumph is allowed once per round": "Make thriumph is allowed once per round"
+	"Make thriumph is allowed once per round": "Make thriumph is allowed once per round",
+	"Hello": "Hello"
 }

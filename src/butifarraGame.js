@@ -137,17 +137,12 @@ var ButifarraGame = function(name) {
         this.playedRounds[this.round-1]=roundData; //Refresh the round data.
         var roundScores=roundData.getScores();
         var winnerTeam,result;
-        var tie=false;
         for(var team=1;team<=2;team++)
         {
             if(roundScores[team]>36) //We only compute the points above 36 (half of the stack)
             {
                 winnerTeam=team;
                 result=roundScores[team]-36;
-            }
-            else if (roundScores[team]===36) //Tie round
-            {
-                tie=true;
             }
         }
         //Remove the cards from the current players.
@@ -270,7 +265,7 @@ var ButifarraGame = function(name) {
     4. Start the first round.
     */
     this.start = function(){
-        super_start.call(this,false);
+        super_start.call(this);
         this.assignTeams();
         var players = this.teams[1].concat(this.teams[2]);
         var thriumpher;

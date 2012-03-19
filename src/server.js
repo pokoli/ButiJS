@@ -99,7 +99,6 @@ io.sockets.on('connection', function (socket) {
             if(_games[i].id ===  _currentGameId)
                 return _games[i];
         }
-        return;
     }
     
     /*
@@ -226,7 +225,7 @@ io.sockets.on('connection', function (socket) {
   	
   	socket.on('disconnect', function(){
   	    var player = getCurrentPlayer();
-  	    
+
   	    if(player)
   	    {
       		_games.forEach(function(game,idx){

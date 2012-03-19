@@ -180,11 +180,16 @@ module.exports = {
 	    {
             endCalled--;
 	        if(endCalled===0){
-        	    //Remove the listeners from this test
-    	        removeListeners('select-thriumph');
-    	        removeListeners('start');
-    	        removeListeners('cards');
-	            done();
+	            socket.emit('list-games',undefined,function(data){
+	                //Test if the game is running on the server side
+	                data.length.should.eql(2);
+	                data[1].players.length.should.eql(4);
+            	    //Remove the listeners from this test
+        	        removeListeners('select-thriumph');
+        	        removeListeners('start');
+        	        removeListeners('cards');
+	                done();
+	            });
 	        } 
 	    }
 
@@ -400,36 +405,49 @@ module.exports = {
     	game = Game.create('New Game');
 		socket.emit('create-game',game,joinGame);
     },
+    "Server must be able to translate strings" : function(done){
+        socket.emit('translate','Hello',function(data){
+            data.should.eql('Hello');
+            done();
+        });
+    },
 	"When a player disconnects the server removes it's reference " : function(done){
         finish(done);
 		//TODO: Improve, not working very well.
+//        socketE = client.connect('http://localhost', {port : 8000,'force new connection': true, 'reconnect': false});
+//        socketF = client.connect('http://localhost', {port : 8000,'force new connection': true, 'reconnect': false});
+//        socketG = client.connect('http://localhost', {port : 8000,'force new connection': true, 'reconnect': false});
+
 //		var disconnects=3;
 
 //		function disconnected(){
+//		    console.log('Disconnected');
 //		    disconnects--;
 //		    if(disconnects===0) test();
 //		}
 
-		//function test()
-		//{
-		//	socket.emit('list-players',null,function(data){
-		//	    data.should.be.an.instanceof(Array);
-		//	    data.length.should.eql(1);
-		//	    var names = ['Peach'].sort();
-        //        var sorted = [];
-         //       for(var i=0;i<data.length;i++)
-        //            sorted.push(data[i].name);
-        //        sorted = sorted.sort();
-         //       sorted.should.eql(names);
-		 //       finish(done);
-		 //   });
-		    
-		//}
-		
-		//socketD.disconnect(disconnected);
-		//socketC.disconnect(disconnected);
-		//socketB.disconnect(disconnected);
+//		function test()
+//		{
+//			socket.emit('list-players',null,function(data){
+//			    data.should.be.an.instanceof(Array);
+//			    data.length.should.eql(4);
+//			    var names = ['Peach'].sort();
+//                var sorted = [];
+//                for(var i=0;i<data.length;i++)
+//                    sorted.push(data[i].name);
+//                sorted = sorted.sort();
+//               sorted.should.eql(names);
+//		        finish(done);
+//		    }); 
+//		}
 
+//		socketE.on('disconnect',disconnected);
+//		socketF.on('disconnect',disconnected);
+//		socketG.on('disconnect',disconnected);
+
+//		socketE.disconnect();
+//		socketF.disconnect();
+//		socketG.disconnect();
 	}
 };
 

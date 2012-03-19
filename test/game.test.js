@@ -86,5 +86,6 @@ module.exports = {
 		game.addWatcher(watcher);
         game.numberOfWatchers().should.eql(1);
         game.numberOfPlayers().should.eql(0);
+        game.notifyAll('test');
 	}
 };
