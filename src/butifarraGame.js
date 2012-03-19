@@ -249,7 +249,8 @@ var ButifarraGame = function(name) {
                 }
             });
         }
-        //this.emit('updated',this);
+        //Notify all that the round has updated -> The client must refresh the scores.
+        this.notifyAll('updated-game',this);
     }
     this.on('start-new-round',this.startNewRound);
     
