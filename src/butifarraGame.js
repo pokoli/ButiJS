@@ -132,7 +132,6 @@ var ButifarraGame = function(name) {
     }
 
     this.roundEnded = function(roundData){
-        console.log('Game round ended');
         //Move the thriumpher pointer to the next player.
         _thriumpher = (_thriumpher+1)%4;
         this.playedRounds[this.round-1]=roundData; //Refresh the round data.
@@ -192,7 +191,6 @@ var ButifarraGame = function(name) {
         2. Start a new round
     */
     this.startNewRound = function(){
-        console.log('Starting new round');
         this.round++;
         var idFristplayer = _thriumpher+1;
         idFristplayer = idFristplayer % 4;
