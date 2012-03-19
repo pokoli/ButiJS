@@ -487,6 +487,118 @@ module.exports = {
         //Make the first move
         jugades[0]();
     },
+    "When a team gets more than 100 points the game is ended" : function(done){
+        var game = Game.create('Test Game');
+        game.test=true;
+        var one = Player.create('1');
+        var two = Player.create('2');
+        var three = Player.create('3');
+        var four = Player.create('4');
+        one.id=1;
+        one.team=1;
+        one.cards=[
+            Card.create(1,'Oros'),Card.create(6,'Oros'),Card.create(5,'Oros'),Card.create(2,'Oros'),
+            Card.create(1,'Copes'),Card.create(4,'Copes'),Card.create(2,'Copes'),Card.create(7,'Espases'),
+            Card.create(5,'Espases'),Card.create(2,'Espases'),Card.create(11,'Bastos'),Card.create(10,'Bastos'),
+        ];
+        two.id=2;
+        two.team=1;
+        two.cards=[
+            Card.create(10,'Oros'),Card.create(3,'Oros'),Card.create(9,'Copes'),Card.create(12,'Copes'),
+            Card.create(7,'Copes'),Card.create(5,'Copes'),Card.create(9,'Espases'),Card.create(8,'Espases'),
+            Card.create(6,'Espases'),Card.create(3,'Espases'),Card.create(9,'Bastos'),Card.create(1,'Bastos'),
+        ];
+        three.id=3;
+        three.team=2;
+        three.cards=[
+            Card.create(9,'Oros'),Card.create(8,'Oros'),Card.create(10,'Copes'),Card.create(1,'Espases'),
+            Card.create(12,'Espases'),Card.create(11,'Espases'),Card.create(4,'Espases'),Card.create(8,'Bastos'),
+            Card.create(7,'Bastos'),Card.create(6,'Bastos'),Card.create(3,'Bastos'),Card.create(2,'Bastos'),
+        ];
+        four.id=4;
+        four.team=2;
+        four.cards=[
+            Card.create(12,'Oros'),Card.create(11,'Oros'),Card.create(7,'Oros'),Card.create(4,'Oros'),
+            Card.create(11,'Copes'),Card.create(8,'Copes'),Card.create(6,'Copes'),Card.create(3,'Copes'),
+            Card.create(10,'Espases'),Card.create(12,'Bastos'),Card.create(5,'Bastos'),Card.create(4,'Bastos'),
+        ];
+        game.firstToTriumph=four;
+
+        one.join(game);
+        two.join(game);
+        four.join(game);
+        three.join(game);
+
+        game.start();
+
+        game.state.should.eql('running');
+        game.teams[1].should.eql([one,two]);
+        game.teams[2].should.eql([four,three]);
+
+        var tmp=[];
+        for(var i=0;i<game.players.length;i++)
+            tmp.push(game.players[i].name);
+        tmp.should.eql(['4','1','3','2']);
+
+        //Increase all the teams score to 99 to be able to get the game finished.
+        game.score[1]=99;
+        game.score[2]=99;
+
+        //Triumpher = four -> Delegar
+        game.emit('chosen-thriumph','Delegar',testNoError);
+        //Triumpher = three -> Bastos
+        game.emit('chosen-thriumph','Bastos',testNoError);
+        game.playedRounds[game.round-1].thriumph.should.eql('Bastos');
+        game.playedRounds[game.round-1].delegated.should.eql(true);
+        // two no contra.
+        game.emit('do-contro',{value: false, player: two},testNoError);
+        // one contra
+        game.emit('do-contro',{value: true, player: one},testNoError);
+        // four no  recontra.
+        game.emit('do-contro',{value: false, player: four},testNoError);
+        // three recontra
+        game.emit('do-contro',{value: true, player: three},testNoError);
+        game.playedRounds[game.round-1].multiplier.should.eql(4);
+
+        var jugades = [];
+        var winners = [];
+        var points = [];
+
+        var tmp = addRoundMovements(jugades,winners,points,[one,two,three,four],game);
+        jugades = tmp[0];
+        winners = tmp[1];
+        points = tmp[2];
+
+        //Final de la ronda.
+        //Resultat parcial de la ronda:
+        //   - Equip 1: 32 punts
+        //   - Equip 2: 40 punts
+        //   - S'augmenten 4 punts al marcador de l'equip 2.
+        game.playedRounds[game.round-1].on('round-ended',function(data){
+            data.multiplier.should.eql(4);
+            var roundScores = data.getScores();
+            roundScores[1].should.eql(32);
+            roundScores[2].should.eql(40);
+            game.score[1].should.eql(99);
+            game.score[2].should.eql(115);
+
+        });
+
+        game.on('game-ended',function(gameData){
+            gameData.state.should.eql('ended');
+            gameData.winnerTeam.should.eql(2);
+            done();
+        });
+        //Comensa una nova ronda.
+        //FIN
+        jugades.length.should.eql(winners.length);
+        winners.length.should.eql(points.length);
+
+        addMoveEndedListener(game,jugades,winners,points);
+
+        //Make the first move
+        jugades[0]();
+    }
     //TODO: Is not working because it gets an not valid movement inside of the second round.
     /*
     "We must be able to play more than one round.": function(done){

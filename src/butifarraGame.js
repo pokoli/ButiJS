@@ -165,6 +165,8 @@ var ButifarraGame = function(name) {
             if(this.score[winnerTeam]>100)
             {
                 gameEnded=true;
+                this.state='ended';
+                this.winnerTeam=winnerTeam;
             }
         }
 
@@ -178,6 +180,7 @@ var ButifarraGame = function(name) {
         if(gameEnded)
         {
             this.emit('game-ended',this);
+            this.notifyAll('game-ended',this);
         }
         else
         {
