@@ -24,7 +24,7 @@ $(function() {
     //Create a dialog for asking the user her login.
     $("#login-dialog").dialog({
 	autoOpen: false,
-	height: 200,
+	height: 210,
 	width: 350,
 	modal: true,
 	buttons: {
@@ -55,7 +55,7 @@ $(function() {
     }
     $("#create-game-dialog").dialog({
 	autoOpen: false,
-	height: 200,
+	height: 210,
 	width: 350,
 	modal: true,
 	buttons: {
@@ -311,7 +311,7 @@ function writeMessageDialog(message, x,y){
         odiv += '<p id="message-dialog-text"></p>';
         odiv += '</div>';
         $(odiv).appendTo($('#game'));
-        $('#message-dialog').dialog({ autoOpen: false,height: 240,width: 350});
+        $('#message-dialog').dialog({ autoOpen: false,height: 250,width: 350});
 	}
 	$('#message-dialog-text').html(message);
     $('#message-dialog').dialog('open');
@@ -579,7 +579,7 @@ function showControDialog(selections,additionalText,callback)
         $(oDiv).appendTo($('#container'));
         $('#show-contro-dialog').dialog({
 	    autoOpen: false ,
-	    height: 240,
+	    height: 250,
 	    width: 350,
 	    modal: false,
 	    buttons: {
@@ -646,7 +646,7 @@ function showThriumphDialog(selections,callback)
         $(oDiv).appendTo($('#container'));
         $('#show-thriumph-dialog').dialog({
 	    autoOpen: false ,
-	    height: 200,
+	    height: 210,
 	    width: 350,
 	    modal: false,
 	    buttons: {
