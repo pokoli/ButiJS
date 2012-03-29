@@ -6,12 +6,21 @@ ul
    list-style-type:none;
 }
 
+/*
+    Commented because causes conflicts with jQuery UI
 div
 {
     height:100%;
     width: 100%;
+}*/
+
+body{
+    margin:0px;
 }
 
+fieldset {
+    border: none;
+}
 /*
     Custom classes
 */
