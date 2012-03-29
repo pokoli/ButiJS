@@ -150,7 +150,11 @@ socket.on('notify-thriumph', function (data){
 socket.on('round-ended',function(data){
     currentThriumph=undefined;
     controInfo=[];
-    updateRoundScores(data['round-score'],data['multiplier']);
+    var mult = data['multiplier'];
+    //If is botifarra the score must be multiplied by two.
+    if(data['botifarra'])
+        mult = mult * 2;
+    updateRoundScores(data['round-score'],mult);
     writeMessageDialog('Round Ended.<br> Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
 });
 
