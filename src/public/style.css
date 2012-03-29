@@ -21,6 +21,11 @@ body{
 fieldset {
     border: none;
 }
+
+th
+{
+    text-align: left;
+}
 /*
     Custom classes
 */
@@ -46,6 +51,11 @@ fieldset {
     overflow: auto;
 }
 
+.text-right
+{
+    text-align:right;
+    padding-right:5px;
+}
 /*
     Elements properties
 */
@@ -77,6 +87,7 @@ fieldset {
 #game-list
 {
     width:79%;
+    overflow: auto;
 }
 #game-details
 {

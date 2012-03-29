@@ -37,9 +37,10 @@ html
                     p #{__i('Players')}
                     ul#player-list
                 form#chat-form(action='javascript:send();')
-                   input#msg(type='text',value='')
+                   input#msg.text.ui-widget-content.ui-corner-all(type='text',value='')
             div#games.row
-                table#game-list.cell.bordered
+                div#game-list.cell.bordered
+                    table#game-list
                 div#game-details.cell.bordered
                     p #{__i('Game Details')}
                 form#game-form

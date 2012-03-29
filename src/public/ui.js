@@ -19,8 +19,9 @@ $(function() {
     height = $('#tabs').height() -65;
     $('#chat-messages').height(height);
     $('#chat-players').height(height);
-    $('#game-details').height(height - 100);
-    $('#game-form').height(100);
+    $('#game-details').height(height - 40);
+    $('#game-list').height(height - 40);
+    $('#game-form').height(40);
     //Create a dialog for asking the user her login.
     $("#login-dialog").dialog({
 	autoOpen: false,
@@ -130,7 +131,7 @@ function showGameDetails(gameData)
 */
 function drawGameData(data){
 		$('#game-list').children().remove();
-		$('#game-list').append('<thead><tr><th>'+__('Name')+'</th><th>'+__('State')+'</th><th>'+__('Players')+'</th><th>'+__('Watchers')+'</th></thead>')
+		$('#game-list').append('<thead><tr><th style="width: 55%">'+__('Name')+'</th><th style="width: 20%">'+__('State')+'</th><th style="width: 10%" class="text-right">'+__('Players')+'</th><th style="width: 10%" class="text-right">'+__('Watchers')+'</th></thead>')
 		if(!data || data===[] || data.length ===0)
 		{
 		    games=[];
@@ -139,7 +140,7 @@ function drawGameData(data){
 		games=data;
 		for(var i=0;i<data.length;i++)
 		{
-			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
+			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td class="text-right">'+data[i].players.length+'</td><td class="text-right">'+data[i].watchers.length+'</td></tr>');
 		}
 		//Refresh the game data if it has changed.
 		if(selected || selected === 0)
