@@ -184,6 +184,8 @@ function addNewGame(gameData)
         url : 'game',
         success : function(data) {
              $('#current-game').html(data);
+             $('#current-game #summary').height($('#current-game > #game').height() * 0.55);
+             $('#current-game #score').height($('#current-game > #game').height() * 0.45);
              initCanvas($('#game'),gameData);
         },
      });

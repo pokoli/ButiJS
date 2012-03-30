@@ -111,14 +111,8 @@ th
     width:20%;
 }
 
-#summary
+#summary,#score
 {
-    height: 60%;
-}
-
-#score
-{
-    height: 40%;
     overflow: auto;
 }
 
