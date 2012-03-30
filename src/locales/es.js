@@ -49,5 +49,8 @@
 	" has Recontred": " recontra",
 	"Make thriumph is allowed once per round": "Solo se puede elegir trumfo una vez por ronda",
 	"Card must be from thriumph suit": "Debes jugar una carta de trumfo",
-	"Game %s does not exist": "La partida %s no existe"
+	"Game %s does not exist": "La partida %s no existe",
+	"waiting": "Esperando jugadores",
+	"running": "Jugando",
+	"ended": "Finalitzo"
 }

@@ -21,7 +21,7 @@ var Game = function(name) {
     this.name=name;
 	this.players = [];
 	this.watchers = [];
-	this.state = 'waiting';
+	this.state = i18n.__('waiting');
 	this.min_players = 0;
 	
 	this.on('notifyAll',notifyAll); 
@@ -109,6 +109,6 @@ Game.prototype.numberOfWatchers = function(){
 
 Game.prototype.start = function(){
     if(this.numberOfPlayers() < this.min_players) throw new Error(i18n.__('Not enough players'));
-    this.state='running';
+    this.state=i18n.__('running');
 }
 

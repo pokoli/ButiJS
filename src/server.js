@@ -207,7 +207,6 @@ io.sockets.on('connection', function (socket) {
       		_currentGameId=_games[i].id;
             if(_games[i].numberOfPlayers()===4)
             {
-                _games[i].state='running';
                 _games[i].start();
             }
             if(fn) fn(false,_games[i]);

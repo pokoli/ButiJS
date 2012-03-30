@@ -49,5 +49,8 @@
 	" has Recontred": " recontra",
 	"Make thriumph is allowed once per round": "Només es pot elegir trumfo una vegada per ronda",
 	"Card must be from thriumph suit": "Has de jugar una carta de trumfo",
-	"Game %s does not exist": "La partida %s no existeix"
+	"Game %s does not exist": "La partida %s no existeix",
+	"waiting": "Esperant jugadors",
+	"running": "En curs",
+	"ended": "Finalitzat"
 }
