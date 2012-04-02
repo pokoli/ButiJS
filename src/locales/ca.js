@@ -52,5 +52,6 @@
 	"Game %s does not exist": "La partida %s no existeix",
 	"waiting": "Esperant jugadors",
 	"running": "En curs",
-	"ended": "Finalitzat"
+	"ended": "Finalitzat",
+	"No current game running": "No s'està jugant cap partida"
 }

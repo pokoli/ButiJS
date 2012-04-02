@@ -52,5 +52,6 @@
 	"Game %s does not exist": "La partida %s no existe",
 	"waiting": "Esperando jugadores",
 	"running": "Jugando",
-	"ended": "Finalitzo"
+	"ended": "Finalitzo",
+	"No current game running": "No se esta jugando ninguna partida"
 }
