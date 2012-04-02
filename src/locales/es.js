@@ -53,5 +53,6 @@
 	"waiting": "Esperando jugadores",
 	"running": "Jugando",
 	"ended": "Finalitzo",
-	"No current game running": "No se esta jugando ninguna partida"
+	"No current game running": "No se esta jugando ninguna partida",
+		"Card must be higher than others team": "Debes jugar una carta superior a la del equipo rival"
 }

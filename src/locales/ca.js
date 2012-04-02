@@ -53,5 +53,6 @@
 	"waiting": "Esperant jugadors",
 	"running": "En curs",
 	"ended": "Finalitzat",
-	"No current game running": "No s'està jugant cap partida"
+	"No current game running": "No s'està jugant cap partida",
+	"Card must be higher than others team": "Has de jugar una carta superior a la del equip rival"
 }
