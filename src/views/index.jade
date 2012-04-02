@@ -30,10 +30,10 @@ html
                 li 
                     a(href='#games') #{__i('Games')}
             div#chat.row
-                div#chat-messages.cell.bordered
-                    ul#messages.scrolled
+                div#chat-messages.cell.bordered.scrolled
+                    ul#messages
                         li #{__i('Welcome to the Chat!')}
-                div#chat-players.cell.bordered
+                div#chat-players.cell.bordered.scrolled
                     p #{__i('Players')}
                     ul#player-list
                 form#chat-form(action='javascript:send();')
