@@ -20,7 +20,7 @@ function trans(text){
 })(['Hello','Thriumph: ','Is not your turn',"You should select a game.","Login","Cancel","Create",
 "Not yet implemented",'Name','State','Players','Watchers','No players on the server','Round','Team','Score',
 'Round Info','(Delegated)','Thriumpher','Contro','Contro players','Do you want to make a contro?','Accept',
-'Select Thriumph','Select','Is your turn','Yes','No','Player ',' has Contred',' has Recontred']);
+'Select Thriumph','Select','Is your turn','Yes','No','Player ',' has Contred',' has Recontred','Add bot']);
 
 function getValue(text,translate){
     if(translated[text])
@@ -246,6 +246,20 @@ function joinGame(){
 	});
 }
 
+function addBot(){
+    if(!selected && selected != 0)
+    {
+        alert(__("You should select a game."));
+        return;
+    }
+	socket.emit('add-bot', games[selected].id,function(err){
+	    if(err)
+	    {
+	        alert(err);
+	    }
+	    refreshGames();
+	});
+}
 /*
     Calculates the weight of a card in the order of the player card
     Based on the following relations:
