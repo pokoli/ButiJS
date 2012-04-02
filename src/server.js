@@ -108,7 +108,7 @@ io.sockets.on('connection', function (socket) {
     function processGameEvent(event,data,callback)
     {
         var game = getCurrentGame();
-        if(game && game.state==='running')
+        if(game) //Removed for translation errors&& game.state==='running')
             game.emit(event,data,callback);
         else
           callback && callback(i18n.__('No current game running'));
@@ -200,6 +200,7 @@ io.sockets.on('connection', function (socket) {
   	        if(fn) fn(__('You are already in the game'));
   	        return;
         }
+
         _games[i].addPlayer(current,function(err){
             if(err){
                 fn && fn(err);
@@ -216,7 +217,6 @@ io.sockets.on('connection', function (socket) {
   	});
 
   	socket.on('add-bot', function(data, fn){
-  	    debugger;
   	    //1. Find the game.
   	    var game;
   	    for(var i=0;i<_games.length;i++)

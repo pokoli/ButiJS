@@ -1,4 +1,5 @@
-var client = require('socket.io-client');
+var client = require('socket.io-client'), 
+    Card = require('../card');
 
 /*
     Generic code for all the bots.
@@ -50,17 +51,47 @@ var Bot = function(){
         socket.on('cards',function(data){_cards = data;});
         socket.on('notify-thriumph', function (data){_thriumph = data;});
         socket.on('select-thriumph', function (choises){
-            socket.emit('chosen-thriumph',that.selectThriumph(choises));
+            process.nextTick(function(){
+                socket.emit('chosen-thriumph',that.selectThriumph(choises));
+            });
         });
         socket.on('play-card',function(){
-            socket.emit('new-roll',that.selectCard());
+            console.log(_name+' have to play a card');
+            function playCard(){
+               var card = that.selectCard();
+               socket.emit('new-roll',card,function(err){
+                    console.log(err);
+                    if(err)
+                    {
+                        process.nextTick(playCard);
+                        return;
+                    }
+                    _cards.forEach(function(cardInStack,idx){
+          			    if(cardInStack.suit === card.suit && cardInStack.number === card.number)
+              			{
+          					_cards.splice(idx,1);
+              			}
+      		        });
+                    
+                });
+            }
+            process.nextTick(playCard);
         });
         socket.on('contro',function(){
-            socket.emit('new-roll',that.contro());
+            process.nextTick(function(){
+                socket.emit('do-contro',{ 'value' : that.contro() });
+            });
         });
 
-        //TODO:Save played cards
-        //socket.on('card-played');
+        socket.on('card-played',function(data){
+            _playedCards.push(data.card);
+            if(_move.length===4)
+                _move=[];
+            _move.push(data);
+        });
+        socket.on('move-ended',function(data){
+            _move = [];
+        });
         //TODO:Save contros???????
         //socket.on('contro-done',function(data){
     }
@@ -101,9 +132,56 @@ Bot.prototype.contro = function(){
     Selects a card to play
     Could be overriden by extending classes.
 */
-Bot.prototype.selectCard = function(){
-    //Dummy version return first choise.
-    return this.cards()[0];
+Bot.prototype.selectCard = function(err){
+    var move = this.move();
+    var cards = this.cards();
+    var thriumph = this.thriumph();
+    if(move.length > 0)
+    {
+        var higher;
+        for(var i=0;i<move.length;i++)
+        {
+            var card = Card.create(move[i].card.number,move[i].card.suit);
+            if(!higher)
+                higher=card;
+            else if(card.isHigher(higher))
+                higher=card;
+        }
+        var suitCard;
+        var thriumphCard;
+        var initCard = Card.create(move[0].card.number,move[0].card.suit);
+        for(var i=0;i<cards.length;i++)
+        {
+            var card = Card.create(cards[i].number,cards[i].suit);
+            if(card.suit===initCard.suit)
+            {
+                if(card.isHigher(higher))
+                {
+                    return cards[i];
+                }
+                suitCard=card;
+            }
+            if(card.suit===thriumph)
+                thriumphCard=card;
+        }
+        //If no higher card we have to play a card from the suit
+        if(suitCard)
+        {
+            return suitCard;
+        }
+        else if (thriumphCard)
+        {
+            return thriumphCard;
+        }
+        else
+        {
+            return cards[0]; //Any card is well played
+        }
+    }
+    else
+    {
+        return cards[0];
+    }
 }
 
 module.exports.Bot = Bot;
