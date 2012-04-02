@@ -6,13 +6,14 @@ var client = require('socket.io-client');
 
 var Bot = function(){
     var socket;
-    var connected;
+    var _connected;
     var _cards;
     var _thriumph;
     var _move=[];
     var _playedCards = [];
     var _name;
 
+    this.connected = function() { return _connected; };
     this.name = function(){ return _name;};
     this.cards = function(){ return _cards;};
     this.thriumph = function(){ return _thriumph;};
@@ -25,16 +26,25 @@ var Bot = function(){
         Accepts a parameter for specifing server options: 
             - Host: Host running the butiJS server
             - Port: Port where the butiJS server is listening.
+            - Game: Id of the game to join after connecting
     */
-    this.connect = function(opts){
+    this.connect = function(opts,callback){
         opts = opts || {}
         var host = opts.host || 'localhost';
         var port = opts.port || 8000;
+        var gameid = opts.game;
         socket = client.connect('http://'+host, {'port' : port,'force new connection': true});
         socket.on('welcome',function(){
             _name = 'Bot'+new Date().getTime().toString().substring(6,250);
-            socket.emit('login',{'name' : _name});
-            connected=true;
+            socket.emit('login',{'name' : _name}, function(){
+                if(gameid)
+                {
+                    socket.emit('join-game',gameid,callback);
+                    return;
+                }
+                if(callback) callback();
+            });
+            _connected=true;
         });
 
         socket.on('cards',function(data){_cards = data;});
@@ -56,7 +66,7 @@ var Bot = function(){
     }
 
     this.join = function(game){
-        if(!connected)
+        if(!_connected)
         {
             return false;
         }

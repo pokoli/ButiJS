@@ -5,7 +5,8 @@ var express = require('express')
   , sanitize = require('validator').sanitize
   , i18n = require('i18n')
   , Game = require('./butifarraGame')
-  , Player = require('./player');
+  , Player = require('./player')
+  , Bot = require('./bots/bot').Bot;
 var app = express.createServer();
 
 //Static files configuration
@@ -213,7 +214,28 @@ io.sockets.on('connection', function (socket) {
         });
 
   	});
-  	
+
+  	socket.on('add-bot', function(data, fn){
+  	    debugger;
+  	    //1. Find the game.
+  	    var game;
+  	    for(var i=0;i<_games.length;i++)
+  	    {
+  	        if(_games[i].id === data)
+  	        {
+  	            game=_games[i];
+  	            break;
+  	        }
+  	    }
+  	    if(!game)
+  	    {
+  	        if(fn) fn(__('Game %s does not exist',data));
+  	        return;
+  	    }
+        var bot = new Bot();
+        bot.connect({game: data},fn);
+  	});
+
   	socket.on('send', function(data){
   		var sendData = {};
   		sendData.player=getCurrentPlayer();
