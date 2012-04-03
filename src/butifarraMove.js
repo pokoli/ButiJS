@@ -24,7 +24,37 @@ function calculatePoints(cards){
         if(card.number===9) points=points+5;
     }
     //Four cards are valued 1 point.
-    return ++points;
+    points = points + Math.floor(cards.length / 4)
+    return points;
+}
+
+/*
+    Returns the team that wins the hand.
+*/
+function getWinner(rolls,thriumph){
+    var higherCard,winner;
+    for(var i=0;i<rolls.length;i++)
+    {
+        var player = rolls[i].player;
+        var card = rolls[i].card;
+
+        if(!higherCard)
+        {
+            higherCard=card;
+            winner=player;
+        }
+        if(card.suit === thriumph && higherCard.suit!=thriumph)
+        {
+            higherCard=card;
+            winner=player;
+        }
+        if(higherCard.suit===card.suit && card.isHigher(higherCard))
+        {
+            higherCard=card;
+            winner=player;
+        }
+    }
+    return winner;
 }
 
 /*  
@@ -35,38 +65,9 @@ function calculatePoints(cards){
 
 var ButifarraMove = function(thriumph) {
     this.rolls = []; //Expose it to the public;
-    
-    /*
-        Returns the team that wins the hand.
-    */
-    function getWinner(rolls){
-        var higherCard,winner;
-        for(var i=0;i<rolls.length;i++)
-        {
-            var player = rolls[i].player;
-            var card = rolls[i].card;
-
-            if(!higherCard)
-            {
-                higherCard=card;
-                winner=player;
-            }
-            if(card.suit === thriumph && higherCard.suit!=thriumph)
-            {
-                higherCard=card;
-                winner=player;
-            }
-            if(higherCard.suit===card.suit && card.isHigher(higherCard))
-            {
-                higherCard=card;
-                winner=player;
-            }
-        }
-        return winner;
-    }
 
     this.getWinner = function(){
-        return getWinner(this.rolls);
+        return getWinner(this.rolls,thriumph);
     }
 
     /*
@@ -233,4 +234,5 @@ module.exports.create = function(thriumph) {
 };
 
 module.exports.calculatePoints = calculatePoints;
+module.exports.getWinner = getWinner;
 
