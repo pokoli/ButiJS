@@ -1,4 +1,5 @@
 var client = require('socket.io-client'), 
+    Move = require('../butifarraMove'),
     Card = require('../card');
 
 /*
@@ -141,15 +142,7 @@ Bot.prototype.selectCard = function(err){
     var thriumph = this.thriumph();
     if(move.length > 0)
     {
-        var higher;
-        for(var i=0;i<move.length;i++)
-        {
-            var card = Card.create(move[i].card.number,move[i].card.suit);
-            if(!higher)
-                higher=card;
-            else if(card.isHigher(higher))
-                higher=card;
-        }
+        var higher=Move.getHigherCard(move,thriumph);
         var suitCard;
         var thriumphCard;
         var initCard = Card.create(move[0].card.number,move[0].card.suit);
