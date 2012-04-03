@@ -6,7 +6,7 @@ var express = require('express')
   , i18n = require('i18n')
   , Game = require('./butifarraGame')
   , Player = require('./player')
-  , Bot = require('./bots/bot').Bot;
+  , Bot = require('./bots/simpleBot').Bot;
 var app = express.createServer();
 
 //Static files configuration
