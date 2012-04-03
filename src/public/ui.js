@@ -86,6 +86,8 @@ $(function() {
 function addMessage(data)
 {
 	$('#messages').append('<li>' + data + '</li>');
+	//Move the scroll to the atached element.
+	$('#messages > li ').last()[0].scrollIntoView();
 }
 
 /*

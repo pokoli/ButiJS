@@ -53,5 +53,7 @@
 	"waiting": "Esperant jugadors",
 	"running": "En curs",
 	"ended": "Finalitzat",
-	"Add bot": "Afegir Robot"
+	"Add bot": "Afegir Robot",
+	"No current game running": "No s'està jugant cap partida",
+	"Card must be higher than others team": "Has de jugar una carta superior a la del equip rival"
 }

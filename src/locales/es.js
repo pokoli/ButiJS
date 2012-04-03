@@ -53,5 +53,7 @@
 	"waiting": "Esperando jugadores",
 	"running": "Jugando",
 	"ended": "Finalitzo",
-	"Add bot": "Añadir Robot"
+	"Add bot": "Añadir Robot",
+	"No current game running": "No se esta jugando ninguna partida",
+	"Card must be higher than others team": "Debes jugar una carta superior a la del equipo rival"
 }
