@@ -15,6 +15,7 @@ var Bot = function(){
     var _playedCards = [];
     var _name;
     var _teams;
+    var _team;
 
     this.connected = function() { return _connected; };
     this.name = function(){ return _name;};
@@ -23,6 +24,7 @@ var Bot = function(){
     this.move = function(){ return _move;};
     this.playedCards = function(){ return _playedCards;};
     this.teams = function(){ return _teams; };
+    this.team = function(){ return _team; };
 
     var that = this;
     /*
@@ -51,7 +53,20 @@ var Bot = function(){
             _connected=true;
         });
 
-        socket.on('start',function(data){ _teams = data.teams});
+        socket.on('start',function(data){ 
+            _teams = data.teams
+            for(var i=1;i<3;i++)
+            {
+                for(var j=0;j<_teams[i].length;j++)
+                {
+                    if(_teams[i][j].name===_name)
+                    {
+                        _team=i;
+                        break;
+                    }
+                }
+            }
+        });
         socket.on('cards',function(data){_cards = data;});
         socket.on('notify-thriumph', function (data){_thriumph = data;});
         socket.on('select-thriumph', function (choises){
@@ -93,7 +108,7 @@ var Bot = function(){
                 _move=[];
             _move.push(data);
         });
-        socket.on('move-ended',function(data){
+        socket.on('end-move',function(data){
             _move = [];
         });
         //TODO:Save contros???????
