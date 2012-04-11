@@ -11,6 +11,7 @@ var Bot = function(){
     var _connected;
     var _cards;
     var _thriumph;
+    var _delegated;
     var _move=[];
     var _playedCards = [];
     var _name;
@@ -21,6 +22,7 @@ var Bot = function(){
     this.name = function(){ return _name;};
     this.cards = function(){ return _cards;};
     this.thriumph = function(){ return _thriumph;};
+    this.delegated = function(){ return _delegated;};
     this.move = function(){ return _move;};
     this.playedCards = function(){ return _playedCards;};
     this.teams = function(){ return _teams; };
@@ -68,7 +70,15 @@ var Bot = function(){
             }
         });
         socket.on('cards',function(data){_cards = data;});
-        socket.on('notify-thriumph', function (data){_thriumph = data;});
+        socket.on('notify-thriumph', function (data){
+            _delegated=false;
+            _thriumph = data;
+            if(data.indexOf('(') >= 0)
+            {
+                _thriumph = data.substring(0,data.indexOf('(')-1);
+                _delegated=true;
+            }
+        });
         socket.on('select-thriumph', function (choises){
             process.nextTick(function(){
                 socket.emit('chosen-thriumph',that.selectThriumph(choises));
