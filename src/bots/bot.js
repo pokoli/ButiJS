@@ -133,6 +133,9 @@ var Bot = function(){
         socket.on('end-move',function(data){
             _move = [];
         });
+        socket.on('round-ended',function(data){
+            _playedCards=[];
+        });
         //TODO:Save contros???????
         //socket.on('contro-done',function(data){
     }
