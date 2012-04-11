@@ -17,6 +17,7 @@ var Bot = function(){
     var _name;
     var _teams;
     var _team;
+    var _thriumpherTeam;
 
     this.connected = function() { return _connected; };
     this.name = function(){ return _name;};
@@ -27,6 +28,7 @@ var Bot = function(){
     this.playedCards = function(){ return _playedCards;};
     this.teams = function(){ return _teams; };
     this.team = function(){ return _team; };
+    this.thriumpherTeam = function(){ return _thriumpherTeam; };
 
     var that = this;
     /*
@@ -67,6 +69,16 @@ var Bot = function(){
                         break;
                     }
                 }
+            }
+            if(data.round && data.playedRounds[data.round-1])
+            {
+                _thriumpherTeam = data.playedRounds[data.round-1].thriumpher.team
+            }
+        });
+        socket.on('updated-game',function(data){
+            if(data.round && data.playedRounds[data.round-1])
+            {
+                _thriumpherTeam = data.playedRounds[data.round-1].thriumpher.team
             }
         });
         socket.on('cards',function(data){_cards = data;});
