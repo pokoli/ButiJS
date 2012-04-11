@@ -69,17 +69,40 @@ function cardWeight(card)
 }
 
 /*
+    Calculates the weight of a card in the order of the player card
+    Based on the following relations:
+    Suit: Oros > Copes > Espases -> Bastos
+    Number: 9 > 1 > 12 > 11 > 10 > ... > 2
+*/
+function cardWeightNotSuit(card)
+{
+    var score=0;
+    if(card.number===9 || card.number===1)
+        score+=13;
+    score+=card.number;
+    return score;
+}
+
+/*
     Sorts the cards based on the follwing order:
      - Per suit: Oros > Copes > Espases -> Bastos
      - Per Number: 9 > 1 > 12 > 11 > 10 > ... > 2
+    If notTriumph is true the Suit is not taken into account.
 */
-function sortCards(unsorted)
+function sortCards(unsorted,notSuit)
 {
     function cardSort(a,b)
     {
         return (cardWeight(a)-cardWeight(b))*-1
     }
-    return unsorted.sort(cardSort);
+    function cardSortNotSuit(a,b)
+    {
+        return (cardWeightNotSuit(a)-cardWeightNotSuit(b))*-1
+    }
+    if(!notSuit)
+        return unsorted.sort(cardSort);
+    else
+        return unsorted.sort(cardSortNotSuit);
 }
 
 /*
@@ -112,6 +135,37 @@ function calculateMinMaxPerSuit(pals)
     return {'max': max, 'min' : min};
 }
 
+/*
+    Returns true if all the cards are in playedCards, false if not.
+*/
+function hasBeenPlayed(playedCards,cards)
+{
+    try{
+        if(!cards.length)
+            cards = [cards];
+        for(var i=0;i<cards.length;i++)
+            cards[i] = Card.create(cards[i].number,cards[i].suit);
+        for(var i=0;i<playedCards.length;i++)
+        {
+            var card = Card.create(playedCards[i].number,playedCards[i].suit);
+            var idx = -1;
+            for(var j=0;j<cards.length;j++)
+            {
+                if(card.number===cards[j].number && card.suit===cards[j].suit)
+                {
+                    idx=j;
+                    break;
+                }
+            }
+            if(idx >= 0 )
+            {
+                cards.splice(idx,1);
+            }
+        }
+        return cards.length===0;
+    }
+    catch(e){ console.log(e);return false }
+}
 
 /*
     Selects a thriumph from available choises.
@@ -141,10 +195,10 @@ SimpleBot.prototype.selectThriumph = function(choises){
 
 Bot.prototype.contro = function(){
     var thriumph = this.thriumph();
+    var delegated = this.delegated();
     //Trumfo directe no contrem mai.
-    if(thriumph && thriumph.indexOf('(') < 0)
+    if(!delegated)
         return false;
-    thriumph = thriumph.substring(0,thriumph.indexOf('(')-1);
     var pals = calculateSuits(this.cards());
     var numbers = calculateNumbers(this.cards());
     //Trumfo passat dos manilles i un as s'ha de contrar. 
@@ -152,7 +206,9 @@ Bot.prototype.contro = function(){
         return true;
     if(pals[thriumph] && pals[thriumph] >=5)
         return true;
-    
+    //If we have more than 22 points in the stack we have to make a contro
+    if(Move.calculatePoints(this.cards()) > 22)
+        return true;
     return false;    
 }
 
@@ -189,53 +245,140 @@ Bot.prototype.selectCard = function(err){
             if(card.suit===thriumph)
                 thriumphCard.push(card);
         }
-        //If we have more than one higher card -> Roll more than one. 
+         var ourHand = false;
+         if(Move.getWinner(move,thriumph).team === this.team())
+         {
+            ourHand=true;
+         }
+
         if(higherCards.length > 0 )
         {
+            //TODO: If we have higherCards, some time we have to play the higher.
             higherCards = sortCards(higherCards);
-            return higherCards[0];
+            var idx= ourHand ? 0 : higherCards.length -1;
+            //If we are the last player we always play the lower card. (abarrotem)
+            if(move.length===3)
+                idx=higherCards.length -1;
+            return higherCards[idx];
         }
-        /*
-            TODO: Depending on the winner we have to choise diferent cards:
-                - If the winner is from our team -> higher
-                - If the winner is from other team -> lower.
-         */
         if(suitCard.length > 0 )
         {
             suitCard = sortCards(suitCard);
-            return suitCard[0];
+            var idx= ourHand ? 0 : suitCard.length -1;
+            return suitCard[idx];
         }
         else if (thriumphCard.length > 0)
         {
             thriumphCard = sortCards(thriumphCard);
-            return thriumphCard[0];
+            var idx= ourHand ? 0 : thriumphCard.length -1;
+            return thriumphCard[idx];
         }
         else
         {
-            return cards[cards.length-1]; //Any card is well played -> The last because all are ordered.
-        }
-    }
-    else if (playedCards.length ===0)
-    {
-        //Si tenim un semifallo jugarem aquell pal.
-        if(min[1] ===1)
-        {
-            for(var i=0;i<cards.length;i++)
+            if(ourHand)
             {
-                if(cards[i].suit===min[0])
+                var tmp = sortCards(cards,true);
+                //TODO: Test if its the higher tacking into account the played cards.
+                for(var i=0;i<tmp.length;i++)
                 {
-                    return cards[i];
+                    //Never play a nine
+                    if(tmp[i].number!==9)
+                    {
+                        return tmp[i];
+                    }
                 }
             }
+            else
+            {
+                return sortCards(cards,true)[cards.length-1];
+            }
         }
-        //TODO: Add more cases here.
-        //TODO: Implement better generic case
-        return cards[0];
     }
     else
     {
-        //TODO: Implement better generic case
+        var playedPals = calculateSuits(playedCards);
+        //Si tenim un semifallo jugarem aquell pal.
+        if(min[1] ===1)
+        {
+            //If there are played cards thats not a correct semifallo.
+            if(!playedPals[min[0]])
+            {
+                for(var i=0;i<cards.length;i++)
+                {
+                    if(cards[i].suit===min[0])
+                    {
+                        return cards[i];
+                    }
+                }
+            }
+        }
+        //If the trhiumpher is from our team and we have thriumph
+        if(this.thriumpherTeam() === this.team() && pals[thriumph])
+        {
+            //No thriumph played.
+            //Or there are more players that have thriumph in her hand.
+            var remaining = pals[thriumph]
+            if(playedPals[thriumph])
+                remaining += playedPals[thriumph];
+            if(remaining < 12)
+            {
+                for(var i=0;i<cards.length;i++)
+                {
+                    if(cards[i].suit===thriumph)
+                    {
+                        return cards[i];
+                    }
+                }
+            }
+        }
+        //Si tenim un as jugarem aquell pal
+        if(numbers[1] && numbers[1] > 1 )
+        {
+            for(var i=0;i<cards.length;i++)
+            {
+                if(cards[i].number===1)
+                {
+                    //If the 9 has been played we play the one because there is no higher card.
+                    if(hasBeenPlayed(playedCards,Card.create(9,cards[i].suit)))
+                        return cards[i];
+                    if(pals[cards[i].suit] > 1 && cards[i].suit!== thriumph)
+                    {
+                       var suitCards = [];
+                       for(var j=0;j<cards.length;j++)
+                       {
+                            if(cards[j].suit == cards[i].suit && cards[j].number !== 1)
+                            {
+                                suitCards.push(cards[j]);
+                            }
+                       }
+                       return sortCards(suitCards)[0]; //We play the higher before the AS 
+                    }
+                }   
+            }
+        }
+        debugger;
+        var j=1;
+        var numbersArray=[];
+        for(var i in numbers)
+        {
+            numbersArray.push(i);
+        }
+        //Play the highest cards that is not thriumph.
+        while(j<cards.length)
+        {
+            var highest = numbersArray[numbersArray.length-j];
+            for(var i=0;i<cards.length;i++)
+            {
+                //highest is a String so we avoid comparing type also (===)
+                if(cards[i].number==highest  && cards[i].suit != thriumph)
+                {
+                    return cards[i];
+                }   
+            }
+            j++;
+        }
         return cards[0];
+        
     }
 }
 
