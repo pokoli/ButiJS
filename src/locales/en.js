@@ -20,5 +20,6 @@
 	"Game %s does not exist": "Game %s does not exist",
 	"No current game running": "No current game running",
 	"Hello": "Hello",
-	"ended": "ended"
+	"ended": "ended",
+	" %s left the server": " %s left the server"
 }

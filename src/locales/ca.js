@@ -54,5 +54,6 @@
 	"running": "En curs",
 	"ended": "Finalitzat",
 	"No current game running": "No s'està jugant cap partida",
-	"Card must be higher than others team": "Has de jugar una carta superior a la del equip rival"
+	"Card must be higher than others team": "Has de jugar una carta superior a la del equip rival",
+	"The game is full": "La partida esta plena"
 }
