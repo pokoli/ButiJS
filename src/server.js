@@ -5,7 +5,8 @@ var express = require('express')
   , sanitize = require('validator').sanitize
   , i18n = require('i18n')
   , Game = require('./butifarraGame')
-  , Player = require('./player');
+  , Player = require('./player')
+  , Bot = require('./bots/simpleBot').Bot;
 var app = express.createServer();
 
 //Static files configuration
@@ -107,7 +108,7 @@ io.sockets.on('connection', function (socket) {
     function processGameEvent(event,data,callback)
     {
         var game = getCurrentGame();
-        if(game && game.state==='running')
+        if(game) //Removed for translation errors&& game.state==='running')
             game.emit(event,data,callback);
         else
           callback && callback(i18n.__('No current game running'));
@@ -199,6 +200,7 @@ io.sockets.on('connection', function (socket) {
   	        if(fn) fn(__('You are already in the game'));
   	        return;
         }
+
         _games[i].addPlayer(current,function(err){
             if(err){
                 fn && fn(err);
@@ -213,7 +215,27 @@ io.sockets.on('connection', function (socket) {
         });
 
   	});
-  	
+
+  	socket.on('add-bot', function(data, fn){
+  	    //1. Find the game.
+  	    var game;
+  	    for(var i=0;i<_games.length;i++)
+  	    {
+  	        if(_games[i].id === data)
+  	        {
+  	            game=_games[i];
+  	            break;
+  	        }
+  	    }
+  	    if(!game)
+  	    {
+  	        if(fn) fn(__('Game %s does not exist',data));
+  	        return;
+  	    }
+        var bot = new Bot();
+        bot.connect({game: data},fn);
+  	});
+
   	socket.on('send', function(data){
   		var sendData = {};
   		sendData.player=getCurrentPlayer();

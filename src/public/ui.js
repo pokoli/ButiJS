@@ -125,6 +125,7 @@ function showGameDetails(gameData)
             $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i]+'</td><tr>');
         }
     }
+    $('#game-details').append('<tr><td colspan="2"><input onclick="javascript:addBot();" id="add-bot" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only type="button" value="'+__('Add bot')+'" /></td></tr>');
     $('#game-details').append('</table>');
 }
 

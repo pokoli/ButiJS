@@ -31,6 +31,10 @@ Make the current player join the game.
 
 If the player is currently on a game should throw an error. 
 
+### add-bot
+
+Add a bot to an existing game.
+
 ### list-games
 
 Returns the current game's on the server

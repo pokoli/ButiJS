@@ -1,4 +1,5 @@
-var i18n = require('i18n');
+var i18n = require('i18n'),
+    Card = require('./card');
 
 /*
     Holds the information of each roll.
@@ -29,14 +30,14 @@ function calculatePoints(cards){
 }
 
 /*
-    Returns the team that wins the hand.
+    Returns the player that wins the hand.
 */
 function getWinner(rolls,thriumph){
     var higherCard,winner;
     for(var i=0;i<rolls.length;i++)
     {
         var player = rolls[i].player;
-        var card = rolls[i].card;
+        var card = Card.create(rolls[i].card.number,rolls[i].card.suit);
 
         if(!higherCard)
         {
@@ -55,6 +56,30 @@ function getWinner(rolls,thriumph){
         }
     }
     return winner;
+}
+
+/*
+    Returns the the higherCard of the move.
+*/
+function getHigherCard(rolls,thriumph){
+    var higherCard,winner;
+    for(var i=0;i<rolls.length;i++)
+    {
+         var card = Card.create(rolls[i].card.number,rolls[i].card.suit);
+        if(!higherCard)
+        {
+            higherCard=card;
+        }
+        if(card.suit === thriumph && higherCard.suit!=thriumph)
+        {
+            higherCard=card;
+        }
+        if(higherCard.suit===card.suit && card.isHigher(higherCard))
+        {
+            higherCard=card;
+        }
+    }
+    return higherCard;
 }
 
 /*  
@@ -235,4 +260,5 @@ module.exports.create = function(thriumph) {
 
 module.exports.calculatePoints = calculatePoints;
 module.exports.getWinner = getWinner;
+module.exports.getHigherCard = getHigherCard;
 
