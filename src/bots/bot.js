@@ -107,13 +107,14 @@ var Bot = function(){
                         process.nextTick(playCard);
                         return;
                     }
-                    _cards.forEach(function(cardInStack,idx){
+                    for(var idx=0;idx<_cards.length;idx++)
+                    {
+                        cardInStack=_cards[idx];
           			    if(cardInStack.suit === card.suit && cardInStack.number === card.number)
               			{
           					_cards.splice(idx,1);
               			}
-      		        });
-                    
+                    }
                 });
             }
             process.nextTick(playCard);
