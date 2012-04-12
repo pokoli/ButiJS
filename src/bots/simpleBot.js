@@ -168,12 +168,43 @@ function hasBeenPlayed(playedCards,cards)
 }
 
 /*
+    Returns true if all the higher cards have been played. False if not.
+*/
+function isHighestRemaining(playedCards,card)
+{
+    var orderedNumbers = [9,1,12,11,10,8,7,6,5,4,3,2];
+    var higher=[];
+    for(var i=0;i<orderedNumbers.length;i++)
+    {
+        //If we find our number stop!
+        if(card.number===orderedNumbers[i])
+            break;
+        higher.push(orderedNumbers[i]);
+    }
+    //Avoid seeking all played cards.
+    if(higher.length===0)
+        return true;
+    for(var i=0;i<playedCards.length;i++)
+    {
+        if(playedCards[i].suit===card.suit)
+        {
+            var idx  = higher.indexOf(playedCards[i].number);
+            if(idx > -1)
+            {
+                higher.splice(idx,1);
+            }
+        }
+    }
+    return higher.length===0;
+}
+
+/*
     Selects a thriumph from available choises.
 */
 SimpleBot.prototype.selectThriumph = function(choises){
     var cards = this.cards();
-    //If we have more than 22 points in the stack we make botifarra.
-    if(Move.calculatePoints(cards) > 22)
+    //If we have more than 24 points in the stack we make botifarra.
+    if(Move.calculatePoints(cards) > 24)
         return 'Botifarra';
     var pals = calculateSuits(cards);
     var temp= calculateMinMaxPerSuit(pals);
@@ -206,8 +237,8 @@ Bot.prototype.contro = function(){
         return true;
     if(pals[thriumph] && pals[thriumph] >=5)
         return true;
-    //If we have more than 22 points in the stack we have to make a contro
-    if(Move.calculatePoints(this.cards()) > 22)
+    //If we have more than 24 points in the stack we have to make a contro
+    if(Move.calculatePoints(this.cards()) > 24)
         return true;
     return false;    
 }
@@ -224,6 +255,7 @@ Bot.prototype.selectCard = function(err){
     var numbers = calculateNumbers(cards);
     var temp= calculateMinMaxPerSuit(pals);
     var max=temp.max, min=temp.min;
+    var playedPals = calculateSuits(playedCards);
     if(move.length > 0)
     {
         var higher=Move.getHigherCard(move,thriumph);
@@ -253,36 +285,43 @@ Bot.prototype.selectCard = function(err){
 
         if(higherCards.length > 0 )
         {
-            //TODO: If we have higherCards, some time we have to play the higher.
             higherCards = sortCards(higherCards);
+            var idx=0;
             var idx= ourHand ? 0 : higherCards.length -1;
-            //If we are the last player we always play the lower card. (abarrotem)
-            if(move.length===3)
+            //If there are upper cards to pending to play we play the lower.
+            if(!isHighestRemaining(playedCards,higherCards[0]))
                 idx=higherCards.length -1;
+            else
+                idx=0;
+            //If less than 4 cards have been played, we play the lower. (abarrotem)
+            if(playedPals[move[0].card.suit] && playedPals[move[0].card.suit] < 4)
+                idx= higherCards.length -1;
             return higherCards[idx];
         }
         if(suitCard.length > 0 )
         {
             suitCard = sortCards(suitCard);
-            var idx= ourHand ? 0 : suitCard.length -1;
+            var idx = suitCard.length -1
+            //If we have points we play it if it is not thriumph
+            if(ourHand && move.length===3 && suitCard[0].suit !== thriumph && (suitCard[0].number===1 || suitCard[0].number>9))
+                idx=0;
             return suitCard[idx];
         }
-        else if (thriumphCard.length > 0)
+        //We only have to play thriumph when the winner is not from our team
+        else if (thriumphCard.length > 0 && !ourHand)
         {
             thriumphCard = sortCards(thriumphCard);
-            var idx= ourHand ? 0 : thriumphCard.length -1;
-            return thriumphCard[idx];
+            return thriumphCard[thriumphCard.length -1];
         }
         else
         {
             if(ourHand)
             {
                 var tmp = sortCards(cards,true);
-                //TODO: Test if its the higher tacking into account the played cards.
                 for(var i=0;i<tmp.length;i++)
                 {
                     //Never play a nine
-                    if(tmp[i].number!==9)
+                    if(tmp[i].number!==9 && !isHighestRemaining(playedCards,tmp[i]))
                     {
                         return tmp[i];
                     }
@@ -296,7 +335,6 @@ Bot.prototype.selectCard = function(err){
     }
     else
     {
-        var playedPals = calculateSuits(playedCards);
         //Si tenim un semifallo jugarem aquell pal.
         if(min[1] ===1)
         {
@@ -332,7 +370,7 @@ Bot.prototype.selectCard = function(err){
             }
         }
         //Si tenim un as jugarem aquell pal
-        if(numbers[1] && numbers[1] > 1 )
+        if(numbers[1] && numbers[1] > 0 )
         {
             for(var i=0;i<cards.length;i++)
             {
@@ -356,28 +394,15 @@ Bot.prototype.selectCard = function(err){
                 }   
             }
         }
-        debugger;
-        var j=1;
-        var numbersArray=[];
-        for(var i in numbers)
+        for(var i=0;i<cards.length;i++)
         {
-            numbersArray.push(i);
+            if(cards[i].suit !== thriumph && isHighestRemaining(playedCards,cards[i]))
+                return cards[i];
         }
-        //Play the highest cards that is not thriumph.
-        while(j<cards.length)
-        {
-            var highest = numbersArray[numbersArray.length-j];
-            for(var i=0;i<cards.length;i++)
-            {
-                //highest is a String so we avoid comparing type also (===)
-                if(cards[i].number==highest  && cards[i].suit != thriumph)
-                {
-                    return cards[i];
-                }   
-            }
-            j++;
-        }
-        return cards[0];
+        //Play a random card
+        var idx = parseInt(Math.random() * cards.length-1)
+        console.log('Random card: '+idx+'/'+cards.length);
+        return cards[idx];
         
     }
 }
