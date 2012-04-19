@@ -385,6 +385,270 @@ module.exports = {
         //Make the first move
         jugades[0]();
     },
+    "The round score is multiplied by 2 if thriumph is Botifarra": function(done){
+        /*
+            Adds the movements of a valid round
+            Personalized for a valid butifarra round.
+        */
+        function addRoundMovements(jugades,winners,points,players,game)
+        {
+            var one = players[0];
+            var two = players[1];
+            var three = players[2];
+            var four = players[3];
+
+            jugades.push(function(){
+                // Es el torn de 2 -> 5 Bastos
+                game.emit('new-roll',Card.create(5,'Bastos'),testNoError);
+                // Es el torn de 3 -> 11 Bastos
+                game.emit('new-roll',Card.create(11,'Bastos'),testNoError);
+                // Es el torn de 1 -> 2 Bastos
+                game.emit('new-roll',Card.create(2,'Bastos'),testNoError);
+                // Es el torn de 4 -> 3 Bastos
+                game.emit('new-roll',Card.create(3,'Bastos'),testNoError);
+            });
+            winners.push(three);
+            points.push(3);
+
+            jugades.push(function(){
+                // Es el torn de 3 -> 11 Espases
+                game.emit('new-roll',Card.create(11,'Espases'),testNoError);
+                // Es el torn de 1 -> 9 Espases
+                game.emit('new-roll',Card.create(9,'Espases'),testNoError);
+                // Es el torn de 4 -> 4 Espases
+                game.emit('new-roll',Card.create(4,'Espases'),testNoError);
+                // Es el torn de 2 -> 2 Espases
+                game.emit('new-roll',Card.create(2,'Espases'),testNoError);
+            });
+            winners.push(one);
+            points.push(8);
+
+            jugades.push(function(){
+                // Es el torn de 1 -> 11 Copes
+                game.emit('new-roll',Card.create(11,'Copes'),testNoError);
+                // Es el torn de 4 -> 12 Copes
+                game.emit('new-roll',Card.create(12,'Copes'),testNoError);
+                // Es el torn de 2 -> 5 Copes
+                game.emit('new-roll',Card.create(5,'Copes'),testNoError);
+                // Es el torn de 3 -> 2 Copes
+                game.emit('new-roll',Card.create(2,'Copes'),testNoError);
+            });
+            winners.push(four);
+            points.push(6);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 1 Espases
+                game.emit('new-roll',Card.create(1,'Espases'),testNoError);
+                // Es el torn de 2 -> 3 Espases
+                game.emit('new-roll',Card.create(3,'Espases'),testNoError);
+                // Es el torn de 3 -> 7 Espases
+                game.emit('new-roll',Card.create(7,'Espases'),testNoError);
+                // Es el torn de 1 -> 3 Espases
+                game.emit('new-roll',Card.create(3,'Copes'),testNoError);
+            });
+            winners.push(four);
+            points.push(5);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 12 Espases
+                game.emit('new-roll',Card.create(12,'Espases'),testNoError);
+                // Es el torn de 2 -> 5 Espases
+                game.emit('new-roll',Card.create(5,'Espases'),testNoError);
+                // Es el torn de 3 -> 8 Espases
+                game.emit('new-roll',Card.create(8,'Espases'),testNoError);
+                // Es el torn de 1 -> 6 Bastos
+                game.emit('new-roll',Card.create(6,'Bastos'),testNoError);
+            });
+            winners.push(four);
+            points.push(4);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 10 Espases
+                game.emit('new-roll',Card.create(10,'Espases'),testNoError);
+                // Es el torn de 2 -> 6 Espases
+                game.emit('new-roll',Card.create(6,'Espases'),testNoError);
+                // Es el torn de 3 -> 10 Copes
+                game.emit('new-roll',Card.create(10,'Copes'),testNoError);
+                // Es el torn de 1 -> 6 Oros
+                game.emit('new-roll',Card.create(6,'Oros'),testNoError);
+            });
+            // Guanya el jugador 3, 12 punts per l'equip 2.
+            winners.push(four);
+            points.push(3);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 9 Oros
+                game.emit('new-roll',Card.create(9,'Oros'),testNoError);
+                // Es el torn de 2 -> 4 Oros
+                game.emit('new-roll',Card.create(4,'Oros'),testNoError);
+                // Es el torn de 3 -> 11 Oros
+                game.emit('new-roll',Card.create(11,'Oros'),testNoError);
+                // Es el torn de 1 -> 8 Oros
+                game.emit('new-roll',Card.create(8,'Oros'),testNoError);
+            });
+            winners.push(four);
+            points.push(8);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 1 Oros
+                game.emit('new-roll',Card.create(1,'Oros'),testNoError);
+                // Es el torn de 2 -> 12 Oros
+                game.emit('new-roll',Card.create(12,'Oros'),testNoError);
+                // Es el torn de 3 -> 3 Oros
+                game.emit('new-roll',Card.create(3,'Oros'),testNoError);
+                // Es el torn de 1 -> 10 Oros
+                game.emit('new-roll',Card.create(10,'Oros'),testNoError);
+            });
+            winners.push(four);
+            points.push(9);
+
+            jugades.push(function(){
+                // Es el torn de 4 ->7 Oros
+                game.emit('new-roll',Card.create(7,'Oros'),testNoError);
+                // Es el torn de 2 -> 6 Copes
+                game.emit('new-roll',Card.create(6,'Copes'),testNoError);
+                // Es el torn de 3 -> 5 Oros
+                game.emit('new-roll',Card.create(5,'Oros'),testNoError);
+                // Es el torn de 1 -> 8 Bastos
+                game.emit('new-roll',Card.create(8,'Bastos'),testNoError);
+            });
+            winners.push(four);
+            points.push(1);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 2 Oros
+                game.emit('new-roll',Card.create(2,'Oros'),testNoError);
+                // Es el torn de 2 -> 7 Bastos
+                game.emit('new-roll',Card.create(7,'Bastos'),testNoError);
+                // Es el torn de 3 -> 1 Bastos
+                game.emit('new-roll',Card.create(1,'Bastos'),testNoError);
+                // Es el torn de 1 -> 7 Copes
+                game.emit('new-roll',Card.create(10,'Bastos'),testNoError);
+            });
+            winners.push(four);
+            points.push(6);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 9 Copes
+                game.emit('new-roll',Card.create(9,'Copes'),testNoError);
+                // Es el torn de 2 -> 12 Bastos
+                game.emit('new-roll',Card.create(12,'Bastos'),testNoError);
+                // Es el torn de 3 -> 8 Copes
+                game.emit('new-roll',Card.create(8,'Copes'),testNoError);
+                // Es el torn de 1 -> 4 Copes
+                game.emit('new-roll',Card.create(4,'Copes'),testNoError);
+            });
+            // Guanya el jugador 3, 1 punts per l'equip 2.
+            winners.push(four);
+            points.push(9);
+
+            jugades.push(function(){
+                // Es el torn de 4 -> 8 Copes
+                game.emit('new-roll',Card.create(7,'Copes'),testNoError);
+                // Es el torn de 2 -> 9 Bastos
+                game.emit('new-roll',Card.create(9,'Bastos'),testNoError);
+                // Es el torn de 3 -> 4 Bastos
+                game.emit('new-roll',Card.create(4,'Bastos'),testNoError);
+                // Es el torn de 1 -> 7 Copes
+                game.emit('new-roll',Card.create(1,'Copes'),testNoError);
+            });
+            winners.push(one);
+            points.push(10);
+
+            return [jugades,winners,points];
+        }
+        var game = Game.create('Test Game');
+        game.test=true;
+        var one = Player.create('1');
+        var two = Player.create('2');
+        var three = Player.create('3');
+        var four = Player.create('4');
+        one.id=1;
+        one.team=1;
+        one.cards=[
+            Card.create(10,'Oros'),Card.create(8,'Oros'),Card.create(6,'Oros'),Card.create(1,'Copes'),
+            Card.create(11,'Copes'),Card.create(4,'Copes'),Card.create(3,'Copes'),Card.create(9,'Espases'),
+            Card.create(10,'Bastos'),Card.create(8,'Bastos'),Card.create(6,'Bastos'),Card.create(2,'Bastos'),
+        ];
+        two.id=2;
+        two.team=1;
+        two.cards=[
+            Card.create(12,'Oros'),Card.create(4,'Oros'),Card.create(6,'Copes'),Card.create(5,'Copes'),
+            Card.create(6,'Espases'),Card.create(5,'Espases'),Card.create(3,'Espases'),Card.create(2,'Espases'),
+            Card.create(9,'Bastos'),Card.create(12,'Bastos'),Card.create(7,'Bastos'),Card.create(5,'Bastos'),
+        ];
+        three.id=3;
+        three.team=2;
+        three.cards=[
+            Card.create(11,'Oros'),Card.create(5,'Oros'),Card.create(3,'Oros'),Card.create(10,'Copes'),
+            Card.create(8,'Copes'),Card.create(2,'Copes'),Card.create(11,'Espases'),Card.create(8,'Espases'),
+            Card.create(7,'Espases'),Card.create(1,'Bastos'),Card.create(11,'Bastos'),Card.create(4,'Bastos'),
+        ];
+        four.id=4;
+        four.team=2;
+        four.cards=[
+            Card.create(9,'Oros'),Card.create(1,'Oros'),Card.create(7,'Oros'),Card.create(2,'Oros'),
+            Card.create(9,'Copes'),Card.create(12,'Copes'),Card.create(7,'Copes'),Card.create(1,'Espases'),
+            Card.create(12,'Espases'),Card.create(10,'Espases'),Card.create(4,'Espases'),Card.create(3,'Bastos'),
+        ];
+        game.firstToTriumph=four;
+
+        one.join(game);
+        two.join(game);
+        three.join(game);
+        four.join(game);
+
+        game.start();
+
+        game.state.should.eql('running');
+        game.teams[1].should.eql([one,two]);
+        game.teams[2].should.eql([three,four]);
+
+        var tmp=[];
+        for(var i=0;i<game.players.length;i++)
+            tmp.push(game.players[i].name);
+        tmp.should.eql(['4','2','3','1']);
+
+        //Triumpher = four -> Botifarra
+        game.emit('chosen-thriumph','Botifarra',testNoError);
+        game.playedRounds[game.round-1].thriumph.should.eql('Botifarra');
+        game.playedRounds[game.round-1].delegated.should.eql(false);
+        // one no contra
+        game.emit('do-contro',{value: false, player: one},testNoError);
+        // two no contra.
+        game.emit('do-contro',{value: false, player: two},testNoError);
+
+        var jugades = [];
+        var winners = [];
+        var points = [];
+
+        var tmp = addRoundMovements(jugades,winners,points,[one,two,three,four],game);
+        jugades = tmp[0];
+        winners = tmp[1];
+        points = tmp[2];
+        //Final de la ronda.
+        //Resultat parcial de la ronda:
+        //   - Equip 1: 18 punts
+        //   - Equip 2: 54 punts
+        //   - S'augmenten 36 punts al marcador de l'equip 2.
+        game.playedRounds[game.round-1].on('round-ended',function(data){
+            var roundScores = data.getScores();
+            roundScores[1].should.eql(18);
+            roundScores[2].should.eql(54);
+            game.score[1].should.eql(0);
+            game.score[2].should.eql(36);
+            done();
+        });
+        //Comensa una nova ronda.
+        //FIN
+        jugades.length.should.eql(winners.length);
+        winners.length.should.eql(points.length);
+
+        addMoveEndedListener(game,jugades,winners,points);
+        
+        //Make the first move
+        jugades[0]();
+    },    
     "The scores are multiplied if the round is contred": function(done){
         var game = Game.create('Test Game');
         game.test=true;

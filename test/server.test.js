@@ -140,9 +140,11 @@ module.exports = {
 			data.player.name.should.eql('Luiggi');
 			data.msg.should.eql(msg);
 			recived--;
-			if(recived===0) done();
+			if(recived===0) {
+				removeListeners('message');
+			    done();
+			}
 		}
-		
 		addListeners('message',message);
 		socket.emit('send',msg);
 	},
@@ -410,6 +412,27 @@ module.exports = {
             data.should.eql('Hello');
             done();
         });
+    },
+    "We should be able to add bots to a game" : function(done){
+        game = Game.create('Bot Game');
+		socket.emit('create-game',game,function(err,data){
+		    should.ifError(err);
+			recivedGame = Game.clone(data);
+			socket.emit('add-bot',recivedGame.id,function(err){
+			    should.ifError(err);
+			    socket.emit('list-games',undefined,function(gameList){
+			        for(var i=0;i<gameList.length;i++)
+			        {
+			            if(gameList[i].name==='Bot Game')
+			            {
+			                gameList[i].players.length.should.eql(2);
+			                gameList[i].players[1].name.substring(0,3).should.eql('Bot');
+			                done();
+			            }
+			        }
+			    });
+			});
+		});
     },
 	"When a player disconnects the server removes it's reference " : function(done){
         finish(done);

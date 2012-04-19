@@ -152,6 +152,9 @@ var ButifarraGame = function(name) {
         //If the round result must be multiplied by the round multiplier.
         if(result)
             result = result * roundData.multiplier
+        //If the round thriumph is butifarra the score must be multiplied by two.
+        if(result && roundData.thriumph === 'Botifarra')
+            result = result * 2;    
 
         var gameEnded=false;
         if(winnerTeam)
@@ -160,7 +163,7 @@ var ButifarraGame = function(name) {
             if(this.score[winnerTeam]>100)
             {
                 gameEnded=true;
-                this.state='ended';
+                this.state=i18n.__('ended');
                 this.winnerTeam=winnerTeam;
             }
         }
@@ -168,7 +171,8 @@ var ButifarraGame = function(name) {
         var data = {
             'round-score' : roundScores,
             'total-score' : this.score,
-            'multiplier' : roundData.multiplier
+            'multiplier' : roundData.multiplier,
+            'botifarra' : roundData.thriumph === 'Botifarra'
         };
 
         this.notifyAll('round-ended',data);

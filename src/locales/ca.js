@@ -48,5 +48,14 @@
 	" has Contred": " contra",
 	" has Recontred": " recontra",
 	"Make thriumph is allowed once per round": "Només es pot elegir trumfo una vegada per ronda",
-	"Card must be from thriumph suit": "Has de jugar una carta de trumfo"
+	"Card must be from thriumph suit": "Has de jugar una carta de trumfo",
+	"Game %s does not exist": "La partida %s no existeix",
+	"waiting": "Esperant jugadors",
+	"running": "En curs",
+	"ended": "Finalitzat",
+	"Add bot": "Afegir Robot",
+	"No current game running": "No s'està jugant cap partida",
+	"Card must be higher than others team": "Has de jugar una carta superior a la del equip rival",
+	"The game is full": "La partida esta plena",
+	"Card must be defined": "La carta ha d'estar definida"
 }

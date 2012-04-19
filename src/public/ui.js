@@ -19,12 +19,13 @@ $(function() {
     height = $('#tabs').height() -65;
     $('#chat-messages').height(height);
     $('#chat-players').height(height);
-    $('#game-details').height(height - 100);
-    $('#game-form').height(100);
+    $('#game-details').height(height - 40);
+    $('#game-list').height(height - 40);
+    $('#game-form').height(40);
     //Create a dialog for asking the user her login.
     $("#login-dialog").dialog({
 	autoOpen: false,
-	height: 200,
+	height: 210,
 	width: 350,
 	modal: true,
 	buttons: {
@@ -55,7 +56,7 @@ $(function() {
     }
     $("#create-game-dialog").dialog({
 	autoOpen: false,
-	height: 200,
+	height: 210,
 	width: 350,
 	modal: true,
 	buttons: {
@@ -85,6 +86,8 @@ $(function() {
 function addMessage(data)
 {
 	$('#messages').append('<li>' + data + '</li>');
+	//Move the scroll to the atached element.
+	$('#messages > li ').last()[0].scrollIntoView();
 }
 
 /*
@@ -122,6 +125,7 @@ function showGameDetails(gameData)
             $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i]+'</td><tr>');
         }
     }
+    $('#game-details').append('<tr><td colspan="2"><input onclick="javascript:addBot();" id="add-bot" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only type="button" value="'+__('Add bot')+'" /></td></tr>');
     $('#game-details').append('</table>');
 }
 
@@ -130,7 +134,7 @@ function showGameDetails(gameData)
 */
 function drawGameData(data){
 		$('#game-list').children().remove();
-		$('#game-list').append('<thead><tr><th>'+__('Name')+'</th><th>'+__('State')+'</th><th>'+__('Players')+'</th><th>'+__('Watchers')+'</th></thead>')
+		$('#game-list').append('<thead><tr><th style="width: 55%">'+__('Name')+'</th><th style="width: 20%">'+__('State')+'</th><th style="width: 10%" class="text-right">'+__('Players')+'</th><th style="width: 10%" class="text-right">'+__('Watchers')+'</th></thead>')
 		if(!data || data===[] || data.length ===0)
 		{
 		    games=[];
@@ -139,7 +143,7 @@ function drawGameData(data){
 		games=data;
 		for(var i=0;i<data.length;i++)
 		{
-			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td>'+data[i].players.length+'</td><td>'+data[i].watchers.length+'</td></tr>');
+			$('#game-list').append('<tr onClick="selectGame('+i+')"><td>'+data[i].name+'</td><td>'+data[i].state+'</td><td class="text-right">'+data[i].players.length+'</td><td class="text-right">'+data[i].watchers.length+'</td></tr>');
 		}
 		//Refresh the game data if it has changed.
 		if(selected || selected === 0)
@@ -183,6 +187,8 @@ function addNewGame(gameData)
         url : 'game',
         success : function(data) {
              $('#current-game').html(data);
+             $('#current-game #summary').height($('#current-game > #game').height() * 0.55);
+             $('#current-game #score').height($('#current-game > #game').height() * 0.45);
              initCanvas($('#game'),gameData);
         },
      });
@@ -304,14 +310,13 @@ var ids = [];
         - y: The Y offset where we have to write the message
 */
 function writeMessageDialog(message, x,y){
-    debugger;
     if($('#message-dialog').length==0)
     {
         var odiv = '<div id="message-dialog" title="Info">';
         odiv += '<p id="message-dialog-text"></p>';
         odiv += '</div>';
         $(odiv).appendTo($('#game'));
-        $('#message-dialog').dialog({ autoOpen: false,height: 240,width: 350});
+        $('#message-dialog').dialog({ autoOpen: false,height: 250,width: 350});
 	}
 	$('#message-dialog-text').html(message);
     $('#message-dialog').dialog('open');
@@ -579,7 +584,7 @@ function showControDialog(selections,additionalText,callback)
         $(oDiv).appendTo($('#container'));
         $('#show-contro-dialog').dialog({
 	    autoOpen: false ,
-	    height: 240,
+	    height: 250,
 	    width: 350,
 	    modal: false,
 	    buttons: {
@@ -646,7 +651,7 @@ function showThriumphDialog(selections,callback)
         $(oDiv).appendTo($('#container'));
         $('#show-thriumph-dialog').dialog({
 	    autoOpen: false ,
-	    height: 200,
+	    height: 210,
 	    width: 350,
 	    modal: false,
 	    buttons: {
@@ -663,7 +668,7 @@ function showThriumphDialog(selections,callback)
         $('#thriumph-selector').children().remove();
         for(var i=0;i<selections.length;i++)
         {
-            $('#show-thriumph-dialog > #thriumph').append('<option value="'+selections[i]+'">'+selections[i]+'</option>');
+            $('#thriumph-selector').append('<option value="'+selections[i]+'">'+selections[i]+'</option>');
         }
     }
     $('#show-thriumph-dialog').dialog('open');

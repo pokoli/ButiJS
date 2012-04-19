@@ -20,7 +20,7 @@ function trans(text){
 })(['Hello','Thriumph: ','Is not your turn',"You should select a game.","Login","Cancel","Create",
 "Not yet implemented",'Name','State','Players','Watchers','No players on the server','Round','Team','Score',
 'Round Info','(Delegated)','Thriumpher','Contro','Contro players','Do you want to make a contro?','Accept',
-'Select Thriumph','Select','Is your turn','Yes','No','Player ',' has Contred',' has Recontred']);
+'Select Thriumph','Select','Is your turn','Yes','No','Player ',' has Contred',' has Recontred','Add bot']);
 
 function getValue(text,translate){
     if(translated[text])
@@ -116,8 +116,9 @@ function onPlayCard(){
 socket.on('play-card',onPlayCard);
 
 socket.on('select-thriumph', function(data){
-    if(data && data.length>0)
+    if(data && data.length>0 && !thriumphedThisRound)
     {
+        thriumphedThisRound=true;
         showThriumphDialog(data,makeThriumph);
     }
 });
@@ -149,8 +150,13 @@ socket.on('notify-thriumph', function (data){
 
 socket.on('round-ended',function(data){
     currentThriumph=undefined;
+    thriumphedThisRound=false;
     controInfo=[];
-    updateRoundScores(data['round-score'],data['multiplier']);
+    var mult = data['multiplier'];
+    //If is botifarra the score must be multiplied by two.
+    if(data['botifarra'])
+        mult = mult * 2;
+    updateRoundScores(data['round-score'],mult);
     writeMessageDialog('Round Ended.<br> Team 1 :'+data['round-score'][1]+' - Team 2 :'+data['round-score'][2]);
 });
 
@@ -242,6 +248,20 @@ function joinGame(){
 	});
 }
 
+function addBot(){
+    if(!selected && selected != 0)
+    {
+        alert(__("You should select a game."));
+        return;
+    }
+	socket.emit('add-bot', games[selected].id,function(err){
+	    if(err)
+	    {
+	        alert(err);
+	    }
+	    refreshGames();
+	});
+}
 /*
     Calculates the weight of a card in the order of the player card
     Based on the following relations:

@@ -6,12 +6,26 @@ ul
    list-style-type:none;
 }
 
+/*
+    Commented because causes conflicts with jQuery UI
 div
 {
     height:100%;
     width: 100%;
+}*/
+
+body{
+    margin:0px;
 }
 
+fieldset {
+    border: none;
+}
+
+th
+{
+    text-align: left;
+}
 /*
     Custom classes
 */
@@ -28,7 +42,7 @@ div
 
 .bordered
 {
-	border: 1px solid #ddd;
+	border: 1px solid #000;
 	height:90%;
 }
 
@@ -37,6 +51,11 @@ div
     overflow: auto;
 }
 
+.text-right
+{
+    text-align:right;
+    padding-right:5px;
+}
 /*
     Elements properties
 */
@@ -68,6 +87,7 @@ div
 #game-list
 {
     width:79%;
+    overflow: auto;
 }
 #game-details
 {
@@ -91,14 +111,8 @@ div
     width:20%;
 }
 
-#summary
+#summary,#score
 {
-    height: 60%;
-}
-
-#score
-{
-    height: 40%;
     overflow: auto;
 }
 

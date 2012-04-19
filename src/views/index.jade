@@ -30,19 +30,20 @@ html
                 li 
                     a(href='#games') #{__i('Games')}
             div#chat.row
-                div#chat-messages.cell.bordered
-                    ul#messages.scrolled
+                div#chat-messages.cell.bordered.scrolled
+                    ul#messages
                         li #{__i('Welcome to the Chat!')}
-                div#chat-players.cell.bordered
+                div#chat-players.cell.bordered.scrolled
                     p #{__i('Players')}
                     ul#player-list
                 form#chat-form(action='javascript:send();')
-                   input#msg(type='text',value='')
+                   input#msg.text.ui-widget-content.ui-corner-all(type='text',value='')
             div#games.row
-                table#game-list.cell.bordered
+                div#game-list.cell.bordered
+                    table#game-list
                 div#game-details.cell.bordered
                     p #{__i('Game Details')}
                 form#game-form
-                    input#join(type='button',value="#{__i('Join game')}")
-                    input#watch(type='button',value="#{__i('Watch game')}")
-                    input#create(type='button',value="#{__i('Create game')}")
+                    input#join.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only(type='button',value="#{__i('Join game')}")
+                    input#watch.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only(type='button',value="#{__i('Watch game')}")
+                    input#create.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only(type='button',value="#{__i('Create game')}")
