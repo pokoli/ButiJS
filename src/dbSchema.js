@@ -26,12 +26,12 @@ var Round = new Schema({
     moves       : [Move]
   , thriumph    : String
   , delegated   : Boolean
-  , thriumpher  : Player
+  , thriumpher  : { type: Schema.ObjectId, ref: 'Player' }
 });
 
 var Teams = new Schema({
-    1           : [Players]
-  , 2           : [Players]
+    1           : [Player]
+  , 2           : [Player]
 });
 
 var TeamsScore = new Schema({
@@ -39,8 +39,13 @@ var TeamsScore = new Schema({
   , 2           : Number
 });
 
-module.exports.ButifarraGame = new Schema({
+var Game = new Schema({
     rounds      : [Round]
-    teams       : [Teams]
-    score       : TeamsScore
+  , teams       : [Teams]
+  , score       : { type: Schema.ObjectId, ref: 'TeamsScore' }
 });
+module.exports.ButifarraGame = Game
+
+mongoose.model('player', Player);
+mongoose.model('game', Game);
+
