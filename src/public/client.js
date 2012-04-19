@@ -116,8 +116,9 @@ function onPlayCard(){
 socket.on('play-card',onPlayCard);
 
 socket.on('select-thriumph', function(data){
-    if(data && data.length>0)
+    if(data && data.length>0 && !thriumphedThisRound)
     {
+        thriumphedThisRound=true;
         showThriumphDialog(data,makeThriumph);
     }
 });
@@ -149,6 +150,7 @@ socket.on('notify-thriumph', function (data){
 
 socket.on('round-ended',function(data){
     currentThriumph=undefined;
+    thriumphedThisRound=false;
     controInfo=[];
     var mult = data['multiplier'];
     //If is botifarra the score must be multiplied by two.

@@ -310,7 +310,6 @@ var ids = [];
         - y: The Y offset where we have to write the message
 */
 function writeMessageDialog(message, x,y){
-    debugger;
     if($('#message-dialog').length==0)
     {
         var odiv = '<div id="message-dialog" title="Info">';
@@ -669,7 +668,7 @@ function showThriumphDialog(selections,callback)
         $('#thriumph-selector').children().remove();
         for(var i=0;i<selections.length;i++)
         {
-            $('#show-thriumph-dialog > #thriumph').append('<option value="'+selections[i]+'">'+selections[i]+'</option>');
+            $('#thriumph-selector').append('<option value="'+selections[i]+'">'+selections[i]+'</option>');
         }
     }
     $('#show-thriumph-dialog').dialog('open');
