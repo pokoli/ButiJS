@@ -346,8 +346,8 @@ Bot.prototype.selectCard = function(err){
     }
     else
     {
-        //Si tenim un semifallo jugarem aquell pal.
-        if(min[1] ===1)
+        //Si tenim un semifallo jugarem aquell pal. (si no es trumfo)
+        if(min[1] ===1 && min[0]!==thriumph)
         {
             //If there are played cards thats not a correct semifallo.
             if(!playedPals[min[0]])
