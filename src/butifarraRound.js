@@ -143,6 +143,11 @@ var ButifarraRound = function(players,thriumpher,firstPlayer,firstThriumpher) {
         var skey = player.id || player.name;
         var that=this;
         player.cards=_playersCards[skey];
+        if(!card || (!card.number && !card.suit))
+        {
+            callback && callback(i18n.__('Card must be defined'));
+            return;
+        }
         var card = Card.create(card.number,card.suit);
         _move.addRoll(player,card,function(err){
             if(err)

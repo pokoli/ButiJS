@@ -142,6 +142,37 @@ module.exports = {
         });
         round0.emit('chosen-thriumph','Bastos');
     },
+    "When rolling the card must be defined" : function(done){
+        var events=4;
+        var ok=2,bad=2;
+        function callback(err){
+            if(err)
+            {
+                err.should.eql('Card must be defined');
+                bad--;
+            }
+            else
+            {
+                ok--;
+            }
+            events--;
+            if(events===0) {
+                ok.should.eql(0);
+                bad.should.eql(0);
+                done();
+            }
+        }
+        round = setUp();
+        round.on('notify-contro',function(){
+            round.emit('do-contro',{'value': false});
+            round.emit('do-contro',{'value': false});
+            round.emit('new-roll',Card.create(2,'Espases'), callback);
+            round.emit('new-roll',{number: 3, suit: 'Espases'}, callback);
+            round.emit('new-roll',undefined, callback);
+            round.emit('new-roll',{}, callback);
+        });
+        round.emit('chosen-thriumph','Bastos');
+    },
     "After 4 rolls the move is endend and a new-round event is fired" : function(done){
         round = setUp();
         round.on('notify-contro',function(){

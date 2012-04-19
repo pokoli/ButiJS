@@ -326,6 +326,17 @@ Bot.prototype.selectCard = function(err){
                         return tmp[i];
                     }
                 }
+                console.log('Remaining 9');
+                //If we are here the only remaining cards is a nine, so we have to play it.
+                if(thriumphCard.length >0)
+                {
+                    thriumphCard = sortCards(thriumphCard);
+                    return thriumphCard[thriumphCard.length -1];
+                }
+                else
+                {
+                    return cards[0];
+                }
             }
             else
             {
@@ -405,6 +416,9 @@ Bot.prototype.selectCard = function(err){
         return cards[idx];
         
     }
+    console.log('Any valid card');
+    //If we are here we haven't found any valid card, so we play the first to avoid playing undefinedCards
+    return cards[0];
 }
 
 module.exports.Bot = SimpleBot;

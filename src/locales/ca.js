@@ -56,5 +56,6 @@
 	"Add bot": "Afegir Robot",
 	"No current game running": "No s'està jugant cap partida",
 	"Card must be higher than others team": "Has de jugar una carta superior a la del equip rival",
-	"The game is full": "La partida esta plena"
+	"The game is full": "La partida esta plena",
+	"Card must be defined": "La carta ha d'estar definida"
 }
