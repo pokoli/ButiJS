@@ -545,6 +545,9 @@ function placePlayedCard(data)
     cardsLayer.add(cardImage);
     mainStage.add(cardsLayer);
 }
+
+//Holds the clear timeout.
+var clearTimer;
 /*
     Add a listener to the game for clearing the playedCards on clicking the game zone
     Autoclear the played cards after 3 secons
@@ -552,7 +555,8 @@ function placePlayedCard(data)
 function enableClearPlayedCards(){
     waitingClear=true;
     $('#game').bind('click',clearPlayedCards);
-    setTimeout(clearPlayedCards,3000);
+    //Increased to 5 second
+    clearTimer = setTimeout(clearPlayedCards,5000);
 }
 
 /*
@@ -564,6 +568,8 @@ function clearPlayedCards()
     waitingClear=false;
     //Remove the listener
     $('#game').unbind('click',clearPlayedCards);
+    //Remove the timeOut
+    clearTimeout(clearTimer);
     //Clear the cards
     mainStage.getChild('cardsPlayedLayer').children=[];
     mainStage.getChild('cardsPlayedLayer').draw();
