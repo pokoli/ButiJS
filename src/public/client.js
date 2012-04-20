@@ -72,6 +72,8 @@ var currentThriumph;
 var currentAction;
 //Hold the history of contros done.
 var controInfo=[];
+//Holds if the player has already thriumphed this round.
+var thriumphedThisRound=false;
 
 /*
     Fired when a game we are playing is started
@@ -220,12 +222,12 @@ function playCard(card,callback)
     if(currentAction)
         return;
     currentAction=true;
-    socket.emit('new-roll',card,function(err){
+    socket.emit('new-roll',card,function(err,sugestions){
         currentAction=false;
         if(err)
         {
             writeMessage(err);
-            callback && callback(err);
+            callback && callback(err,sugestions);
             return;
         }
         yourTurn--;

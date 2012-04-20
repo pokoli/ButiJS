@@ -152,6 +152,8 @@ var ButifarraMove = function(thriumph) {
         {
             var hasTriumph=false;
             var higherThriumph;
+            var initSuitCards = [];
+            var thriumphCards = [];
             //Loop players cards to know if they have valid rolls or not.
             for(var i=0;i<roll.player.cards.length;i++)
             {
@@ -159,22 +161,26 @@ var ButifarraMove = function(thriumph) {
                 //If the players has cards from the init suit, must roll it.
                 if(card.suit===initSuit)
                 {
-                    if(callback) callback(new Error(i18n.__('Card must be from initial suit')));
-                    return;
+                    initSuitCards.push(card);
                 }
                 if(card.suit===thriumph)
                 {
-                    hasTriumph=true;
+                    thriumphCards.push(card);
                     if(!higherThriumph)
                         higherThriumph=card;
                     else if(card.isHigher(higherThriumph))
                         higherThriumph=card;
                 }
             }
-            if(hasTriumph && higherCardTeam!==roll.player.team && roll.card.suit!=thriumph &&
+            if(initSuitCards.length>0)
+            {
+                if(callback) callback(new Error(i18n.__('Card must be from initial suit')),initSuitCards);
+                return;
+            }
+            if(thriumphCards.length>0 && higherCardTeam!==roll.player.team && roll.card.suit!=thriumph &&
                 (higherCard.suit!== thriumph || higherCard.isHigher(higherThriumph)===false))
             {
-                if(callback) callback(new Error(i18n.__('Card must be from thriumph suit')));
+                if(callback) callback(new Error(i18n.__('Card must be from thriumph suit')),thriumphCards);
                 return;
             }
         }
@@ -183,15 +189,21 @@ var ButifarraMove = function(thriumph) {
         {   
             if(roll.card.suit===higherCard.suit && !roll.card.isHigher(higherCard))
             {
+                var higherCards = [];
                 //Search if the player has an higher card.
                 for(var i=0;i<roll.player.cards.length;i++)
                 {
                     var card = roll.player.cards[i];
                     if(card.isHigher(higherCard))
                     {
-                        if(callback) callback(new Error(i18n.__('Card must be higher than others team')));
-                        return;
+                        higherCards.push(card);
                     }
+                }
+                if(higherCards.length>0)
+                {
+                    if(callback) callback(new Error(i18n.__('Card must be higher than others team')),higherCards);
+                    return;
+
                 }    
             }
         }
@@ -225,10 +237,10 @@ var ButifarraMove = function(thriumph) {
         }
         var roll = new ButifarraRoll(player,card);
         var that = this;
-        validateRoll(roll,this.rolls,function(err){
+        validateRoll(roll,this.rolls,function(err,sugestions){
             if(err) 
             {
-                callback && callback(err);
+                callback && callback(err,sugestions);
                 return;
             }
             that.rolls.push(roll);

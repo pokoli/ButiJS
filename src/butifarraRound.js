@@ -149,10 +149,10 @@ var ButifarraRound = function(players,thriumpher,firstPlayer,firstThriumpher) {
             return;
         }
         var card = Card.create(card.number,card.suit);
-        _move.addRoll(player,card,function(err){
+        _move.addRoll(player,card,function(err,sugestions){
             if(err)
             {
-                callback && callback(err.message);
+                callback && callback(err.message,sugestions);
                 return;
             }
             _lastPlayed++;

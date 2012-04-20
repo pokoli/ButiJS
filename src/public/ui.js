@@ -316,7 +316,7 @@ function writeMessageDialog(message, x,y){
         odiv += '<p id="message-dialog-text"></p>';
         odiv += '</div>';
         $(odiv).appendTo($('#game'));
-        $('#message-dialog').dialog({ autoOpen: false,height: 250,width: 350});
+        $('#message-dialog').dialog({ autoOpen: false,height: 150,width: 350, position: ["left","top"]});
 	}
 	$('#message-dialog-text').html(message);
     $('#message-dialog').dialog('open');
@@ -493,8 +493,12 @@ function placeCards(cards)
         cardImage.card = cards[i];
         cardImage.on("dblclick", (function(card, idx) {
                     return function () {
-                    playCard(card, function (err) {
-                            if(err) return;
+                    playCard(card, function (err,sugestions) {
+                            if(err)
+                            {
+                                if(sugestions) sugestCards(sugestions);
+                                return;
+                            }
                             cards.splice(idx, 1);
                             placeCards(cards);
                         });
@@ -505,6 +509,31 @@ function placeCards(cards)
     }
     mainStage.add(cardsLayer);
     mainStage.draw();
+}
+
+function sugestCards(cards){
+    var cardsLayer = mainStage.getChild('cardsLayer');
+    if(!cardsLayer) return;
+
+    for(var i=0;i<cardsLayer.children.length;i++)
+    {
+        var bSugested=false;
+        if(cardsLayer.children[i].card)
+        {
+            var card = cardsLayer.children[i].card;
+            for(var j=0;j<cards.length;j++)
+            {
+                if(card.number === cards[j].number && card.suit === cards[j].suit)
+                {
+                   cardsLayer.children[i].y=-30;
+                   bSugested=true;
+                }
+            }
+        }
+        if(!bSugested)
+            cardsLayer.children[i].y=0;
+    }
+    cardsLayer.draw();
 }
 
 //Boolean for marking if we have to wait to the last round cards are played.
@@ -545,6 +574,9 @@ function placePlayedCard(data)
     cardsLayer.add(cardImage);
     mainStage.add(cardsLayer);
 }
+
+//Holds the clear timeout.
+var clearTimer;
 /*
     Add a listener to the game for clearing the playedCards on clicking the game zone
     Autoclear the played cards after 3 secons
@@ -552,7 +584,8 @@ function placePlayedCard(data)
 function enableClearPlayedCards(){
     waitingClear=true;
     $('#game').bind('click',clearPlayedCards);
-    setTimeout(clearPlayedCards,3000);
+    //Increased to 5 second
+    clearTimer = setTimeout(clearPlayedCards,5000);
 }
 
 /*
@@ -564,6 +597,8 @@ function clearPlayedCards()
     waitingClear=false;
     //Remove the listener
     $('#game').unbind('click',clearPlayedCards);
+    //Remove the timeOut
+    clearTimeout(clearTimer);
     //Clear the cards
     mainStage.getChild('cardsPlayedLayer').children=[];
     mainStage.getChild('cardsPlayedLayer').draw();
