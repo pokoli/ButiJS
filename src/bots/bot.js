@@ -98,13 +98,21 @@ var Bot = function(){
         });
         socket.on('play-card',function(){
             console.log(_name+' have to play a card');
-            function playCard(){
-               var card = that.selectCard();
-               socket.emit('new-roll',card,function(err){
-                    console.log(err);
+            function playCard(validCard){
+               var card = validCard || that.selectCard();
+               socket.emit('new-roll',card,function(err,suggestions){
+                    console.log(err+' sugestions: '+suggestions);
                     if(err)
                     {
-                        process.nextTick(playCard);
+                        if(suggestions)
+                        {
+                            //If it's an invalid card play the first suggested cards
+                            process.nextTick(function(){ playCard(suggestions[0]);});
+                        }
+                        else
+                        {
+                            process.nextTick(playCard);
+                        }
                         return;
                     }
                     for(var idx=0;idx<_cards.length;idx++)
