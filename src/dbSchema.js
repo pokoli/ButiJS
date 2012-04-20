@@ -41,9 +41,12 @@ var TeamsScore = new Schema({
 });
 
 var Game = new Schema({
-    rounds      : [Round]
+    name        : String
+  , players     : [Player]
+  , state       : String
+  , rounds      : [Round]
   , teams       : [Teams]
-  , score       : { type: Schema.ObjectId, ref: 'TeamsScore' }
+  , score       : [TeamsScore]
 });
 module.exports.ButifarraGame = Game
 
