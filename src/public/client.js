@@ -72,6 +72,8 @@ var currentThriumph;
 var currentAction;
 //Hold the history of contros done.
 var controInfo=[];
+//Holds if the player has already thriumphed this round.
+var thriumphedThisRound=false;
 
 /*
     Fired when a game we are playing is started
