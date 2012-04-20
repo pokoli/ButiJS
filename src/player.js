@@ -4,8 +4,31 @@ var Game = require(__dirname+'/game')
   , butiSchema = require('./dbSchema');
 
 
-var Player = mongoose.model('player',butiSchema.Player);
+var Model = mongoose.model('player',butiSchema.Player);
 
+var Player = function(name,email,socket)
+{
+    this.name=name;
+    this.email=email;
+    var _socket=socket;
+    //Holds the dbInstance objectRepresenting this player
+
+    var _dbInstance = new Model();
+    this.assignDBInstance = function()
+    {
+        _dbInstance.name=this.name;
+        _dbInstance.email=this.email;
+    }
+
+    this.save = function(callback){
+        this.assignDBInstance();
+        var that = this;
+        _dbInstance.save(function(){
+            that._id=_dbInstance._id;
+            if(callback) callback();
+        });
+    }
+}
 	
 Player.prototype.notify = function (type,data,fn){
     if(this._socket)
@@ -52,14 +75,10 @@ Player.prototype.join = function(game){
 };
 
 module.exports.create = function(name,email,socket) {
-	var player = new Player();
-	player.name=name;
-	player.email=email;
-	player._socket=socket;
-	return player;
+	return new Player(name,email,socket);
 };
 
-module.exports.Model = Player
+module.exports.Model = Model
 
 
 
