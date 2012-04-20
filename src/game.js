@@ -58,7 +58,13 @@ module.exports.clone = function(game,type) {
 	if(game.players)
 		_game.players=game.players;
 	if(game._events)
-	    _game._events=game._events;	
+	    _game._events=game._events;
+	if(game.watchers)
+	    _game.watchers=game.watchers;
+	if(game.state)
+	    _game.state=game.state;
+	if(game.min_players)
+	    _game.min_players=game.min_players;
 	return _game;
 };
 
@@ -110,5 +116,6 @@ Game.prototype.numberOfWatchers = function(){
 Game.prototype.start = function(){
     if(this.numberOfPlayers() < this.min_players) throw new Error(i18n.__('Not enough players'));
     this.state=i18n.__('running');
+    this.emit('updated',this);
 }
 

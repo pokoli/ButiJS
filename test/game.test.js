@@ -57,6 +57,12 @@ module.exports = {
 	"If we clone a game it should be the same" : function(){
 		var clonedGame = Game.clone(game);
 		clonedGame.should.eql(game);
+		var newGame = Game.create('Test game');
+		newGame.state='running';
+		newGame.watchers=[1,2];
+		newGame.players=[2,1];
+		var clonedNewGame = Game.clone(newGame);
+		clonedNewGame.should.eql(newGame);
 	},
 	"The game should have a state property, 'waiting'' by default" : function(){
 		game.should.have.property('state');
