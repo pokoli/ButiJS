@@ -1,10 +1,14 @@
 var util = require('util')
-  , i18n = require('i18n');
+  , i18n = require('i18n')
+  , mongoose = require('mongoose')
+  , butiSchema = require('./dbSchema');
 
 var Game = require('./game'),
     Round = require('./butifarraRound'),
     Stack = require('./spanishCardStack');    
-    
+
+
+var Model = mongoose.model('butifarraGame',butiSchema.ButifarraGame);    
 /*
     Put the players in the correct other to the game flow. 
     @returns and array of players.
@@ -52,6 +56,26 @@ var ButifarraGame = function(name) {
     //Holds the last and the first player to choose Thriumph
     var _thriumpher;
     var _firstThriumpher;
+
+    //Holds the dbInstance objectRepresenting this game.
+    var _dbInstance = new Model();
+
+    this.assignDBInstance = function()
+    {
+        _dbInstance.name=this.name;
+        _dbInstance.players=this.players;
+        _dbInstance.rounds=this.playedRounds;
+        _dbInstance.state=this.state;
+        _dbInstance.teams=this.teams;
+        _dbInstance.score=[this.score];
+        console.log(_dbInstance);
+    }
+
+    this.save = function(callback){
+        this.assignDBInstance();
+        console.log(_dbInstance);
+        _dbInstance.save(callback);
+    }
 
     /*
         Asigns a player to a team.
@@ -316,4 +340,6 @@ module.exports.clone = function(game) {
 }
 //Export orderPlayers function to reuse it in the Round Engine
 module.exports.orderPlayers = orderPlayers;
+//Export the database model.
+module.exports.Model = Model;
 
