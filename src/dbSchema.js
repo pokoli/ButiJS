@@ -5,6 +5,7 @@ var Player = new Schema({
     name            : String
   , email           : String
   , playedGames     : Number
+  , winnedGames     : Number
 });
 module.exports.Player = Player;
 
