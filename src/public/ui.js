@@ -375,8 +375,15 @@ function initCanvas(canvasElement,gameData)
             break;
         }
     }
-    ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
-    names[1]=gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
+    //We are a watcher so we watch the first player!!
+    if(!playerTeam)
+    {
+        playerTeam=gameData.players[0].team;
+        ids[3]=gameData.players[0].id;
+        names[3]=gameData.players[0].name;
+    }
+    ids[1] = gameData.teams[playerTeam][0].id === ids[3] ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
+    names[1]=gameData.teams[playerTeam][0].id === ids[3] ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
 
     var right=(i+1)%4;
     var left=(i+3)%4;
