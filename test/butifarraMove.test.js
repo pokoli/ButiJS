@@ -275,6 +275,57 @@ module.exports = {
             done();
         });
     },
+    "If we must play a card from init suit, correct cards would be suggested." : function(done){
+        var move0=Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+        });
+        player3.cards=[Card.create(2,'Bastos'),Card.create(3,'Espases')];
+        move0.addRoll(player3,player3.cards[0],function(err,sugestions){
+            err.should.eql(new Error('Card must be from thriumph suit'));
+            sugestions.should.be.instanceof(Array);
+            sugestions.length.should.eql(1);
+            sugestions[0].should.eql(Card.create(3,'Espases'));
+            done();
+        });
+    },
+    "If we must play a thriumph card, correct cards would be suggested." : function(done){
+        var move0=Move.create('Copes');
+        player1.cards=[Card.create(2,'Espases')];
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+        });
+        player3.cards=[Card.create(2,'Bastos'),Card.create(2,'Copes')];
+        move0.addRoll(player3,player3.cards[0],function(err,sugestions){
+            err.should.eql(new Error('Card must be from thriumph suit'));
+            sugestions.should.be.instanceof(Array);
+            sugestions.length.should.eql(1);
+            sugestions[0].should.eql(Card.create(2,'Copes'));
+            done();
+        });
+    },
+    "If we must play a higher card, correct cards would be suggested." : function(done){
+        var move0=Move.create('Copes');
+        player1.cards=[Card.create(6,'Espases')];
+        move0.addRoll(player1,player1.cards[0],function(err){
+            should.ifError(err);
+            player1.cards.length.should.eql(0);
+        });
+        player3.cards=[Card.create(4,'Espases'),Card.create(7,'Espases'),Card.create(8,'Espases'),Card.create(10,'Espases'),Card.create(11,'Espases')];
+        move0.addRoll(player3,player3.cards[0],function(err,sugestions){
+            err.should.eql(new Error('Card must be higher than others team'));
+            sugestions.should.be.instanceof(Array);
+            sugestions.length.should.eql(4);
+            sugestions[0].should.eql(Card.create(7,'Espases'));
+            sugestions[1].should.eql(Card.create(8,'Espases'));
+            sugestions[2].should.eql(Card.create(10,'Espases'));
+            sugestions[3].should.eql(Card.create(11,'Espases'));
+            done();
+        });
+    },
     "If player hasn't thriumph nor current suit cards, any card can be played" : function(done){
         var move0=Move.create('Copes');
         player1.cards=[Card.create(2,'Espases')];
