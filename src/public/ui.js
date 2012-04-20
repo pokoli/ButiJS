@@ -493,8 +493,12 @@ function placeCards(cards)
         cardImage.card = cards[i];
         cardImage.on("dblclick", (function(card, idx) {
                     return function () {
-                    playCard(card, function (err) {
-                            if(err) return;
+                    playCard(card, function (err,sugestions) {
+                            if(err)
+                            {
+                                if(sugestions) sugestCards(sugestions);
+                                return;
+                            }
                             cards.splice(idx, 1);
                             placeCards(cards);
                         });
@@ -505,6 +509,31 @@ function placeCards(cards)
     }
     mainStage.add(cardsLayer);
     mainStage.draw();
+}
+
+function sugestCards(cards){
+    var cardsLayer = mainStage.getChild('cardsLayer');
+    if(!cardsLayer) return;
+
+    for(var i=0;i<cardsLayer.children.length;i++)
+    {
+        var bSugested=false;
+        if(cardsLayer.children[i].card)
+        {
+            var card = cardsLayer.children[i].card;
+            for(var j=0;j<cards.length;j++)
+            {
+                if(card.number === cards[j].number && card.suit === cards[j].suit)
+                {
+                   cardsLayer.children[i].y=-30;
+                   bSugested=true;
+                }
+            }
+        }
+        if(!bSugested)
+            cardsLayer.children[i].y=0;
+    }
+    cardsLayer.draw();
 }
 
 //Boolean for marking if we have to wait to the last round cards are played.

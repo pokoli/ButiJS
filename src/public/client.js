@@ -222,12 +222,12 @@ function playCard(card,callback)
     if(currentAction)
         return;
     currentAction=true;
-    socket.emit('new-roll',card,function(err){
+    socket.emit('new-roll',card,function(err,sugestions){
         currentAction=false;
         if(err)
         {
             writeMessage(err);
-            callback && callback(err);
+            callback && callback(err,sugestions);
             return;
         }
         yourTurn--;
