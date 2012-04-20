@@ -180,6 +180,12 @@ io.sockets.on('connection', function (socket) {
         game.on('newListener',function(event,listener){
             socket.on(event,listener);
         });
+        //Save the game to the database every time it's updated
+        game.on('save',function(data){
+            data.save(function(err){
+                if(err) console.log('Error saving games to database: '+err);
+            });
+        });
   		game.addPlayer(getCurrentPlayer(),function(err){
   		    if(err)
   		    {

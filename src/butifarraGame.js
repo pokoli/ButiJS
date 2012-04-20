@@ -68,12 +68,10 @@ var ButifarraGame = function(name) {
         _dbInstance.state=this.state;
         _dbInstance.teams=this.teams;
         _dbInstance.score=[this.score];
-        console.log(_dbInstance);
     }
 
     this.save = function(callback){
         this.assignDBInstance();
-        console.log(_dbInstance);
         _dbInstance.save(callback);
     }
 
@@ -280,6 +278,7 @@ var ButifarraGame = function(name) {
         }
         //Notify all that the round has updated -> The client must refresh the scores.
         this.notifyAll('updated-game',this);
+        this.emit('save',this);
     }
     this.on('start-new-round',this.startNewRound);
     
@@ -318,7 +317,8 @@ var ButifarraGame = function(name) {
     */
     this.addPlayer = function(player,fn){
         if(this.numberOfPlayers() === 4) return fn(i18n.__('The game is full'));
-        super_addPlayer.call(this,player,fn)
+        super_addPlayer.call(this,player,fn);
+        this.emit('save',this);
     }
 };
 //Inherits from game
