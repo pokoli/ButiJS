@@ -31,6 +31,12 @@ Make the current player join the game.
 
 If the player is currently on a game should throw an error. 
 
+### watch-game
+
+Watch the game selected game.
+
+If the player is currently on a game should throw an error.
+
 ### add-bot
 
 Add a bot to an existing game.

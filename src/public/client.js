@@ -248,6 +248,21 @@ function joinGame(){
 	});
 }
 
+function watchGame(){
+    if(!selected && selected != 0)
+    {
+        alert(__("You should select a game."));
+        return;
+    }
+	socket.emit('watch-game', games[selected].id,function(err,data){
+	    if(err)
+	    {
+	        alert(err);
+	    }
+	    refreshGames();
+	});
+}
+
 function addBot(){
     if(!selected && selected != 0)
     {
