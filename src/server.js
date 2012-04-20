@@ -6,7 +6,9 @@ var express = require('express')
   , i18n = require('i18n')
   , Game = require('./butifarraGame')
   , Player = require('./player')
-  , Bot = require('./bots/simpleBot').Bot;
+  , Bot = require('./bots/simpleBot').Bot
+  , conf = require('./database_configuration')
+  , mongoose = require('mongoose');
 var app = express.createServer();
 
 //Static files configuration
@@ -52,6 +54,8 @@ app.get('/game', function(req,res){
 
 app.listen(8000);
 var io = socketio.listen(app, {log:false});
+//Connect to the Database
+mongoose.connect('mongodb://'+conf.host+'/'+conf.database);
 
 //Variable for hosting the current games and players on the server
 var _games = [];
@@ -117,12 +121,24 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('welcome', { msg : i18n.__('Welcome, who you are?')});
   
 	socket.on('login', function(data, fn){
-		var player = Player.create(data.name,'',socket);
-		_playerid = generateUniqueID();
-		_players[_playerid]=player;
-		player.id=_playerid;
-		if(fn) fn(player);
-  		socket.broadcast.emit('message',i18n.__('%s joined the server',player.name));
+	    Player.Model.findOne({name: data.name},function(err,doc){
+		    var player = Player.create(data.name,'',socket);
+	        if(doc)
+	        {
+		        player.email=doc.email;
+		        player._id=doc._id;
+		        player.save();
+		    }
+		    else
+		    {
+                player.save();
+		    }
+		    _playerid = generateUniqueID();
+		    _players[_playerid]=player;
+		    player.id=_playerid;
+		    if(fn) fn(player);
+      		socket.broadcast.emit('message',i18n.__('%s joined the server',player.name));
+      	})
   	});
   	/*
   	    data: Holds the filter to apply
