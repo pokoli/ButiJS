@@ -316,7 +316,7 @@ function writeMessageDialog(message, x,y){
         odiv += '<p id="message-dialog-text"></p>';
         odiv += '</div>';
         $(odiv).appendTo($('#game'));
-        $('#message-dialog').dialog({ autoOpen: false,height: 250,width: 350});
+        $('#message-dialog').dialog({ autoOpen: false,height: 150,width: 350, position: ["left","top"]});
 	}
 	$('#message-dialog-text').html(message);
     $('#message-dialog').dialog('open');
