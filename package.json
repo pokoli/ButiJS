@@ -1,7 +1,7 @@
 {
   "name": "ButiJS",
   "description": "Butifarra's game server on the top of node.js",
-  "version": "0.0.7",
+  "version": "0.0.6",
   "license" : "MIT",
   "repository": {
     "type": "git",
