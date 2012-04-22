@@ -1,6 +1,6 @@
-var Move = process.env.COVERAGE ? require('../src-cov/butifarraMove') : require('../src/butifarraMove'),
-	Player = process.env.COVERAGE ? require('../src-cov/player') : require('../src/player'),
-	Card = process.env.COVERAGE ? require('../src-cov/card') : require('../src/card'),
+var Move = process.env.COVERAGE ? require('../src-cov/butifarraMove') : require('../butifarraMove'),
+	Player = process.env.COVERAGE ? require('../src-cov/player') : require('../player'),
+	Card = process.env.COVERAGE ? require('../src-cov/card') : require('../card'),
 	should = require ('should');
 
 var player1 = Player.create('John');

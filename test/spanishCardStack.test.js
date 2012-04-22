@@ -1,5 +1,5 @@
-var Stack = process.env.COVERAGE ? require('../src-cov/spanishCardStack') : require('../src/spanishCardStack'),
-	Card = process.env.COVERAGE ? require('../src-cov/card') : require('../src/card'),
+var Stack = process.env.COVERAGE ? require('../src-cov/spanishCardStack') : require('../spanishCardStack'),
+	Card = process.env.COVERAGE ? require('../src-cov/card') : require('../card'),
 	should = require ('should');
 
 var stack;

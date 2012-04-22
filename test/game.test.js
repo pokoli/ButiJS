@@ -1,5 +1,5 @@
-var Game = process.env.COVERAGE ? require('../src-cov/game') : require('../src/game'),
-	Player = process.env.COVERAGE ? require('../src-cov/player') : require('../src/player'),
+var Game = process.env.COVERAGE ? require('../src-cov/game') : require('../game'),
+	Player = process.env.COVERAGE ? require('../src-cov/player') : require('../player'),
 	should = require ('should');
 
 var game = Game.create('New game');

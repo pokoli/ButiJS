@@ -1,7 +1,7 @@
-var Game = process.env.COVERAGE ? require('../src-cov/butifarraGame') : require('../src/butifarraGame'),
-	Player = process.env.COVERAGE ? require('../src-cov/player') : require('../src/player'),
-	Stack = process.env.COVERAGE ? require('../src-cov/spanishCardStack') : require('../src/spanishCardStack'),
-	Card = process.env.COVERAGE ? require('../src-cov/card') : require('../src/card'),
+var Game = process.env.COVERAGE ? require('../src-cov/butifarraGame') : require('../butifarraGame'),
+	Player = process.env.COVERAGE ? require('../src-cov/player') : require('../player'),
+	Stack = process.env.COVERAGE ? require('../src-cov/spanishCardStack') : require('../spanishCardStack'),
+	Card = process.env.COVERAGE ? require('../src-cov/card') : require('../card'),
 	should = require ('should');
 
 var game = Game.create();

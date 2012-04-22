@@ -1,8 +1,8 @@
 var should = require('should'),
 	client = require('socket.io-client'),
-	server = process.env.COVERAGE ? require('../src-cov/server.js') : require('../src/server.js'),
-	Player = process.env.COVERAGE ? require('../src-cov/player.js') : require('../src/player.js'),
-	Game = process.env.COVERAGE ?  require('../src/butifarraGame.js') : require('../src/butifarraGame.js');
+	server = process.env.COVERAGE ? require('../src-cov/server.js') : require('../server.js'),
+	Player = process.env.COVERAGE ? require('../src-cov/player.js') : require('../player.js'),
+	Game = process.env.COVERAGE ?  require('../src-cov/butifarraGame.js') : require('../butifarraGame.js');
 
 var connected = false,connectedB = false,connectedC = false,connectedD = false;
 	
