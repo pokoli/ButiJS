@@ -215,6 +215,39 @@ io.sockets.on('connection', function (socket) {
         });
 
   	});
+  	
+  	socket.on('watch-game', function(data, fn){
+  	    //1. Find the game.
+  	    var game;
+  	    for(var i=0;i<_games.length;i++)
+  	    {
+  	        if(_games[i].id === data)
+  	        {
+  	            game=_games[i];
+  	            break;
+  	        }
+  	    }
+  	    if(!game)
+  	    {
+  	        if(fn) fn(__('Game %s does not exist',data));
+  	        return;
+  	    }
+
+        var current = getCurrentPlayer();
+        if(_games[i].hasPlayer(current))
+        {
+  	        if(fn) fn(__('You are already in the game'));
+  	        return;
+        }
+        _games[i].addWatcher(current,function(err){
+            if(err){
+                fn && fn(err);
+                return;
+            }
+            if(fn) fn(false,_games[i]);
+        });
+
+  	});
 
   	socket.on('add-bot', function(data, fn){
   	    //1. Find the game.

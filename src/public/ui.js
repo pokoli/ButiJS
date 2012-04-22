@@ -75,7 +75,7 @@ $(function() {
     });
     //Game manipulation functions
     $('#join').click(joinGame);
-    $('#watch').click(function(){ alert(__("Not yet implemented"));return;});
+    $('#watch').click(watchGame);
     $('#create').click(function(){$("#create-game-dialog").dialog('open')});
 });
 
@@ -122,7 +122,7 @@ function showGameDetails(gameData)
         $('#game-details').append('<tr><th colspan="2">'+__('Watchers')+'</th>');
         for(var i=0;i<gameData.watchers.length;i++)
         {
-            $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i]+'</td><tr>');
+            $('#game-details').append('<tr><td colspan="2">'+gameData.watchers[i].name+'</td><tr>');
         }
     }
     $('#game-details').append('<tr><td colspan="2"><input onclick="javascript:addBot();" id="add-bot" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only type="button" value="'+__('Add bot')+'" /></td></tr>');
@@ -375,8 +375,15 @@ function initCanvas(canvasElement,gameData)
             break;
         }
     }
-    ids[1] = gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
-    names[1]=gameData.teams[playerTeam][0].id === playerid ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
+    //We are a watcher so we watch the first player!!
+    if(!playerTeam)
+    {
+        playerTeam=gameData.players[0].team;
+        ids[3]=gameData.players[0].id;
+        names[3]=gameData.players[0].name;
+    }
+    ids[1] = gameData.teams[playerTeam][0].id === ids[3] ? gameData.teams[playerTeam][1].id : gameData.teams[playerTeam][0].id; 
+    names[1]=gameData.teams[playerTeam][0].id === ids[3] ? gameData.teams[playerTeam][1].name : gameData.teams[playerTeam][0].name;
 
     var right=(i+1)%4;
     var left=(i+3)%4;

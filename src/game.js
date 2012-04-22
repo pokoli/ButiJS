@@ -78,9 +78,10 @@ Game.prototype.addPlayer = function(player,fn){
 	fn && fn();
 }
 
-Game.prototype.addWatcher = function(watcher){
+Game.prototype.addWatcher = function(watcher,fn){
 	this.watchers.push(watcher);
 	this.emit('updated',this);
+	fn && fn();
 }
 
 Game.prototype.hasPlayer = function(otherPlayer){
