@@ -159,11 +159,6 @@ io.sockets.on('connection', function (socket) {
   	
   	socket.on('create-game', function(data, fn){
         var game = Game.clone(data);
-        //Every time the game recives a new evenet listener it's exposed to 
-        //the server whe expose their events to the socket
-        game.on('newListener',function(event,listener){
-            socket.on(event,listener);
-        });
   		game.addPlayer(getCurrentPlayer(),function(err){
   		    if(err)
   		    {
