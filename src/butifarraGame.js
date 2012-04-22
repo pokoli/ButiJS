@@ -296,6 +296,24 @@ var ButifarraGame = function(name) {
         if(this.numberOfPlayers() === 4) return fn(i18n.__('The game is full'));
         super_addPlayer.call(this,player,fn)
     }
+
+    var super_addWatcher = this.addWatcher;
+    /*
+        Override addPlayer to validate the number of players.
+    */
+    this.addWatcher = function(watcher,fn){
+        if(this.state===i18n.__('ended'))
+        {
+            fn(i18n.__('Not yet implemented'));
+            return;
+        }
+        var that=this;
+        super_addWatcher.call(this,watcher,function(){
+            if(that.state===i18n.__('running'))
+                watcher.notify('start',that);
+            fn && fn();
+        });
+    }
 };
 //Inherits from game
 util.inherits(ButifarraGame, Game.Game);
