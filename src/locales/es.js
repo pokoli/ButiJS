@@ -38,7 +38,7 @@
 	"Select Thriumph": "Selecciona trumfo",
 	"Select": "Seleccionar",
 	"We": "Nosotros",
-	"They": "Vosaltros",
+	"They": "Vosotros",
 	"Is your turn": "Es tu turno",
 	"Yes": "Si",
 	"No": "No",
@@ -57,5 +57,6 @@
 	"No current game running": "No se esta jugando ninguna partida",
 	"Card must be higher than others team": "Debes jugar una carta superior a la del equipo rival",
 	"The game is full": "La partida esta llena",
-	"Card must be defined": "La carta debe estar definida"
+	"Card must be defined": "La carta debe estar definida",
+	"You are already watching the game": "Ya estas viendo la partida"
 }

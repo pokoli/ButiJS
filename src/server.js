@@ -239,6 +239,11 @@ io.sockets.on('connection', function (socket) {
   	        if(fn) fn(__('You are already in the game'));
   	        return;
         }
+        if(_games[i].hasWatcher(current))
+        {
+  	        if(fn) fn(__('You are already watching the game'));
+  	        return;
+        }
         _games[i].addWatcher(current,function(err){
             if(err){
                 fn && fn(err);

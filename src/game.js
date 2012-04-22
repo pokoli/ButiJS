@@ -93,6 +93,15 @@ Game.prototype.hasPlayer = function(otherPlayer){
 	return false;
 }
 
+Game.prototype.hasWatcher = function(otherPlayer){
+    for(var i=0;i<this.watchers.length;i++)
+    {
+        if(this.watchers[i].isEqual(otherPlayer))
+            return true;
+    }
+	return false;
+}
+
 Game.prototype.removePlayer = function(otherPlayer){
     for(var i=0;i<this.players.length;i++)
     {

@@ -163,8 +163,20 @@ module.exports = {
 	        done();
 	    });
 	},
-	"A player should be able a game only one time. " : function(done){
+	"A player should be able to play a game only one time. " : function(done){
 	    socket.emit('join-game',1,function(err,data){
+	        err.should.eql('You are already in the game');
+	        done();
+	    });
+	},
+    "A player should be able to watch a game only one time. " : function(done){
+	    socketC.emit('watch-game',1,function(err,data){
+	        err.should.eql('You are already watching the game');
+	        done();
+	    });
+	},
+    "A player should not be able to watch a game he/she is playing " : function(done){
+	    socketB.emit('watch-game',1,function(err,data){
 	        err.should.eql('You are already in the game');
 	        done();
 	    });

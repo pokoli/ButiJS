@@ -21,5 +21,6 @@
 	"No current game running": "No current game running",
 	"Hello": "Hello",
 	"ended": "ended",
-	" %s left the server": " %s left the server"
+	" %s left the server": " %s left the server",
+	"You are already watching the game": "You are already watching the game"
 }
