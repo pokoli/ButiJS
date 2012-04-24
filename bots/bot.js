@@ -41,7 +41,7 @@ var Bot = function(){
     this.connect = function(opts,callback){
         opts = opts || {}
         var host = opts.host || 'localhost';
-        var port = opts.port || 8000;
+        var port = opts.port || process.env.PORT || 8000;
         var gameid = opts.game;
         socket = client.connect('http://'+host, {'port' : port,'force new connection': true});
         socket.on('welcome',function(){

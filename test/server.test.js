@@ -39,10 +39,12 @@ function removeListeners(name)
     });
 }
 
+var portNumber = process.env.PORT || 8000;
+
 module.exports = {
 	"We will be able to connect the server and we recive a welcome event" : function(done){
 	    var events=2;
-    	socket = client.connect('http://localhost', {port : 8000});
+    	socket = client.connect('http://localhost', {port : portNumber});
 		socket.on('connect', function (err) {
 			connected=true;
 			should.ifError(err);
@@ -57,9 +59,9 @@ module.exports = {
 		});
 	},
 	"Two (or more) connections could be established on the same time ": function(){
-		socketB = client.connect('http://localhost', {port : 8000,'force new connection': true});
-        socketC = client.connect('http://localhost', {port : 8000,'force new connection': true});
-        socketD = client.connect('http://localhost', {port : 8000,'force new connection': true});
+		socketB = client.connect('http://localhost', {port : portNumber,'force new connection': true});
+        socketC = client.connect('http://localhost', {port : portNumber,'force new connection': true});
+        socketD = client.connect('http://localhost', {port : portNumber,'force new connection': true});
 		socketB.on('connect', function (err) {
     		connectedB=true;
 			should.ifError(err);
@@ -457,9 +459,9 @@ module.exports = {
 	"When a player disconnects the server removes it's reference " : function(done){
         finish(done);
 		//TODO: Improve, not working very well.
-//        socketE = client.connect('http://localhost', {port : 8000,'force new connection': true, 'reconnect': false});
-//        socketF = client.connect('http://localhost', {port : 8000,'force new connection': true, 'reconnect': false});
-//        socketG = client.connect('http://localhost', {port : 8000,'force new connection': true, 'reconnect': false});
+//        socketE = client.connect('http://localhost', {port : portNumber,'force new connection': true, 'reconnect': false});
+//        socketF = client.connect('http://localhost', {port : portNumber,'force new connection': true, 'reconnect': false});
+//        socketG = client.connect('http://localhost', {port : portNumber,'force new connection': true, 'reconnect': false});
 
 //		var disconnects=3;
 

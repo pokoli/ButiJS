@@ -2,6 +2,8 @@
 html
     head
         title Butifarra's Game Server
+        script
+            var serverUrl = '#{serverUrl}' || 'localhost:8000';
         script(type='text/javascript',src='/socket.io/socket.io.js')
         script(type='text/javascript',src='/public/jquery-1.7.1.min.js')
         script(type='text/javascript',src='/public/jquery-ui-1.8.17.custom.min.js')

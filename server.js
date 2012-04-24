@@ -43,14 +43,14 @@ app.configure('development',function(){
 });
 
 app.get('/', function(req,res){
-    res.render('index');
+    res.render('index',{'serverUrl': req.header('host')});
 });
 
 app.get('/game', function(req,res){
     res.render('game');
 });
-
-app.listen(8000);
+var port = process.env.PORT || 8000;
+app.listen(port);
 var io = socketio.listen(app, {log:false});
 
 //Variable for hosting the current games and players on the server
