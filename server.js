@@ -42,7 +42,9 @@ app.configure('development',function(){
     app.set('view options', { pretty: true , layout: false});
 });
 
+var serverURL;
 app.get('/', function(req,res){
+    serverURL = req.header('host');
     res.render('index',{'serverUrl': req.header('host')});
 });
 
@@ -266,7 +268,7 @@ io.sockets.on('connection', function (socket) {
   	        return;
   	    }
         var bot = new Bot();
-        bot.connect({game: data},fn);
+        bot.connect({game: data, url: serverURL},fn);
   	});
 
   	socket.on('send', function(data){

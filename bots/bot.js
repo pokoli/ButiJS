@@ -40,6 +40,16 @@ var Bot = function(){
     */
     this.connect = function(opts,callback){
         opts = opts || {}
+        if(opts.url)
+        {
+            if(opts.url.indexOf(':')>-1)
+            {
+                opts.host=opts.url.substring(0,opts.url.indexOf(':'));
+                opts.port=opts.url.substring(opts.url.indexOf(':')+1,opts.url.length);
+            }
+            else
+                opts.host=opts.url;
+        }
         var host = opts.host || 'localhost';
         var port = opts.port || process.env.PORT || 8000;
         var gameid = opts.game;
