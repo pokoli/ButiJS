@@ -202,7 +202,7 @@ function isHighestRemaining(playedCards,card)
     Selects a thriumph from available choises.
 */
 SimpleBot.prototype.selectThriumph = function(choises){
-    var cards = this.cards();
+    var cards = this.getCards();
     //If we have more than 24 points in the stack we make botifarra.
     if(Move.calculatePoints(cards) > 24)
         return 'Botifarra';
@@ -225,20 +225,20 @@ SimpleBot.prototype.selectThriumph = function(choises){
 */
 
 Bot.prototype.contro = function(){
-    var thriumph = this.thriumph();
-    var delegated = this.delegated();
+    var thriumph = this.getThriumph();
+    var delegated = this.getDelegated();
     //Trumfo directe no contrem mai.
     if(!delegated)
         return false;
-    var pals = calculateSuits(this.cards());
-    var numbers = calculateNumbers(this.cards());
+    var pals = calculateSuits(this.getCards());
+    var numbers = calculateNumbers(this.getCards());
     //Trumfo passat dos manilles i un as s'ha de contrar. 
     if(numbers[9] && numbers[9] >=2 && numbers[1] && numbers[1] >= 1)
         return true;
     if(pals[thriumph] && pals[thriumph] >=5)
         return true;
     //If we have more than 24 points in the stack we have to make a contro
-    if(Move.calculatePoints(this.cards()) > 24)
+    if(Move.calculatePoints(this.getCards()) > 24)
         return true;
     return false;    
 }
@@ -247,10 +247,11 @@ Bot.prototype.contro = function(){
     Selects a card to play
 */
 Bot.prototype.selectCard = function(err){
-    var playedCards = this.playedCards();
-    var move = this.move();
-    var cards = sortCards(this.cards());
-    var thriumph = this.thriumph();
+    var playedCards = this.getPlayedCards();
+    var move = this.getMove();
+    var cards = sortCards(this.getCards());
+    var thriumph = this.getThriumph();
+    var team = this.getTeam();
     var pals = calculateSuits(cards);
     var numbers = calculateNumbers(cards);
     var temp= calculateMinMaxPerSuit(pals);
@@ -278,7 +279,7 @@ Bot.prototype.selectCard = function(err){
                 thriumphCard.push(card);
         }
          var ourHand = false;
-         if(Move.getWinner(move,thriumph).team === this.team())
+         if(Move.getWinner(move,thriumph).team === team)
          {
             ourHand=true;
          }
@@ -362,7 +363,7 @@ Bot.prototype.selectCard = function(err){
             }
         }
         //If the trhiumpher is from our team and we have thriumph
-        if(this.thriumpherTeam() === this.team() && pals[thriumph])
+        if(this.getThriumpherTeam() === team && pals[thriumph])
         {
             //No thriumph played.
             //Or there are more players that have thriumph in her hand.

@@ -19,16 +19,16 @@ var Bot = function(){
     var _team;
     var _thriumpherTeam;
 
-    this.connected = function() { return _connected; };
-    this.name = function(){ return _name;};
-    this.cards = function(){ return _cards;};
-    this.thriumph = function(){ return _thriumph;};
-    this.delegated = function(){ return _delegated;};
-    this.move = function(){ return _move;};
-    this.playedCards = function(){ return _playedCards;};
-    this.teams = function(){ return _teams; };
-    this.team = function(){ return _team; };
-    this.thriumpherTeam = function(){ return _thriumpherTeam; };
+    this.getConnected = function() { return _connected; };
+    this.getName = function(){ return _name;};
+    this.getCards = function(){ return _cards;};
+    this.getThriumph = function(){ return _thriumph;};
+    this.getDelegated = function(){ return _delegated;};
+    this.getMove = function(){ return _move;};
+    this.getPlayedCards = function(){ return _playedCards;};
+    this.getTeams = function(){ return _teams; };
+    this.getTeam = function(){ return _team; };
+    this.getThriumpherTeam = function(){ return _thriumpherTeam; };
 
     var that = this;
     /*
@@ -194,9 +194,9 @@ Bot.prototype.contro = function(){
     Could be overriden by extending classes.
 */
 Bot.prototype.selectCard = function(err){
-    var move = this.move();
-    var cards = this.cards();
-    var thriumph = this.thriumph();
+    var move = this.getMove();
+    var cards = this.getCards();
+    var thriumph = this.getThriumph();
     if(move.length > 0)
     {
         var higher=Move.getHigherCard(move,thriumph);
