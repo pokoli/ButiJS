@@ -265,10 +265,30 @@ io.sockets.on('connection', function (socket) {
   	    if(!game)
   	    {
   	        if(fn) fn(__('Game %s does not exist',data));
-  	        return;
+  	        return;_name
   	    }
         var bot = new Bot();
-        bot.connect({game: data, url: serverURL},fn);
+        bot.createPlayer();
+        bot.id=generateUniqueID();
+        _games[i].addPlayer(bot,function(err){
+            if(err){
+                fn && fn(err);
+                return;
+            }
+      		_currentGameId=_games[i].id;
+            if(_games[i].numberOfPlayers()===4)
+            {
+                _games[i].start();
+            }
+            if(fn) fn(false,_games[i]);
+        });
+        //Pass the bot events to the game.
+        bot.on('new-roll',function(data,callback){ processGameEvent('new-roll',data,callback)});
+  	    bot.on('chosen-thriumph',function(data,callback){ processGameEvent('chosen-thriumph',data,callback)});
+        bot.on('do-contro',function(data,callback){ 
+            data.player = bot;
+            processGameEvent('do-contro',data,callback);
+        });
   	});
 
   	socket.on('send', function(data){

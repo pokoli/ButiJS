@@ -1,5 +1,8 @@
-var client = require('socket.io-client'), 
+var client = require('socket.io-client'),
+    util = require('util'), 
+    event = require('events'),
     Move = require('../butifarraMove'),
+    Player = require('../butifarraMove'),
     Card = require('../card');
 
 /*
@@ -32,30 +35,15 @@ var Bot = function(){
 
     var that = this;
     /*
-        Connect to a ButiJS server:
-        Accepts a parameter for specifing server options: 
-            - Host: Host running the butiJS server
-            - Port: Port where the butiJS server is listening.
-            - Game: Id of the game to join after connecting
+        Assigns a current name to the bot. 
     */
-    this.connect = function(opts,callback){
-        opts = opts || {}
-        if(opts.url)
-        {
-            if(opts.url.indexOf(':')>-1)
-            {
-                opts.host=opts.url.substring(0,opts.url.indexOf(':'));
-                opts.port=opts.url.substring(opts.url.indexOf(':')+1,opts.url.length);
-            }
-            else
-                opts.host=opts.url;
-        }
-        var host = opts.host || 'localhost';
-        var port = opts.port || process.env.PORT || 8000;
-        var gameid = opts.game;
-        socket = client.connect('http://'+host, {'port' : port,'force new connection': true});
+    function assignName(){
+        _name = 'Bot'+new Date().getTime().toString().substring(6,250);    
+    }
+    
+    function assignEvents(socket,gameid,callback){
         socket.on('welcome',function(){
-            _name = 'Bot'+new Date().getTime().toString().substring(6,250);
+            asssignName();
             socket.emit('login',{'name' : _name}, function(){
                 if(gameid)
                 {
@@ -68,7 +56,7 @@ var Bot = function(){
         });
 
         socket.on('start',function(data){ 
-            _teams = data.teams
+            _teams = data.teams;
             for(var i=1;i<3;i++)
             {
                 for(var j=0;j<_teams[i].length;j++)
@@ -153,9 +141,100 @@ var Bot = function(){
         socket.on('round-ended',function(data){
             _playedCards=[];
         });
-        //TODO:Save contros???????
-        //socket.on('contro-done',function(data){
     }
+
+    var that = this;
+    /*
+        Connect to a ButiJS server:
+        Accepts a parameter for specifing server options: 
+            - Host: Host running the butiJS server
+            - Port: Port where the butiJS server is listening.
+            - Game: Id of the game to join after connecting
+    */
+    this.connect = function(opts,callback){
+        opts = opts || {}
+        if(opts.url)
+        {
+            if(opts.url.indexOf(':')>-1)
+            {
+                opts.host=opts.url.substring(0,opts.url.indexOf(':'));
+                opts.port=opts.url.substring(opts.url.indexOf(':')+1,opts.url.length);
+            }
+            else
+                opts.host=opts.url;
+        }
+        var host = opts.host || 'localhost';
+        var port = opts.port || process.env.PORT || 8000;
+        socket = client.connect('http://'+host, {'port' : port,'force new connection': true});
+        assignEvents(socket,opts.game,callback);
+    }
+    /*
+        TODO: The following two functions are copied from Player, avoid copying and include it ;)
+    */
+    /*
+        Used to notify the bot with events!!!
+    */
+	this.notify = function (type,data,fn){
+	    if(socket)
+	    {
+	        if(fn && data)
+	        {
+    	        socket.emit(type,data,fn);
+    	    }
+	        else if(data)
+	        {
+    	        socket.emit(type,data);
+    	    }
+    	    else
+    	    {
+    	        socket.emit(type);
+    	    }
+	    }
+	    else
+	    {
+	        if(fn && data)
+	        {
+    	        this.emit(type,data,fn);
+    	    }
+	        else if(data)
+	        {
+    	        this.emit(type,data);
+    	    }
+    	    else
+    	    {
+    	        this.emit(type);
+    	    }
+	    }
+	}
+	/*
+	    Used to compare bots with players
+	*/
+	this.isEqual = function(otherPlayer){
+	    var bret=false;
+	    if(this.id && otherPlayer.id)
+	        return this.id === otherPlayer.id
+	    else
+	    {
+	        if(this.id || otherPlayer.id)
+	            return false;
+	        if(this.name && otherPlayer.name)
+    	      bret = this.name === otherPlayer.name;
+    	    else if(this.name || otherPlayer.name)
+    	        return false;
+	        if(bret && this.email && otherPlayer.email)
+    	      bret = this.email === otherPlayer.email;
+            else if(this.email || otherPlayer.email)
+    	        return false;
+	    }
+	    return bret;
+	}
+
+    this.createPlayer = function(){
+        assignEvents(this);
+        assignName();
+        this.name=_name;
+        return this;
+   };
 
     this.join = function(game){
         if(!_connected)
@@ -170,7 +249,8 @@ var Bot = function(){
         socket.disconnect();
     }
 }
-
+//Inherits from EventEmitter so we can manage the events of the game.
+util.inherits(Bot, event.EventEmitter);
 /*
     Selects a thriumph from available choises.
     Could be overriden by extending classes.
