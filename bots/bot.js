@@ -24,7 +24,7 @@ var Bot = function(){
 
     this.getConnected = function() { return _connected; };
     this.getName = function(){ return _name;};
-    this.getCards = function(){ return _cards;};
+    this.getCards = function(){ return _cards || this.cards;};
     this.getThriumph = function(){ return _thriumph;};
     this.getDelegated = function(){ return _delegated;};
     this.getMove = function(){ return _move;};
