@@ -9,6 +9,9 @@ var express = require('express')
   , Bot = require('./bots/simpleBot').Bot;
 var app = express.createServer();
 
+var VERSION = '0.0.7';
+
+
 //Static files configuration
 var pub = __dirname + '/public/'; 
 
@@ -50,6 +53,21 @@ app.get('/', function(req,res){
 
 app.get('/game', function(req,res){
     res.render('game');
+});
+
+app.get('/stats',function(req,res){
+    var response = {};
+    response.version = VERSION;
+    response.versions = process.versions;
+    response.memory = process.memoryUsage();
+    var playerCount=0;
+    for (var p in _players)
+        if (_players.hasOwnProperty(p)) playerCount++;
+    response.players = playerCount;
+    response.games = _games.length;
+    response.gamesPlayed = gameCounter;
+    response.totalPlayers = uniqueCounter;
+    res.send(response);
 });
 var port = process.env.PORT || 8000;
 app.listen(port);
