@@ -100,6 +100,8 @@ var Bot = function(){
                socket.emit('new-roll',card,function(err,suggestions){
                     if(err)
                     {
+                        console.log('Invalid bot movement: '+err);
+                        console.log('Suggestions: '+suggestions);
                         if(suggestions)
                         {
                             //If it's an invalid card play the first suggested cards
