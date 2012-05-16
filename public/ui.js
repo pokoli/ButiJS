@@ -664,7 +664,7 @@ function updateRoundScores(roundPoints,multiplier)
     }
     else
     {
-        sHTML+= '<td>----------<td><td>----------</td>';
+        sHTML+= '<td>----------</td><td>----------</td>';
     }
     sHTML += '</tr>';
     $('#score > table').append(sHTML);
