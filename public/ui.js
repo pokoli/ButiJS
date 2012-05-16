@@ -323,6 +323,15 @@ function writeMessageDialog(message, x,y){
 }
 
 /*
+    Clears the message layer
+*/
+
+function clearMessages()
+{
+    mainStage.getChild('messageLayer').clear();
+}
+
+/*
     Writes a message to a Layer.
     @params:
         - message: The message to write.
@@ -335,14 +344,12 @@ function writeMessage(message, x,y){
         x = x || messageLayer.getCanvas().width*0.33;
         y = y || messageLayer.getCanvas().height*0.10;
         var context = messageLayer.getContext();
-        messageLayer.clear();
+        clearMessages();
         messageLayer.moveToTop();
         context.font = "18pt Calibri";
         context.fillStyle = "Red";
         context.fillText(message, x, y);
-        setTimeout(3000,function(){
-            messageLayer.clear();
-        });
+        setTimeout(clearMessages,3000);
 }
 
 /* 
