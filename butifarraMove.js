@@ -216,8 +216,8 @@ var ButifarraMove = function(thriumph) {
     this.addRoll = function(player,card,callback){
         if(!card || !card.number || !card.suit)
         {
-            callback && callback(Error(i18n.__('Card must be defined')));
-            return
+            callback && callback(Error(i18n.__('Card must be defined')),player.cards);
+            return;
         }
         //Validate that the player has the card in the stack.
         var doesntHaveCard=true;
@@ -232,7 +232,7 @@ var ButifarraMove = function(thriumph) {
         }
         if(doesntHaveCard && !this.test) //If this.test is defined we are in a test case that needs this to be deactivated
         {
-            callback(Error(i18n.__("You can not play a card you don't have in the stack")));
+            callback(Error(i18n.__("You can not play a card you don't have in the stack")),player.cards);
             return;
         }
         var roll = new ButifarraRoll(player,card);
