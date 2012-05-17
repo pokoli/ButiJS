@@ -683,6 +683,11 @@ function updateRoundScores(roundPoints,multiplier)
     $('#score > table').append(sHTML);
 }
 
+/*
+    Variable for holding if the dialog has been closed correctly.
+*/
+var thriumphDialogOpened=false;
+
 function showThriumphDialog(selections,callback)
 {
     //Prevent from showing the dialog if no selections
@@ -711,10 +716,15 @@ function showThriumphDialog(selections,callback)
 	    modal: false,
 	    buttons: {
 		    "Select": function() {
+		                thriumphDialogOpened=false;
                         if(callback) callback($('#thriumph-selector').val());
                         $(this).dialog( "close" );
 				    }
-			    },	
+			    },
+		//Validate if the dialog has been closed via the select button. If not reopen it. 
+		close: function(){
+		        if(thriumphDialogOpened) $(this).dialog( "open" );
+		    }
         });
     }
     else
@@ -726,5 +736,6 @@ function showThriumphDialog(selections,callback)
             $('#thriumph-selector').append('<option value="'+selections[i]+'">'+selections[i]+'</option>');
         }
     }
+    thriumphDialogOpened=true;
     $('#show-thriumph-dialog').dialog('open');
 }
