@@ -339,6 +339,12 @@ function clearMessages()
         - y: The Y offset where we have to write the message
 */
 function writeMessage(message, x,y){
+        //If the mainStage is not initialized wait 100 miliseconds.
+        if(!mainStage)
+        {
+            setTimeout(function(){writeMessage(message, x,y)},100);
+            return;
+        }
         var messageLayer = mainStage.getChild('messageLayer');
         var x = 0; var y=0;
         x = x || messageLayer.getCanvas().width*0.33;
