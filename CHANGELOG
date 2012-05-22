@@ -1,0 +1,66 @@
+Version 0.0.7 (XX/XX/XXXX):
+
+- Add more cards suggestions.
+- Fix javascript errors on server side.
+- Re-open the thriumph dialog if no selections made. 
+- Added stats page.
+
+Version 0.0.6 (02/05/2012):
+
+- Allow bots to play without a socket connection.
+- Prepare for heroku development. 
+- Removed src dir.
+- Fixed memory leaks on the server side.
+- Added game watchers.
+
+
+Version 0.0.5 (20/04/2012):
+
+- Bots play suggested cards.
+- Suggest valid cards when found an invalid roll.
+
+- Improve the bots logic.
+
+
+
+Version 0.0.4 (12/04/2012): 
+
+- Updated translations.
+- Added bot players
+- Added style to the client. 
+- When thriumph is botifarra multiply score by 2.
+- Show the partial scores (of all rounds) on the client.
+- Show the round result on a dialog.
+- Document the round-ended and game-ended events of the client API
+- Improve the test for more than one round.
+
+Version 0.0.3 (19/03/2012): 
+
+- Show if the thriumph is delegated or not.
+- Auto-clear played cards after 3 seconds.
+- Added the round score to the scores info of the game
+- Added translation on the client side
+- Added test to improve test coverage.
+
+
+Version 0.0.2 (01/03/2012): 
+
+- Fix butifarra rules.
+- Added suport for code coverage.
+- Added a control to know the pending players to contro.
+- Removed throws of errors. Now the errors are managed by callbacks.
+- Improve documentation (README)
+- Send game messages to the players.
+- Show the games to the user interface.
+- The server starts the game when there are enough players.
+- Allow players to join the game.
+- Added a dialog for creating a game. 
+- Added game list.
+- Added login dialog.
+
+
+Version 0.0.1 (11/01/2012):
+
+- Created a web server using express.
+- Added basic-server client comunnication.
+- Added simple User interface.
